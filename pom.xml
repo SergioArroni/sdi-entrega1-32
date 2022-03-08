@@ -8,12 +8,12 @@
         <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>sdi-2122-02-spring</artifactId>
+    <groupId>com.uniovi</groupId>
+    <artifactId>sdi-entrega1-32</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>sdi-2122-02-spring</name>
-    <description>sdi-2122-02-spring</description>
+    <name>sdi-entrega1-32</name>
+    <description>sdi-entrega1-32</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -54,28 +54,27 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!--
+               <dependency>
+                   <groupId>org.springframework.boot</groupId>
+                   <artifactId>spring-boot-starter-security</artifactId>
+               </dependency>-->
 
+       <dependency>
+           <groupId>org.thymeleaf.extras</groupId>
+           <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+           <version>3.0.4.RELEASE</version>
+       </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
-            <version>3.0.4.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
-        </dependency>
+              <groupId>org.seleniumhq.selenium</groupId>
+              <artifactId>selenium-java</artifactId>
+              <version>3.141.59</version>
+          </dependency>
+          <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter</artifactId>
+              <version>5.8.1</version>
+          </dependency>
 
     </dependencies>
 
