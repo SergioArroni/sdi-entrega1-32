@@ -1,0 +1,43 @@
+<!-- nav.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="mr-auto">
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="btnLanguage" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span th:text="#{language.change}"></span>
+                    </a>
+                    <div id="languageDropdownMenuButton" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" id="btnEnglish" value="EN">
+                            <img th:src="@{/images/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
+                            <span th:text="#{language.en}">Inglés</span>
+                        </a>
+                        <a class="dropdown-item" id="btnSpanish" value="ES">
+                            <img th:src="@{/images/if_spain_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
+                            <span th:text="#{language.es}">Español</span>
+                        </a>
+                    </div>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/signup">
+                    <!--<a class="nav-link" href="/signup" th:text="#{signup.message}">-->
+                        <i class='fas fa-user-alt' style='font-size:16px'></i>
+                        <span>Registrate</span>
+                    </a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/login"> <!--th:text="#{login.message}">-->
+                        <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
+                        <span>Identifícate</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
