@@ -32,8 +32,8 @@ public class InsertSampleDataService {
         usersService.addUser(user3);
         usersService.addUser(user4);
 
-        friendsService.addFriend(new Friend(1, user2.getId(), false));
-        friendsService.addFriend(new Friend(1, user3.getId(), false));
-        friendsService.addFriend(new Friend(1, user4.getId(), false));
+        friendsService.addFriend(new Friend(1L, user2.getId(), false));
+        friendsService.addFriend(new Friend(1L, user3.getId(), false));
+        friendsService.addFriend(new Friend(1L, user4.getId(), false));
     }
 }
