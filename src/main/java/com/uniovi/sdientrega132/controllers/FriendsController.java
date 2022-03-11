@@ -1,6 +1,8 @@
 package com.uniovi.sdientrega132.controllers;
 
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.repositories.UsersRepository;
 import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +14,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 public class FriendsController {
     @Autowired
     private FriendsService FriendsService;
 
+    @Autowired
+    private UsersService usersService;
+
     /**
      * @Autowired private FriendValidator FriendValidator;
      */
-    @RequestMapping("/friend/list")
-    public String getList(Model model) {
-        model.addAttribute("friendsList", FriendsService.getFriends());
-        return "friend/list";
+    @RequestMapping("/friends/invitation/{user_id}")
+    public String getListByUser(Model model, @PathVariable long user_id) {
+        List<Friend> friends = FriendsService.getInvitationsByUser1_id(user_id);
+        List<User> users = new ArrayList<User>();
+        for(Friend friend : friends){
+            User amigo = usersService.getUser(friend.getUser2_id());
+            if(amigo != null)
+                users.add(amigo);
+        }
+        model.addAttribute("friendsList", users);
+        return "friends/invitation";
     }
 
     @RequestMapping(value = "/friend/add")
-    public String getProfessor(Model model) {
+    public String getFriend(Model model) {
         model.addAttribute("friend", new Friend());
         return "friend/add";
     }
