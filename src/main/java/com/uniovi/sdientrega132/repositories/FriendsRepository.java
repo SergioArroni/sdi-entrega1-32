@@ -25,5 +25,5 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
     Page<Friend> findByUser1_id(Pageable pageable, Long user1_id);
 
     @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.accept = false")
-    List<Friend> findInvitationsByUser1(Long user1_id);
+    Page<Friend> findInvitationsByUser1(Pageable pageable,Long user1_id);
 }
