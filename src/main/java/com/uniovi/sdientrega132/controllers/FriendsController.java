@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,23 @@ public class FriendsController {
     private FriendsService FriendsService;
 
     @Autowired
-    private UsersService userService;
+    private UsersService usersService;
+
+    /**
+     * @Autowired private FriendValidator FriendValidator;
+     */
+    @RequestMapping("/friends/invitation/{user_id}")
+    public String getListByUser(Model model, @PathVariable long user_id) {
+        List<Friend> friends = FriendsService.getInvitationsByUser1_id(user_id);
+        List<User> users = new ArrayList<User>();
+        for(Friend friend : friends){
+            User amigo = usersService.getUser(friend.getUser2_id());
+            if(amigo != null)
+                users.add(amigo);
+        }
+        model.addAttribute("friendsList", users);
+        return "friends/invitation";
+    }
 
     @RequestMapping("/friend/list")
     public String getList(Model model) {

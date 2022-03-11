@@ -26,6 +26,11 @@ public class FriendsService {
         return professors;
     }
 
+    public List<Friend> getInvitationsByUser1_id(long user1_id) {
+        List<Friend> friends = friendsRepository.findInvitationsByUser1(user1_id);
+        return friends;
+    }
+
     public Friend getFriend(Long id) {
         return friendsRepository.findById(id).get();
     }

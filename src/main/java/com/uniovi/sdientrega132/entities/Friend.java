@@ -32,6 +32,7 @@ public class Friend {
         this.id = id;
     }
 
+
     public Long getUser1_id() {
         return User1_id;
     }

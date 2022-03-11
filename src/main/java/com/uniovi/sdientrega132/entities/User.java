@@ -11,6 +11,7 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
+    //Nombre
     private String name;
     private String surnames;
     @NotNull
