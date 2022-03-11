@@ -17,6 +17,9 @@ public class Publication {
     @JoinColumn(name="user_id")
     private User user;
 
+    public Publication() {
+    }
+
     public Publication(String title, String text, User user) {
         this.title=title;
         this.text=text;
