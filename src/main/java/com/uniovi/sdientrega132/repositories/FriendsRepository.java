@@ -1,7 +1,6 @@
 package com.uniovi.sdientrega132.repositories;
 
 import com.uniovi.sdientrega132.entities.Friend;
-import com.uniovi.sdientrega132.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 
 public interface FriendsRepository extends CrudRepository<Friend, Long> {
 
