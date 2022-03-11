@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.controllers;
 
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.UsersService;
@@ -47,16 +48,15 @@ public class FriendsController {
     @RequestMapping("/friends/invitation/{user_id}")
     public String getListByUser(Model model, Pageable pageable, @PathVariable long user_id) {
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, user_id);
-        List<User> users = new ArrayList<User>();
+        List<FriendsForAll> amigosDeVerdad = new ArrayList<FriendsForAll>();
         for (Friend friend : friends) {
             User amigo = usersService.getUser(friend.getUser2_id());
             if (amigo != null)
-                users.add(amigo);
+                amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
-        Page<User> userAux = new PageImpl<User>(users);
-        model.addAttribute("friendsForAll", friends);
+        Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
         model.addAttribute("page", userAux);
-        model.addAttribute("friendsList", userAux.getContent());
+        model.addAttribute("friendsForAll", userAux);
         return "friends/invitation";
     }
 

@@ -24,17 +24,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="friend : ${friendsList}">
-                <td scope="row" th:text="${friend.name}">71888888X</td>
-                <td scope="row" th:text="${friend.surnames}">Nombre del alumno</td>
-                <td scope="row" th:text="${friend.email}">Apellidos del alumno</td>
-                <td scope="row" th:each="friendFA : ${friendsForAll}"><a></a>
-                    <div th:if="${friendFA.user2_id == friend.id}">
-                        <button type="button" th:id="${'AceptButton' + friend.id}" class="btn btn-success">Aceptar
+            <tr th:each="amigo : ${friendsForAll}">
+                <td scope="row" th:text="${amigo.user.name}">71888888X</td>
+                <td scope="row" th:text="${amigo.user.surnames}">Nombre del alumno</td>
+                <td scope="row" th:text="${amigo.user.email}">Apellidos del alumno</td>
+                <td scope="row"><a></a>
+                    <div>
+                        <button type="button" th:id="${'AceptButton' + amigo.friend.id}" class="btn btn-success">Aceptar
                         </button>
                         <script th:inline="javascript"> /*<![CDATA[*/
-                        $("#resendButton" + "[[${friend.id}]]").click(function () {
-                            $.get("/friend/[[${friend.id}]]/accept", function (data) {
+                        $("#AceptButton" + "[[${amigo.friend.id}]]").click(function () {
+                            $.get("/friend/[[${amigo.friend.id}]]/accept", function (data) {
                                 var numberPage = [[${param.page}]];
                                 var urlUpdate = '/friend/invitation/update';
                                 if (numberPage != null) {
