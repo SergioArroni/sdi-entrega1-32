@@ -3,6 +3,7 @@ package com.uniovi.sdientrega132.entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="user")
@@ -19,6 +20,9 @@ public class User {
     @Transient
     private String passwordConfirm;
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Publication> publications;
 
     public User(){}
 
@@ -82,6 +86,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(Set<Publication> publications) {
+        this.publications = publications;
     }
 
     @Override
