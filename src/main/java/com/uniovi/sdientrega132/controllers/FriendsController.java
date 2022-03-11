@@ -56,5 +56,4 @@ public class FriendsController {
         return "redirect:/friend/list";
     }
 
-
 }
