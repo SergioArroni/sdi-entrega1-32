@@ -45,6 +45,22 @@ public class FriendsController {
         return "friend/add";
     }
 
+
+    @RequestMapping("/friends/list/{user_id}")
+    public String getListRealFriendsByUser(Model model, Pageable pageable, @PathVariable long user_id) {
+        Page<Friend> friends = FriendsService.getFriendByUser1(pageable, user_id);
+        List<FriendsForAll> amigosDeVerdad = new ArrayList<FriendsForAll>();
+        for (Friend friend : friends) {
+            User amigo = usersService.getUser(friend.getUser2_id());
+            if (amigo != null)
+                amigosDeVerdad.add(new FriendsForAll(friend, amigo));
+        }
+        Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
+        model.addAttribute("page", userAux);
+        model.addAttribute("friendsForAll", userAux);
+        return "friends/list";
+    }
+
     @RequestMapping("/friends/invitation/{user_id}")
     public String getListByUser(Model model, Pageable pageable, @PathVariable long user_id) {
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, user_id);
@@ -95,8 +111,8 @@ public class FriendsController {
     public String updateInvitationList(Model model, Pageable pageable, Principal principal) {
         //String dni = principal.getName(); // Obtenemos el DNI del Usuario autenticado
         //User user = userService.getUserByDni(dni);
-        Page<Friend> frieds = FriendsService.getFriendByUser1(pageable, 1L);
-        model.addAttribute("FriendsList", frieds.getContent());
+        // Page<Friend> frieds = FriendsService.getFriendByUser1(pageable, 1L);
+        // model.addAttribute("FriendsList", frieds.getContent());
         return "friends/invitation :: tableFriends";
     }
 

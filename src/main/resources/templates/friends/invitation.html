@@ -25,9 +25,9 @@
             </thead>
             <tbody>
             <tr th:each="amigo : ${friendsForAll}">
-                <td scope="row" th:text="${amigo.user.name}">71888888X</td>
-                <td scope="row" th:text="${amigo.user.surnames}">Nombre del alumno</td>
-                <td scope="row" th:text="${amigo.user.email}">Apellidos del alumno</td>
+                <td scope="row" th:text="${amigo.user.name}">Nombre del usuario</td>
+                <td scope="row" th:text="${amigo.user.surnames}">Apellidos del usuario</td>
+                <td scope="row" th:text="${amigo.user.email}">Email del usuario</td>
                 <td scope="row"><a></a>
                     <div>
                         <button type="button" th:id="${'AceptButton' + amigo.friend.id}" class="btn btn-success">Aceptar
