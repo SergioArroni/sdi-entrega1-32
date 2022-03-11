@@ -100,4 +100,5 @@ public class FriendsController {
         return "friends/invitation :: tableFriends";
     }
 
+
 }
