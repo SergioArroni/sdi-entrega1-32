@@ -23,7 +23,15 @@ public class UsersController {
         return "user/list";
     }
 
+    @RequestMapping("/user/list2")
+    public String getListado2(Model model) {
+        /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);*/
 
+        model.addAttribute("usersList", usersService.getStandardUsers());
+        return "user/list2";
+    }
 
 
 }

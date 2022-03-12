@@ -23,6 +23,19 @@ public class UsersService {
         return users;
     }
 
+    public List<User> getStandardUsers() {
+        List<User> users = new ArrayList<User>();
+        for (User user : getUsers()){
+            if (!user.getRole().equals("ROLE_ADMIN")) {
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    public User getUserByEmail(String email){
+        return usersRepository.findByEmail(email);
+    }
 
     public void addUser(User user) {
         //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
