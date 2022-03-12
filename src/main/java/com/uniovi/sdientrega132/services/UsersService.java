@@ -4,7 +4,7 @@ import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,8 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
-    /*@Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;*/
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<User> getUsers() {
         List<User> users = new ArrayList<User>();
@@ -23,10 +23,10 @@ public class UsersService {
         return users;
     }
 
-    public List<User> getStandardUsers() {
+    public List<User> getStandardUsers(User u) {
         List<User> users = new ArrayList<User>();
         for (User user : getUsers()){
-            if (!user.getRole().equals("ROLE_ADMIN")) {
+            if (!user.getRole().equals("ROLE_ADMIN") && !user.getEmail().equals(u.getEmail())) {
                 users.add(user);
             }
         }
@@ -38,7 +38,7 @@ public class UsersService {
     }
 
     public void addUser(User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
     }
 
