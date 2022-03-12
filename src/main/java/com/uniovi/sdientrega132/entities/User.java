@@ -23,6 +23,7 @@ public class User {
     public User(){}
 
     public User(String name, String surname,String email){
+        super();
         this.name=name;
         this.surnames=surname;
         this.email=email;
