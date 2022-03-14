@@ -6,6 +6,15 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
     <h2>Usuarios</h2>
+
+    <form class="form-inline" action="/user/list">
+        <div class="form-group">
+            <input name="searchText" type="text" class="form-control" size="50"
+                   placeholder="Buscar por email o nombre del usuario">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
     <p>Los usuarios que actualmente figuran en el sistema son los
         siguientes:</p>
     <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>

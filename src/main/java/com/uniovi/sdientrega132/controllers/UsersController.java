@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.LinkedList;
@@ -22,15 +23,20 @@ public class UsersController {
     private UsersService usersService;
 
     @RequestMapping("/user/list")
-    public String getListado(Model model, Pageable pageable) {
+    public String getListado(Model model, Pageable pageable,
+                                    @RequestParam(value="",required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
-        if (activeUser.getRole().equals("ROLE_ADMIN")) {
-            users = usersService.getUsers(pageable);
-        } else {
-            users = usersService.getStandardUsers(activeUser,pageable);
+        if (searchText!=null && !searchText.isEmpty())
+            users = usersService.searchUserByEmailAndName(searchText,activeUser);
+        else {
+            if (activeUser.getRole().equals("ROLE_ADMIN")) {
+                users = usersService.getUsers(pageable);
+            } else {
+                users = usersService.getStandardUsers(activeUser, pageable);
+            }
         }
         model.addAttribute("usersList",users.getContent());
         model.addAttribute("page",users);
@@ -50,6 +56,10 @@ public class UsersController {
         return "login";
     }
 
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
+    public String home(Model model) {
+        return "home";
+    }
 
 
 }

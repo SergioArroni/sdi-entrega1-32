@@ -17,22 +17,22 @@ public class InsertSampleDataService {
 
     @PostConstruct
     public void init() {
-        User user1 = new User("99999990A", "Pedro", "99999990A");
+        User user1 = new User("Pedro", "Gómez", "pedro@gmail.com");
         user1.setPassword("123456");
         user1.setRole(rolesService.getRoles()[0]);
-        User user2 = new User("99999991B", "Lucas", "99999991B");
+        User user2 = new User("Lucas", "Lucas", "lucas@gmail.com");
         user2.setPassword("123456");
         user2.setRole(rolesService.getRoles()[0]);
-        User user3 = new User("99999992C", "María", "99999992C");
+        User user3 = new User("María", "María", "mari@gmail.com");
         user3.setPassword("123456");
         user3.setRole(rolesService.getRoles()[0]);
-        User user4 = new User("99999993D", "Marta", "99999993D");
+        User user4 = new User("Marta", "Marta", "martita@gmail.com");
         user4.setPassword("123456");
         user4.setRole(rolesService.getRoles()[1]);
-        User user5 = new User("99999977E", "Pelayo", "99999977E");
+        User user5 = new User("Pelayo", "Pelayo", "pelayo@gmail.com");
         user5.setPassword("123456");
         user5.setRole(rolesService.getRoles()[1]);
-        User user6 = new User("99999988F", "Edward", "99999988F");
+        User user6 = new User("Edward", "Edward", "edward@uniovi.es");
         user6.setPassword("123456");
         user6.setRole(rolesService.getRoles()[1]);
 
