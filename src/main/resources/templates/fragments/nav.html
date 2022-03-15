@@ -28,11 +28,11 @@
                     <a class="nav-link" href="/signup">
                     <!--<a class="nav-link" href="/signup" th:text="#{signup.message}">-->
                         <i class='fas fa-user-alt' style='font-size:16px'></i>
-                        <span>Registrate</span>
+                        <span th:text="#{nav.signup}"></span>
                     </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/login"> <!--th:text="#{login.message}">-->
+                    <a class="nav-link" href="/user/login"> <!--th:text="#{login.message}">-->
                         <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
                         <span>Identifícate</span>
                     </a>
