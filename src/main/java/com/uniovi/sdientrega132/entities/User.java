@@ -13,7 +13,7 @@ public class User {
     private long id;
     //Nombre
     private String name;
-    private String surnames;
+    private String surname;
     @NotNull
     @Column(unique=true)
     private String email;
@@ -25,8 +25,9 @@ public class User {
     public User(){}
 
     public User(String name, String surname,String email){
+        super();
         this.name=name;
-        this.surnames=surname;
+        this.surname =surname;
         this.email=email;
     }
 
@@ -54,12 +55,12 @@ public class User {
         this.name = name;
     }
 
-    public String getSurnames() {
-        return surnames;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setSurnames(String surnames) {
-        this.surnames = surnames;
+    public void setSurname(String surnames) {
+        this.surname = surnames;
     }
 
     public String getEmail() {
@@ -90,7 +91,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", surnames='" + surnames + '\'' +
+                ", surnames='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

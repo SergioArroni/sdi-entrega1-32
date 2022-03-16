@@ -26,7 +26,7 @@ public class FriendsService {
         return professors;
     }
 
-    public Page<Friend> getInvitationsByUser1_id(Pageable pageable,long user1_id) {
+    public Page<Friend> getInvitationsByUser1_id(Pageable pageable, long user1_id) {
         Page<Friend> friends = friendsRepository.findInvitationsByUser1(pageable, user1_id);
         return friends;
     }
@@ -36,6 +36,7 @@ public class FriendsService {
     }
 
     public Page<Friend> getFriendByUser2(Pageable pageable, Long User2_id) {
+
         return friendsRepository.friendsUser2(pageable ,User2_id);
     }
 
@@ -45,6 +46,7 @@ public class FriendsService {
 
     public Page<Friend> getFriendByUser(Pageable pageable, Long User1_id) {
         return friendsRepository.findByUser_id(pageable ,User1_id);
+
     }
 
     public void addFriend(Friend professor) {
