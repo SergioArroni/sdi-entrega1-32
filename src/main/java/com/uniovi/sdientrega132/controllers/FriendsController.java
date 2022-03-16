@@ -36,7 +36,7 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getFriendByUser1(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        CodeAuxFriends(model, friends, pageable);
         return "friend/list";
     }
 
@@ -46,7 +46,7 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        CodeAuxFriends(model, friends, pageable);
         return "friend/invitation";
     }
 
@@ -68,11 +68,11 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        CodeAuxFriends(model, friends, pageable);
         return "friend/invitation :: tableFriends";
     }
 
-    private void CodeAuxFriends(Model model, Page<Friend> friends) {
+    private void CodeAuxFriends(Model model, Page<Friend> friends, Pageable pageable) {
         List<FriendsForAll> amigosDeVerdad = new ArrayList<FriendsForAll>();
         for (Friend friend : friends) {
             User amigo = usersService.getUser(friend.getUser2_id());
@@ -80,7 +80,10 @@ public class FriendsController {
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
         Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
+
         Page<User> users = new PageImpl<>(new LinkedList<>());
+
+        users = usersService.getUsers(pageable);
         model.addAttribute("page", users);
         model.addAttribute("friendsForAll", userAux);
     }
