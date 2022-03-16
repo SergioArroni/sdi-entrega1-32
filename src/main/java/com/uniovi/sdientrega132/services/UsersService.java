@@ -63,6 +63,7 @@ public class UsersService {
 
     public void deleteUsers(List<Long> ids) {
         usersRepository.deleteAllById(ids);
+    }
 
     public User getUser(Long id) {
         return usersRepository.findById(id).get();
