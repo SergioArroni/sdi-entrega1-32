@@ -33,4 +33,7 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
     @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.accept = true ORDER BY r.User1_id ASC")
     Page<Friend> friendsUser1(Pageable pageable, Long user1_id);
 
+    @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.User2_id = ?2")
+    Friend findCoupleFriends(Long user1_id, Long user2_id);
+
 }

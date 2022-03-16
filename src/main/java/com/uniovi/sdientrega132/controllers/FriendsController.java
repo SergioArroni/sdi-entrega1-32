@@ -36,7 +36,18 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getFriendByUser1(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        Page<Friend> friends2 = FriendsService.getFriendByUser2(pageable, activeUser.getId());
+        if(friends2.getContent() != null) {
+            if (friends.getContent() == null) {
+                friends = friends2;
+            }
+            if(friends != null) {
+                for (Friend friend : friends2)
+                    friends.getContent().add(friend);
+            }
+        }
+        if(friends != null)
+            CodeAuxFriends(model, friends);
         return "friend/list";
     }
 
@@ -70,6 +81,17 @@ public class FriendsController {
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
         return "friend/invitation :: tableFriends";
+    }
+
+    @RequestMapping("/friend/send/{userId2}")
+    public String sendInvitationTo(@PathVariable Long userId2) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        if(FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
+        && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null)
+            FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+        return "redirect:/user/list";
     }
 
     private void CodeAuxFriends(Model model, Page<Friend> friends) {

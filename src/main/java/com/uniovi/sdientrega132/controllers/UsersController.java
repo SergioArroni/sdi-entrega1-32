@@ -1,6 +1,8 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +37,8 @@ public class UsersController {
     private SignUpFormValidator signUpFormValidator;
     @Autowired
     private RolesService rolesService;
+    @Autowired
+    private FriendsService friendsService;
 
 
     @RequestMapping(value="/signup", method= RequestMethod.POST)
@@ -50,7 +55,7 @@ public class UsersController {
     }
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
-                                    @RequestParam(value="",required = false) String searchText) {
+                             @RequestParam(value="",required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);

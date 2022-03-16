@@ -45,14 +45,33 @@
             </tr>
             </thead>
             <tbody>
-            <tr id="trid" th:each="user : ${usersList}">
-                <td scope="row" th:text="${user.email}">ejemplo@uniovi.es</td>
-                <td scope="row" th:text="${user.name}">Nombre del usuario</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${user.surname}">Apellidos del usuario</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}!=${#authentication.getName()}" scope="row">
-                    <input type="checkbox" th:value="${user.id}">
+            <tr id="trid" th:each="usuarios : ${usersList}">
+                <td scope="row" th:text="${usuarios.email}">ejemplo@uniovi.es</td>
+                <td scope="row" th:text="${usuarios.name}">Nombre del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${usuarios.surname}">Apellidos del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${usuarios.email}!=${#authentication.getName()}" scope="row">
+                    <input type="checkbox" th:value="${usuarios.id}">
                 </td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}==${#authentication.getName()}" scope="row">
+                <td scope="row"><a></a>
+                <div>
+                    <button type="button" sec:authorize="hasRole('ROLE_USER')" th:id="${'AceptButton' + usuarios.id}" class="btn btn-success">
+                        Enviar amistad
+                    </button>
+                    <script th:inline="javascript"> /*<![CDATA[*/
+                    $("#AceptButton" + "[[${usuarios.id}]]").click(function () {
+                        $.get("/friend/send/[[${usuarios.id}]]", function () {
+                            var numberPage = [[${param.page}]];
+                            var urlUpdate = '/user/list/update';
+                            if (numberPage != null) {
+                                urlUpdate += "?page=" + numberPage[0];
+                            }
+                            $("#tableFriends").load(urlUpdate);
+                        });
+                    }); /*]]>*/
+                    </script>
+                </div>
+                </td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${usuarios.email}==${#authentication.getName()}" scope="row">
 
                 </td>
             </tr>
