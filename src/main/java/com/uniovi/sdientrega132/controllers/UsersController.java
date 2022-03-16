@@ -1,8 +1,26 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.services.RolesService;
+import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
+import com.uniovi.sdientrega132.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
+import java.util.LinkedList;
 
 @Controller
 public class UsersController {
@@ -25,8 +43,8 @@ public class UsersController {
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
-        //return "redirect:/user/list";
-        return "redirect:/home";
+        return "redirect:/user/list";
+        //return "redirect:/home";
     }
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
@@ -56,10 +74,6 @@ public class UsersController {
         model.addAttribute("usersList", usersService.getUsers(pageable) );
         return "user/list :: tableUsers";
     }
-
-
-
-
 
 
     @RequestMapping(value="/signup", method= RequestMethod.GET)

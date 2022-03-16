@@ -1,15 +1,11 @@
 package com.uniovi.sdientrega132;
 
-import com.uniovi.sdientrega132.pageobjects.PO_HomeView;
-import com.uniovi.sdientrega132.pageobjects.PO_Properties;
-import com.uniovi.sdientrega132.pageobjects.PO_SignUpView;
-import com.uniovi.sdientrega132.pageobjects.PO_View;
+import com.uniovi.sdientrega132.pageobjects.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.pageobjects.PO_NavView;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,6 +71,7 @@ class SdiEntrega132ApplicationTests {
     // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
     // apellidos vacíos)
     @Test
+    @Order(2)
     public void PR02() {
         // Vamos al formulario de registro
         PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
@@ -92,7 +89,8 @@ class SdiEntrega132ApplicationTests {
         PO_SignUpView.fillForm(driver, "marta@uniovi.es", "Marta", "", "holas", "hola");
         PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
         PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
-
+    }
+    @Test
     @Order(11)
     public void PR11() {
         System.out.println("TEST 11");

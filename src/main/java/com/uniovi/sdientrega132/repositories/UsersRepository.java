@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+
 
 public interface UsersRepository extends CrudRepository<User, Long> {
 
@@ -20,7 +20,7 @@ public interface UsersRepository extends CrudRepository<User, Long> {
     @Query("SELECT u from User u WHERE (LOWER(u.name) LIKE LOWER(?1) OR LOWER(u.email) LIKE LOWER(?1))")
     Page<User> searchByEmailAndName(Pageable pageable, String searchText);
 
-    @Query("SELECT u from User u WHERE (LOWER(u.name) LIKE LOWER(?1) OR LOWER(u.email) LIKE(?1) OR LOWER(u.surnames) LIKE LOWER(?1))")
+    @Query("SELECT u from User u WHERE (LOWER(u.name) LIKE LOWER(?1) OR LOWER(u.email) LIKE(?1) OR LOWER(u.surname) LIKE LOWER(?1))")
     Page<User> searchByEmailNameAndSurnames(Pageable pageable, String searchText);
 
 }
