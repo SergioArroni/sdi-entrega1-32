@@ -45,7 +45,8 @@
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"> Gestión de usuarios
+                       aria-haspopup="true" aria-expanded="false">
+                        <span th:text="#{user.menu}"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/user/list">

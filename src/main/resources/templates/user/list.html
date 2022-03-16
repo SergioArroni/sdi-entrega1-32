@@ -5,19 +5,20 @@
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
 <div class="container">
-    <h2>Usuarios</h2>
+    <h2 th:text="#{user.title}">Usuarios</h2>
 
     <form class="form-inline" action="/user/list">
         <div class="form-group">
             <input name="searchText" type="text" class="form-control" size="50"
-                   placeholder="Buscar por email o nombre del usuario">
+                    th:placeholder="#{user.search}">
+            <!--placeholder="Buscar por email o nombre del usuario">-->
         </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-primary" th:text="#{button.search}"></button>
     </form>
 
-    <p>Los usuarios que actualmente figuran en el sistema son los
+    <p th:text="#{user.list.message}">Los usuarios que actualmente figuran en el sistema son los
         siguientes:</p>
-    <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+    <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
     <script> th:inline="javascript">
         /*<![CDATA[*/
         $( "#updateButton" ).click(function() {
@@ -35,20 +36,50 @@
             <thead>
             <tr>
                 <th scope="col">Email</th>
-                <th scope="col">Nombre</th>
-                <th sec:authorize="hasRole('ROLE_ADMIN')" scope="col">Apellidos</th>
+                <th scope="col" th:text="#{user.name}">Nombre</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{user.surnames}" scope="col">Apellidos</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${usersList}">
+            <tr id="trid" th:each="user : ${usersList}">
                 <td scope="row" th:text="${user.email}">ejemplo@uniovi.es</td>
-                <td scope="row" th:text="${user.name}">Nombre del alumno</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${user.surnames}">Apellidos del alumno</td>
+                <td scope="row" th:text="${user.name}">Nombre del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${user.surname}">Apellidos del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}!=${#authentication.getName()}" scope="row">
+                    <input type="checkbox" th:value="${user.id}">
+                </td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}==${#authentication.getName()}" scope="row">
+
+                </td>
             </tr>
             </tbody>
         </table>
+        <button type="button" id="deleteButton" class="btn btn-default" th:text="#{button.delete}"></button>
+        <script> th:inline="javascript">
+            /*<![CDATA[*/
+
+            $( "#deleteButton" ).click(function() {
+                var urlUpdate = '/user/delete?ids=';
+                var selected = '';
+                $('#trid input[type=checkbox]').each(function(){
+                    if(this.checked) {
+                        selected += $(this).val()+',';
+                        urlUpdate += $(this).val()+',';
+                    }
+                });
+                if (selected != '') {
+                    urlUpdate = urlUpdate.substring(0, urlUpdate.length - 1);
+                    location.href="http://localhost:8090"+urlUpdate;
+                }
+                else
+                    alert('Debes seleccionar al menos una opción.');
+
+            });
+        /*]]>*/
+        </script>
     </div>
     <footer th:replace="fragments/pagination"/>
 </div>

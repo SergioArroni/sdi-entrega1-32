@@ -15,12 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class UsersController {
@@ -75,6 +77,15 @@ public class UsersController {
         return "user/list :: tableUsers";
     }
 
+    @GetMapping("/user/delete")
+    public String delete(@RequestParam(value="",required = false) List<Long> ids) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        ids.remove(activeUser.getId());
+        usersService.deleteUsers(ids);
+        return "redirect:/user/list";
+    }
 
     @RequestMapping(value="/signup", method= RequestMethod.GET)
     public String signup(Model model){

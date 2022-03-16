@@ -61,4 +61,8 @@ public class UsersService {
         return users;
     }
 
+    public void deleteUsers(List<Long> ids) {
+        usersRepository.deleteAllById(ids);
+    }
+
 }
