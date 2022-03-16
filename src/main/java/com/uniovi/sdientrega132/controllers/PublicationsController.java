@@ -8,4 +8,7 @@ import org.springframework.stereotype.Controller;
 public class PublicationsController {
     @Autowired
     private PublicationsService publicationsService;
+
+    public void handleFileUpload(FileUpload event) throws IOException
+
 }

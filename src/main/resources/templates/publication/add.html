@@ -35,9 +35,13 @@
                 <span class="text-danger" th:if="${#fields.hasErrors('pubText')}" th:errors="*{pubText}"></span>
             </div>
         </div>
+        <div>
+            <label class="control-label col-sm-2" for="pubFile">Imagen (opcional):</label>
+            <input type="file" name="pubFile" id="pubFile" accept="image/png">
+        </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="submit" class="btn btn-primary">Publicar</button>
             </div>
         </div>
     </form>
