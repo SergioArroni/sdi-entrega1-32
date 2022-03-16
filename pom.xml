@@ -70,6 +70,7 @@
               <artifactId>selenium-java</artifactId>
               <version>3.141.59</version>
           </dependency>
+
           <dependency>
               <groupId>org.junit.jupiter</groupId>
               <artifactId>junit-jupiter</artifactId>

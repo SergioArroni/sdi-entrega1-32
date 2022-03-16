@@ -1,5 +1,5 @@
 package com.uniovi.sdientrega132.services;
-
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,8 @@ import javax.annotation.PostConstruct;
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
-
+    @Autowired
+    private FriendsService friendsService;
     @Autowired
     private RolesService rolesService;
 
@@ -66,5 +67,10 @@ public class InsertSampleDataService {
         user6 = usersService.getUserByEmail(user6.getEmail());
         user7 = usersService.getUserByEmail(user7.getEmail());
         user8 = usersService.getUserByEmail(user8.getEmail());
+
+        friendsService.addFriend(new Friend(1L, user2.getId(), false));
+        friendsService.addFriend(new Friend(1L, user3.getId(), false));
+        friendsService.addFriend(new Friend(1L, user4.getId(), false));
+
     }
 }
