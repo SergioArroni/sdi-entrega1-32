@@ -8,9 +8,11 @@ import java.util.Set;
 @Entity
 @Table(name="user")
 public class User {
+
     @Id
     @GeneratedValue
     private long id;
+    //Nombre
     private String name;
     private String surnames;
     @NotNull
