@@ -58,4 +58,6 @@ public class PublicationsController {
         return "publication/add";
     }
 
+    public void handleFileUpload(FileUpload event) throws IOException {}
+
 }
