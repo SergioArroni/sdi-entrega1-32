@@ -70,6 +70,10 @@ public class InsertSampleDataService {
 
         friendsService.addFriend(new Friend(user1.getId(), user2.getId(), false));
         friendsService.addFriend(new Friend(user1.getId(), user3.getId(), false));
+        friendsService.addFriend(new Friend(user1.getId(), user5.getId(), false));
         friendsService.addFriend(new Friend(user1.getId(), user4.getId(), false));
+        friendsService.addFriend(new Friend(user1.getId(), user6.getId(), false));
+        friendsService.addFriend(new Friend(user1.getId(), user7.getId(), false));
+        friendsService.addFriend(new Friend(user1.getId(), user8.getId(), false));
     }
 }

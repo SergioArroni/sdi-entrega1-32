@@ -62,8 +62,8 @@ public class FriendsController {
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
         Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
+        model.addAttribute("friendsForAll", userAux.getContent());
         model.addAttribute("page", userAux);
-        model.addAttribute("friendsForAll", userAux);
         return "friends/list";
     }
 
@@ -77,8 +77,8 @@ public class FriendsController {
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
         Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
+        model.addAttribute("friendsForAll", userAux.getContent());
         model.addAttribute("page", userAux);
-        model.addAttribute("friendsForAll", userAux);
         return "friends/invitation";
     }
 

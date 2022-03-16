@@ -131,4 +131,15 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    // PR19. Envíar petición de amistad a alguien y que le aparezca
+    @Test
+    @Order(19)
+    public void PR19() {
+        System.out.println("TEST 11");
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999988F", "123456");
+    }
+
 }
