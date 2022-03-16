@@ -32,9 +32,9 @@
                     </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/user/login"> <!--th:text="#{login.message}">-->
+                    <a class="nav-link" href="/login"> <!--th:text="#{login.message}">-->
                         <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
-                        <span>Identifícate</span>
+                        <span th:text="#{login.message}"></span>
                     </a>
                 </li>
             </ul>
