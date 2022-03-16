@@ -26,7 +26,7 @@
             <tbody>
             <tr th:each="amigo : ${friendsForAll}">
                 <td scope="row" th:text="${amigo.user.name}">Nombre del usuario</td>
-                <td scope="row" th:text="${amigo.user.surnames}">Apellidos del usuario</td>
+                <td scope="row" th:text="${amigo.user.surname}">Apellidos del usuario</td>
                 <td scope="row" th:text="${amigo.user.email}">Email del usuario</td>
                 </td>
             </tr>
