@@ -57,7 +57,7 @@
             </tr>
             </tbody>
         </table>
-        <button type="button" id="deleteButton" class="btn btn-default" th:text="#{button.delete}"></button>
+        <button type="button" sec:authorize="hasRole('ROLE_ADMIN')" id="deleteButton" class="btn btn-default" th:text="#{button.delete}"></button>
         <script> th:inline="javascript">
             /*<![CDATA[*/
 
