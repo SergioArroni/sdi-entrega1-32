@@ -23,6 +23,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Value("${spring.data.web.pageable.default-page-size}")
     private int size;
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
