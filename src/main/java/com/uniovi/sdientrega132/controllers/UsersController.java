@@ -1,17 +1,8 @@
 package com.uniovi.sdientrega132.controllers;
 
-import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.services.RolesService;
-import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
-import com.uniovi.sdientrega132.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class UsersController {
@@ -37,6 +28,39 @@ public class UsersController {
         //return "redirect:/user/list";
         return "redirect:/home";
     }
+    @RequestMapping("/user/list")
+    public String getListado(Model model, Pageable pageable,
+                                    @RequestParam(value="",required = false) String searchText) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        Page<User> users = new PageImpl<>(new LinkedList<>());
+        if (searchText!=null && !searchText.isEmpty())
+            users = usersService.searchUserByEmailAndName(searchText,activeUser);
+        else {
+            if (activeUser.getRole().equals("ROLE_ADMIN")) {
+                users = usersService.getUsers(pageable);
+            } else {
+                users = usersService.getStandardUsers(activeUser, pageable);
+            }
+        }
+        model.addAttribute("usersList",users.getContent());
+        model.addAttribute("page",users);
+        return "user/list";
+    }
+
+    @RequestMapping("/user/list/update")
+    public String updateList(Model model, Pageable pageable, Principal principal){
+        String email = principal.getName(); // Email es el name de la autenticación
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("usersList", usersService.getUsers(pageable) );
+        return "user/list :: tableUsers";
+    }
+
+
+
+
+
 
     @RequestMapping(value="/signup", method= RequestMethod.GET)
     public String signup(Model model){
