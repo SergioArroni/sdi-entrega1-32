@@ -46,15 +46,7 @@ public class UsersController {
         return "redirect:home";
     }
 
-    /*@RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@Validated User user, BindingResult result) {
-        signUpFormValidator.validate(user, result);
-        if(result.hasErrors()) {
-            return "login";
-        }
-        securityService.autoLogin(user.getEmail(), user.getPassword());
-        return "redirect:/user/list";
-    }*/
+
 
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
