@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:if="${mark.resend}">
+    <button type="button" th:id="${'resendButton' + mark.id}" class="btn btn-success">Reenviar
+    </button>
+    <script th:inline="javascript"> /*<![CDATA[*/
+    $("#resendButton" + "[[${mark.id}]]").click(function () {
+        $.get("/mark/[[${mark.id}]]/noresend", function (data) {
+            var numberPage = [[${param.page}]];
+            var urlUpdate = '/mark/list/update';
+            if (numberPage != null) {
+                urlUpdate += "?page=" + numberPage[0];
+            }
+            $("#tableMarks").load(urlUpdate);
+        });
+    }); /*]]>*/
+    </script>
+</div>
+<div th:unless="${mark.resend}">
+    <button type="button" th:id="${'noresendButton' + mark.id}" class="btn btn-info">No
+        reenviar
+    </button>
+    <script th:inline="javascript"> /*<![CDATA[*/
+    $("#noresendButton" + "[[${mark.id}]]").click(function () {
+        $.get("/mark/[[${mark.id}]]/resend", function (data) {
+            var numberPage = [[${param.page}]];
+            var urlUpdate = '/mark/list/update';
+            if (numberPage != null) {
+                urlUpdate += "?page=" + numberPage[0];
+            }
+            $("#tableMarks").load(urlUpdate);
+        });
+    }); /*]]>*/
+    </script>
+</div>
+</body>
+</html>
