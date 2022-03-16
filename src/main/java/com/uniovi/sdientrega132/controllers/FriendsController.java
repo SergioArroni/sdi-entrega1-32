@@ -55,12 +55,6 @@ public class FriendsController {
             if (amigo != null)
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
-        friends = FriendsService.getFriendByUser2(pageable, user_id);
-        for (Friend friend : friends) {
-            User amigo = usersService.getUser(friend.getUser1_id());
-            if (amigo != null)
-                amigosDeVerdad.add(new FriendsForAll(friend, amigo));
-        }
         Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
         model.addAttribute("page", userAux);
         model.addAttribute("friendsForAll", userAux);
@@ -121,6 +115,5 @@ public class FriendsController {
         // model.addAttribute("FriendsList", frieds.getContent());
         return "friends/invitation :: tableFriends";
     }
-
 
 }
