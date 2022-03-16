@@ -1,34 +1,31 @@
 package com.uniovi.sdientrega132;
 
-import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.pageobjects.PO_LoginView;
-import com.uniovi.sdientrega132.pageobjects.PO_NavView;
-import com.uniovi.sdientrega132.pageobjects.PO_PrivateView;
-import com.uniovi.sdientrega132.pageobjects.PO_View;
-import com.uniovi.sdientrega132.repositories.UsersRepository;
-import com.uniovi.sdientrega132.services.UsersService;
+import com.uniovi.sdientrega132.pageobjects.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
+
 
 import java.util.List;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
-
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    //static String Geckodriver = "C:\\Path\\geckodriver-v0.30.0-win64.exe";
-    static String Geckodriver = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
-    //static String PathFirefox = "/Applications/Firefox.app/Contents/MacOS/firefox-bin";
-    //static String Geckodriver = "/Users/USUARIO/selenium/geckodriver-v0.30.0-macos";
+    static String Geckodriver ="C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
+
     //Común a Windows y a MACOSX
     static WebDriver driver = getDriver(PathFirefox, Geckodriver);
     static String URL = "http://localhost:8090";
+
+
+
+
 
     @Autowired
     private UsersRepository usersRepository;
@@ -60,6 +57,39 @@ class SdiEntrega132ApplicationTests {
     }
 
     //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
+    @Test
+    @Order(1)
+    public void PR01() {
+        //Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        //Rellenamos el formulario.
+        PO_SignUpView.fillForm(driver, "correo1@uniovi.es", "Josefo", "Perez", "77777", "77777");
+        //Comprobamos que entramos en la vista concreta
+        //PO_ListUsersView.checkKey(driver, "usersInSystem.message", PO_Properties.getSPANISH());
+    }
+
+    // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
+    // apellidos vacíos)
+    @Test
+    @Order(2)
+    public void PR02() {
+        // Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        // Rellenamos el formulario, dejando vacío el campo de email
+        PO_SignUpView.fillForm(driver, "", "Marta", "González", "holas", "hola");
+        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
+        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
+
+        // Rellenamos el formulario, dejando vacío el campo de nombre
+        PO_SignUpView.fillForm(driver, "marta@uniovi.es", "", "González", "holas", "hola");
+        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
+        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
+
+        // Rellenamos el formulario, dejando vacío el campo de apellido
+        PO_SignUpView.fillForm(driver, "marta@uniovi.es", "Marta", "", "holas", "hola");
+        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
+        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
+    }
     @Test
     @Order(11)
     public void PR11() {

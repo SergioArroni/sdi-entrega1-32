@@ -1,5 +1,5 @@
 package com.uniovi.sdientrega132.services;
-
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +59,14 @@ public class UsersService {
             users = usersRepository.searchByEmailNameAndSurnames(pageable, searchText);
         }
         return users;
+    }
+
+    public void deleteUsers(List<Long> ids) {
+        usersRepository.deleteAllById(ids);
+    }
+
+    public User getUser(Long id) {
+        return usersRepository.findById(id).get();
     }
 
 }

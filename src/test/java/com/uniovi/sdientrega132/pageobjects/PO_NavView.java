@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+
 public class PO_NavView extends PO_View{
     /**
      * Clic en una de las opciones principales (a href) y comprueba que se vaya a la vista con el elemento de
@@ -47,7 +48,5 @@ public class PO_NavView extends PO_View{
                 getTimeout());
         Selectedlanguage.get(0).click();
     }
-
-
 
 }
