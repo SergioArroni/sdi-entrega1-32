@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 public class FriendsForAll {
 
-
     private Friend friend;
     private User user;
 
