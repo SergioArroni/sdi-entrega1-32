@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.CustomConfiguration;
 import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.User;
@@ -16,8 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,6 +83,7 @@ public class FriendsController {
         Page<User> users = new PageImpl<>(new LinkedList<>());
 
         users = usersService.getUsers(pageable);
+
         model.addAttribute("page", users);
         model.addAttribute("friendsForAll", userAux);
     }
