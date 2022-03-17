@@ -12,21 +12,15 @@
                 <li class="nav-item ">
                     <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
                 </li>
-                <li id= "users-menu" class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"> Usuarios
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span th:text="#{user.menu}"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/mark/add" sec:authorize="hasRole('ROLE_PROFESSOR')" >Listar Usuarios</a>
-                        <a class="dropdown-item" href="/mark/list">Buscar Usuarios</a>
-                    </div>
-                </li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')" id= "admin-menu" class="nav-item dropdown" >
-                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"> Gestión de usuarios
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/user/add">Listar Usuarios</a>
+                        <a class="dropdown-item" href="/user/list">
+                            <span th:text="#{user.list}">Ver usuarios</span>
+                        </a>
                     </div>
                 </li>
                 <li id= "friends-menu" class="nav-item dropdown">
@@ -59,31 +53,42 @@
                     <div id="languageDropdownMenuButton" class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" id="btnEnglish" value="EN">
                             <img th:src="@{/images/if_uk_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
-                            <span th:text="#{language.en}">Inglés</span>
+                            <span th:text="#{language.en}"></span>
                         </a>
                         <a class="dropdown-item" id="btnSpanish" value="ES">
                             <img th:src="@{/images/if_spain_flag.png}" style="border: 0; float: left; margin-right: 15px"/>
-                            <span th:text="#{language.es}">Español</span>
+                            <span th:text="#{language.es}"></span>
                         </a>
                     </div>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/signup" th:text="#{signup.message}">
                         <i class='fas fa-user-alt' style='font-size:16px'></i>
-                        <span>Registrate</span>
+                        <span th:text="#{nav.signup}"></span>
                     </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/login" th:text="#{login.message}">
                         <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
-                        <span>Identifícate</span>
+                        <span th:text="#{login.message}"></span>
                     </a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <i class='fas fa-sign-out-alt' style='font-size:16px'></i>
-                        <span>Desconectar</span>
+                <li id="logout_link" sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/logout"> <!--th:text="#{login.message}">-->
+                        <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
+                        <span th:text="#{logout.message}"></span>
                     </a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span th:text="#{user.menu}"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/list">
+                            <span th:text="#{user.list}">Ver usuarios</span>
+                        </a>
+                    </div>
                 </li>
             </ul>
         </div>
