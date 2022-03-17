@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.pageobjects;
 
 
+import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,4 +20,6 @@ public class PO_LoginView extends PO_NavView {
         By boton = By.className("btn");
         driver.findElement(boton).click();
     }
+
+
 }

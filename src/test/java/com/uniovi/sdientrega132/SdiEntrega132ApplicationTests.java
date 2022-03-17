@@ -1,17 +1,23 @@
 package com.uniovi.sdientrega132;
 
 import com.uniovi.sdientrega132.pageobjects.*;
+import com.uniovi.sdientrega132.util.SeleniumUtils;
+
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -56,16 +62,18 @@ class SdiEntrega132ApplicationTests {
         driver.quit();
     }
 
-    //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
-    @Test
+
+
+     @Test
     @Order(1)
     public void PR01() {
         //Vamos al formulario de registro
         PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
         //Rellenamos el formulario.
         PO_SignUpView.fillForm(driver, "correo1@uniovi.es", "Josefo", "Perez", "77777", "77777");
-        //Comprobamos que entramos en la vista concreta
-        //PO_ListUsersView.checkKey(driver, "usersInSystem.message", PO_Properties.getSPANISH());
+        String checkText = "Bienvenidos a nuestra red social";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
     // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
@@ -76,20 +84,224 @@ class SdiEntrega132ApplicationTests {
         // Vamos al formulario de registro
         PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
         // Rellenamos el formulario, dejando vacío el campo de email
-        PO_SignUpView.fillForm(driver, "", "Marta", "González", "holas", "hola");
-        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
-        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
+        PO_SignUpView.fillForm(driver, "hola@uniovi.es", "", "González", "123456", "123456");
 
-        // Rellenamos el formulario, dejando vacío el campo de nombre
-        PO_SignUpView.fillForm(driver, "marta@uniovi.es", "", "González", "holas", "hola");
-        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
-        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
+        SeleniumUtils.waitTextIsNotPresentOnPage(driver, "text",PO_View.getTimeout());
 
-        // Rellenamos el formulario, dejando vacío el campo de apellido
-        PO_SignUpView.fillForm(driver, "marta@uniovi.es", "Marta", "", "holas", "hola");
-        PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
-        PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
     }
+
+    @Test
+    @Order(3)
+    public void PR03() {
+        // Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        // Rellenamos el formulario, con la repeticion de la contraseña incorrecta
+        PO_SignUpView.fillForm(driver, "andrea@uniovi.es", "Marta", "González", "123456", "1234567");
+
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.passwordConfirm.coincidence",
+                PO_Properties.getSPANISH());
+
+        String checkText = PO_HomeView.getP().getString("Error.signup.passwordConfirm.coincidence",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(4)
+    public void PR04() {
+        // Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+        // Rellenamos el formulario, con un email ya existente
+        PO_SignUpView.fillForm(driver, "uo271355@uniovi.es", "Marta", "González", "123456", "123456");
+
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.email.duplicate",
+                PO_Properties.getSPANISH());
+
+        String checkText = PO_HomeView.getP().getString("Error.signup.email.duplicate",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(5)
+    public void PR05() {
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario, como administrador
+        PO_LoginView.fillLoginForm(driver,"admin@email.com","admin");
+        String checkText = "Usuarios";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(6)
+    public void PR06() {
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario, como un usuario normal
+        PO_LoginView.fillLoginForm(driver,"uo271355@uniovi.es","123456");
+        String checkText = "Usuarios";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(7)
+    public void PR07() {
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario, como un usuario normal pero con la contraseña y email vacios
+        PO_LoginView.fillLoginForm(driver,"","");
+        SeleniumUtils.waitTextIsNotPresentOnPage(driver, "text",PO_View.getTimeout());
+    }
+
+    @Test
+    @Order(8)
+    public void PR08() {
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario, como un usuario normal pero con la contraseña incorrecta
+        PO_LoginView.fillLoginForm(driver,"uo271355@uniovi.es","12345678");
+
+        List<WebElement> result = PO_LoginView.checkElementByKey(driver, "Error.login",
+                PO_Properties.getSPANISH());
+
+        String checkText = PO_HomeView.getP().getString("Error.login",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(9)
+    public void PR09() {
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver,"uo271355@uniovi.es","123456");
+
+        String checkText = "Usuarios";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        checkText = "Identificate";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    @Test
+    @Order(10)
+    public void PR010() {
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Cierra sesion");
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver,"uo271355@uniovi.es","123456");
+
+        String checkText = "Usuarios";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        SeleniumUtils.textIsPresentOnPage(driver,"Cierra sesion");
+        // Vamos al formulario de logeo
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Cierra sesion");
+    }
+
+    @Test
+    @Order(12)
+    public void PR012() {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+        elementos.get(0).findElement(By.id("selected")).click();
+        driver.findElement(By.id("deleteButton")).click();
+        SeleniumUtils.textIsNotPresentOnPage(driver, "uo271355@uniovi.es");
+    }
+
+    @Test
+    @Order(13)
+    public void PR013() {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //Navegamos hasta la última página
+        boolean isNextPage = false;
+        do {
+
+            // Check If There is next page
+            List<WebElement> nextPageLink = driver.findElements(By.id("nextPageOfList"));
+            if ( !nextPageLink.isEmpty() ) {
+                nextPageLink.get(0).click();
+                isNextPage = true;
+            } else {
+                isNextPage = false;
+            }
+
+        } while (isNextPage);
+
+
+        List<WebElement> users = driver.findElements(By.id("tableUsers"));
+
+        // Seleccionamos el último usuario y lo borramos
+        WebElement checkbox = users.get( users.size()-1 ).findElement(By.id("selected"));
+        checkbox.click();
+
+        WebElement btnBorrar = driver.findElement( By.id("deleteButton"));
+        btnBorrar.click();
+
+        SeleniumUtils.textIsNotPresentOnPage(driver, "lucia@uniovi.es");
+    }
+
+    @Test
+    @Order(14)
+    public void PR014() {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+
+        elementos.get(1).findElement(By.id("selected")).click();
+        elementos.get(2).findElement(By.id("selected")).click();
+        //Navegamos hasta la última página
+        boolean isNextPage = false;
+        do {
+            List<WebElement> nextPageLink = driver.findElements(By.id("nextPageOfList"));
+            // Check If There is next page
+            nextPageLink = driver.findElements(By.id("nextPageOfList"));
+            if ( !nextPageLink.isEmpty() ) {
+                nextPageLink.get(0).click();
+                isNextPage = true;
+            } else {
+                isNextPage = false;
+            }
+
+        } while (isNextPage);
+
+        List<WebElement> users = driver.findElements(By.id("tableUsers"));
+
+        // Seleccionamos el último usuario y lo borramos
+        WebElement checkbox = users.get( users.size()-1 ).findElement(By.id("selected"));
+        checkbox.click();
+
+
+
+        driver.findElement(By.id("deleteButton")).click();
+        SeleniumUtils.textIsNotPresentOnPage(driver, "lucia@uniovi.es");
+        List<WebElement> nextPageLink = driver.findElements(By.id("nextPageOfList"));
+        nextPageLink.get(0).click();
+        SeleniumUtils.textIsNotPresentOnPage(driver, "sara@uniovi.es");
+        SeleniumUtils.textIsNotPresentOnPage(driver, "juan@uniovi.es");
+
+    }
+
+/*
+
     @Test
     @Order(11)
     public void PR11() {
@@ -129,6 +341,6 @@ class SdiEntrega132ApplicationTests {
         result = PO_View.checkElementBy(driver, "text", checkText);
         //System.out.println(result);
         Assertions.assertEquals(checkText, result.get(0).getText());
-    }
+    }*/
 
 }

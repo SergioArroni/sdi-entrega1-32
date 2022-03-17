@@ -1,5 +1,3 @@
-package com.uniovi.sdientrega132.pageobjects;
-
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

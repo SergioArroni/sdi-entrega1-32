@@ -22,7 +22,7 @@
                th:text="${page.getNumber()+1}"></a>
         </li>
         <!-- Siguiente (si la hay) -->
-        <li class="page-item" th:if='${page.getNumber()+1 <= page.getTotalPages()-1}'>
+        <li id="nextPageOfList" class="page-item" th:if='${page.getNumber()+1 <= page.getTotalPages()-1}'>
             <a class="page-link" th:href="@{'?page='+${page.getNumber()+1} }"
                th:text="${page.getNumber()+2}"></a>
         </li>

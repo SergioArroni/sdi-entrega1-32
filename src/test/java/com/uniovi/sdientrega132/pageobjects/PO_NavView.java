@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class PO_NavView extends PO_View{
     /**
      * Clic en una de las opciones principales (a href) y comprueba que se vaya a la vista con el elemento de
@@ -49,4 +51,11 @@ public class PO_NavView extends PO_View{
         Selectedlanguage.get(0).click();
     }
 
+    public static void clickOnHRef(WebDriver driver, String texto) {
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "@href", texto, getTimeout());
+        // Tiene que haber un sólo elemento.
+        assertTrue(elementos.size() == 1);
+        // Ahora lo clickamos
+        elementos.get(0).click();
+    }
 }

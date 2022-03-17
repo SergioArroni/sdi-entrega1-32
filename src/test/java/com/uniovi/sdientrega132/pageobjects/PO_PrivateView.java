@@ -29,4 +29,7 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(index).click();
     }
 
+    public static void deleteUser(WebDriver driver, String string) {
+        clickOnHRef(driver, "/user/delete/"+string); //primero de la lista
+    }
 }
