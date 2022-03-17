@@ -38,13 +38,12 @@ public class FriendsService {
         return friendsRepository.friendsUser2(pageable ,User2_id);
     }
 
-    public Page<Friend> getFriendByUser1(Pageable pageable, Long User1_id) {
+    public Page<Friend> getFriendByUser(Pageable pageable, Long User1_id) {
         return friendsRepository.friendsUser1(pageable ,User1_id);
     }
 
-    public Page<Friend> getFriendByUser(Pageable pageable, Long User1_id) {
-        return friendsRepository.findByUser_id(pageable ,User1_id);
-
+    public Friend getCoupleFriends(Long User1_id, Long User2_id) {
+        return friendsRepository.findCoupleFriends(User1_id, User2_id);
     }
 
     public void addFriend(Friend friend) {

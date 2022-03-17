@@ -33,8 +33,9 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser1(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
+        if(friends != null)
+            CodeAuxFriends(model, friends);
         return "friend/list";
     }
 
@@ -70,6 +71,29 @@ public class FriendsController {
         return "friend/invitation :: tableFriends";
     }
 
+    @RequestMapping("/friend/send/{userId2}")
+    public String sendInvitationTo(@PathVariable Long userId2) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        if(FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
+        && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null)
+            FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+        return "redirect:/user/list";
+    }
+
+    private void CodeAuxFriendsF(Model model, Page<Friend> friends) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        List<FriendsForAll> amigosDeVerdad = new ArrayList<FriendsForAll>();
+        for (Friend friend : friends) {
+            User amigo;
+            if(friend.getUser2_id() != activeUser.getId())
+                amigo = usersService.getUser(friend.getUser2_id());
+            else
+                amigo = usersService.getUser(friend.getUser1_id());
+            if (amigo != null)
     @RequestMapping("/friend/list/update")
     public String updateListList(Model model, Pageable pageable) {
 
@@ -88,6 +112,7 @@ public class FriendsController {
         for (Friend friend : friends) {
             User amigo = usersService.getUser(friend.getUser2_id());
             if (amigo != null) {
+
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
             }
         }

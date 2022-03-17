@@ -134,6 +134,17 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    // PR19. Envíar petición de amistad a alguien y que le aparezca
+    @Test
+    @Order(19)
+    public void PR19B() {
+        System.out.println("TEST 11");
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999988F", "123456");
+    }
+
     // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(19)
@@ -201,6 +212,5 @@ class SdiEntrega132ApplicationTests {
                 PO_View.getTimeout());
         Assertions.assertTrue(usuarios.size() == 6);
     }
-
 
 }

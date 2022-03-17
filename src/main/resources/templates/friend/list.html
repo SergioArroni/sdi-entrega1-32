@@ -5,9 +5,9 @@
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"/>
 <div class="container">
-    <h2>Invitaciones</h2>
-    <p>Las invitaciones pendientes son las siguientes:</p>
-    <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+    <h2><span th:text="#{friend.title}"></span></h2>
+    <p><span th:text="#{friend.description}"></span></p>
+    <button type="button" id="updateButton" class="btn btn-default"><span th:text="#{button.update}"></span></button>
     <script>
         $("#updateButton").click(function () {
             $("#tableFriends").load('/friend/list/update');
@@ -17,9 +17,9 @@
         <table class="table table-hover" th:fragment="tableFriends" id="tableFriends">
             <thead>
             <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellidos</th>
-                <th scope="col">Email</th>
+                <th scope="col"><span th:text="#{signup.name}"></span></th>
+                <th scope="col"><span th:text="#{signup.surname}"></span></th>
+                <th scope="col">Email:</th>
                 <th scope="col"></th>
             </tr>
             </thead>
