@@ -56,7 +56,6 @@ public class FriendsService {
         //Friend friend = friendsRepository.findById(id).get();
 
         friendsRepository.updateResend(revised, id);
-
     }
 
 }

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head" />
 <body>
 <nav th:replace="fragments/nav" />
@@ -7,10 +7,10 @@
     <h2 th:text="#{login.message}"></h2>
     <form class="form-horizontal" method="post" action="/login">
 
-        <!--<div th:if="${param.error}">
-            <div th:text="#{login.error.message}" class="alert alert-danger">
+        <div th:if="${param.error}">
+            <div th:text="#{Error.login}" class="alert alert-danger">
             </div>
-        </div>-->
+        </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="username"> Email:</label>
             <div class="col-sm-10">
@@ -24,7 +24,7 @@
             <div class="col-sm-10">
                 <input type="password" class="form-control" id="password" name="password"
                        th:placeholder="#{signup.password}" required=true/>
-                <!--<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
+              <!--  <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
             </div>
         </div>
         <div class="form-group">
