@@ -21,7 +21,7 @@
         /*]]>*/
     </script>
     <div class="table-responsive">
-        <table class="table table-hover" th:fragment="tablePublications" id="tablePublications" th:replace="fragments/tablePublications" />
+        <table class="table table-hover" th:fragment="tablePublications" id="tablePublications" th:replace="fragments/publicationTable" />
     </div>
     <footer th:replace="fragments/pagination"/>
     <div th:if="${#lists.isEmpty(publicationsList)}"> No hay publicaciones </div>

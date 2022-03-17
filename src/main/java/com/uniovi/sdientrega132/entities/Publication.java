@@ -12,6 +12,7 @@ public class Publication {
     private String title;
     private String text;
     private Date publishingDate;
+    private String foto;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -65,5 +66,22 @@ public class Publication {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    @Override
+    public String toString() {
+        return "Publication{" +
+                "title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", publishingDate=" + publishingDate +
+                '}';
     }
 }

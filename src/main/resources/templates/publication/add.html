@@ -15,7 +15,7 @@
                 <select id="user" class="form-control" name="user">
                     <option th:each="user : ${usersList}"
                             th:value="${user.id}"
-                            th:text="${user.dni}+' - '+${user.name}+' ' +${user.lastName} ">
+                            th:text="${user.email}+' - '+${user.name}+' ' +${user.surnames} ">
                         Usuario
                     </option>
                 </select>

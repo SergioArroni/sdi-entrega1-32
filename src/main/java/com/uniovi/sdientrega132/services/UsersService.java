@@ -6,6 +6,9 @@ import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UsersService {
     @Autowired
@@ -19,8 +22,14 @@ public class UsersService {
         return usersRepository.findById(id).get();
     }
 
-    public User getUserByUsername(String username) {
-        return usersRepository.findByUsername(username);
+    public User getUserByEmail(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<User>();
+        usersRepository.findAll().forEach(users::add);
+        return users;
     }
 
 }
