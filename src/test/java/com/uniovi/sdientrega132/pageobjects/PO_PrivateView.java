@@ -46,4 +46,10 @@ public class PO_PrivateView extends PO_NavView {
         PO_PrivateView.clickOption(driver, "logout", "text", loginText);
     }
 
+    static public void enviarAceptarPeticion(WebDriver driver, String usuario)
+    {
+        By boton = By.id( usuario );
+        driver.findElement(boton).click();
+    }
+
 }

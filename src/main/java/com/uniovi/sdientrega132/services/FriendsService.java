@@ -47,8 +47,8 @@ public class FriendsService {
 
     }
 
-    public void addFriend(Friend professor) {
-        friendsRepository.save(professor);
+    public void addFriend(Friend friend) {
+        friendsRepository.save(friend);
     }
 
     public void deleteFriend(Long id) {

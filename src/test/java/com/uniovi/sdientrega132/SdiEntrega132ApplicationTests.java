@@ -168,7 +168,21 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(22)
     public void PR22() {
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "juan@uniovi.es", "123456");
 
+        // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
+        PO_NavView.desplegarAmigos(driver, "invitationFriends");
+
+        // Se comprueba que Pablo tiene 1 peticion de amistad
+        List<WebElement> usuarios = PO_PrivateView.checkElementBy(driver, "text", "Aceptar");
+        Assertions.assertTrue(usuarios.size() == 1);
+
+        // Se acepta la petición del usuario "Mongo"
+        PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
+
+        // Se comprueba que ahora ya se ha aceptado la petición, por tanto no hay peticiones pendientes
+        PO_PrivateView.clickCheck(driver, "No dispones de ninguna peticion de amistad, :(",0);
     }
 
     // PR23. Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene los amigos que deben ser

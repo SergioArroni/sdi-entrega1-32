@@ -18,8 +18,16 @@
         $("#tableFriends").load(urlUpdate);
     }); /*]]>*/
     </script>
+
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="tableFriends" id="tableFriends">
+            <div th:if="${#lists.isEmpty(friendsForAll)}" class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning">
+                        <p>No dispones de ninguna peticion de amistad, :(.</p>
+                    </div>
+                </div>
+            </div>
             <thead>
             <tr>
                 <th scope="col">Nombre</th>
