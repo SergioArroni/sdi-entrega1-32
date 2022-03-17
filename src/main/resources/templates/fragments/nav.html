@@ -18,7 +18,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/mark/add" sec:authorize="hasRole('ROLE_PROFESSOR')" >Listar Usuarios</a>
-                        <a class="dropdown-item" href="/user/list">Buscar Usuarios</a>
+                        <a class="dropdown-item" id="listUser" href="/user/list">Buscar Usuarios</a>
                     </div>
                 </li>
                 <li sec:authorize="hasRole('ROLE_ADMIN')" id= "admin-menu" class="nav-item dropdown" >

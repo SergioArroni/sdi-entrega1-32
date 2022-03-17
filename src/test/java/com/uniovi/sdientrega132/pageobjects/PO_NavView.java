@@ -59,4 +59,12 @@ public class PO_NavView extends PO_View {
 
     }
 
+    public static void desplegarUsuarios(WebDriver driver, String textoOpcion) {
+        // clickamos la opción de Usuarios
+        PO_PrivateView.clickOn(driver, "users-menu", 0);
+        // Esperamos a que aparezca el menú
+        PO_PrivateView.clickOn(driver, textoOpcion, 0);
+
+    }
+
 }

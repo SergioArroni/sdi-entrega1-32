@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class UsersController {
@@ -41,10 +39,10 @@ public class UsersController {
     private FriendsService friendsService;
 
 
-    @RequestMapping(value="/signup", method= RequestMethod.POST)
-    public String signup(@Validated User user, BindingResult result){
-        signUpFormValidator.validate(user,result);
-        if(result.hasErrors()) {
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@Validated User user, BindingResult result) {
+        signUpFormValidator.validate(user, result);
+        if (result.hasErrors()) {
             return "signup";
         }
         user.setRole(rolesService.getRoles()[0]);
@@ -53,15 +51,17 @@ public class UsersController {
         return "redirect:/user/list";
         //return "redirect:/home";
     }
+
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
-                             @RequestParam(value="",required = false) String searchText) {
+                             @RequestParam(value = "", required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
-        if (searchText!=null && !searchText.isEmpty())
-            users = usersService.searchUserByEmailAndName(searchText,activeUser);
+        List<User> usersAmigos = new ArrayList<>();
+        if (searchText != null && !searchText.isEmpty())
+            users = usersService.searchUserByEmailAndName(searchText, activeUser);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
                 users = usersService.getUsers(pageable);
@@ -69,21 +69,29 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-        model.addAttribute("usersList",users.getContent());
-        model.addAttribute("page",users);
+
+        for (User u : users) {
+                if(activeUser.esAmigo(u) && !usersAmigos.contains(u)) {
+                    usersAmigos.add(u);
+                }
+        }
+        Page<User> hugoMeComeLosCojonesV2 = new PageImpl<>(usersAmigos);
+        model.addAttribute("usersList", users.getContent());
+        model.addAttribute("usersListFriends", hugoMeComeLosCojonesV2);
+        model.addAttribute("page", users);
         return "user/list";
     }
 
     @RequestMapping("/user/list/update")
-    public String updateList(Model model, Pageable pageable, Principal principal){
+    public String updateList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName(); // Email es el name de la autenticación
         User user = usersService.getUserByEmail(email);
-        model.addAttribute("usersList", usersService.getUsers(pageable) );
+        model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
     }
 
     @GetMapping("/user/delete")
-    public String delete(@RequestParam(value="",required = false) List<Long> ids) {
+    public String delete(@RequestParam(value = "", required = false) List<Long> ids) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
@@ -92,25 +100,25 @@ public class UsersController {
         return "redirect:/user/list";
     }
 
-    @RequestMapping(value="/signup", method= RequestMethod.GET)
-    public String signup(Model model){
-        model.addAttribute("user",new User());
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String signup(Model model) {
+        model.addAttribute("user", new User());
         return "signup";
     }
 
-    @RequestMapping(value="/login", method=RequestMethod.GET)
-    public String login(Model model, String error, String logout){
-        if(error!=null){
-            model.addAttribute("error","");
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model model, String error, String logout) {
+        if (error != null) {
+            model.addAttribute("error", "");
         }
-        if(logout!=null){
-            model.addAttribute("message","");
+        if (logout != null) {
+            model.addAttribute("message", "");
         }
         return "login";
     }
 
-    @RequestMapping(value={"/home"},method=RequestMethod.GET)
-    public String home(Model model){
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
+    public String home(Model model) {
         return "home";
     }
 

@@ -68,6 +68,7 @@ public class FriendsController {
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
+
         return "friend/invitation :: tableFriends";
     }
 
@@ -77,8 +78,11 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         if (FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
-                && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null)
+                && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null){
             FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+            activeUser.addAmigo(userId2);
+        }
+
         return "redirect:/user/list";
     }
 
