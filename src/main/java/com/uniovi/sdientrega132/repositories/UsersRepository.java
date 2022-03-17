@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.repositories;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,8 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT u from User u WHERE (LOWER(u.name) LIKE LOWER(?1) OR LOWER(u.email) LIKE(?1) OR LOWER(u.surname) LIKE LOWER(?1))")
     Page<User> searchByEmailNameAndSurnames(Pageable pageable, String searchText);
+
+    @Query("SELECT r FROM User r WHERE r.email = ?1 ORDER BY r.email ASC")
+    Page<Friend> findUserByEmail(Pageable pageable, Long user2_id);
 
 }
