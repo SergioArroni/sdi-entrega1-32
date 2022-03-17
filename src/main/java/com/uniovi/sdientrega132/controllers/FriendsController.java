@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.security.Principal;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -52,13 +50,13 @@ public class FriendsController {
     }
 
     @RequestMapping(value = "/friend/{id}/accept", method = RequestMethod.GET)
-    public String setResendTrue(Model model, @PathVariable Long id) {
+    public String setResendTrue( @PathVariable Long id) {
         FriendsService.setFriendInvitationSend(true, id);
         return "redirect:/friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/noaccept", method = RequestMethod.GET)
-    public String setResendFalse(Model model, @PathVariable Long id) {
+    public String setResendFalse( @PathVariable Long id) {
         FriendsService.setFriendInvitationSend(false, id);
         return "redirect:/friend/invitation";
     }
@@ -84,7 +82,7 @@ public class FriendsController {
         return "redirect:/user/list";
     }
 
-    private void CodeAuxFriends(Model model, Page<Friend> friends) {
+    private void CodeAuxFriendsF(Model model, Page<Friend> friends) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
@@ -96,11 +94,31 @@ public class FriendsController {
             else
                 amigo = usersService.getUser(friend.getUser1_id());
             if (amigo != null)
+    @RequestMapping("/friend/list/update")
+    public String updateListList(Model model, Pageable pageable) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        Page<Friend> friends = FriendsService.getFriendByUser1(pageable, activeUser.getId());
+
+        CodeAuxFriends(model, friends);
+        return "friend/list :: tableFriends";
+    }
+
+    private void CodeAuxFriends(Model model, Page<Friend> friends) {
+        List<FriendsForAll> amigosDeVerdad = new ArrayList<>();
+
+        for (Friend friend : friends) {
+            User amigo = usersService.getUser(friend.getUser2_id());
+            if (amigo != null) {
+
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
+            }
         }
-        Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
-        Page<User> users = new PageImpl<>(new LinkedList<>());
-        model.addAttribute("page", users);
+        Page<FriendsForAll> userAux = new PageImpl<>(amigosDeVerdad);
+
+        model.addAttribute("page", friends);
         model.addAttribute("friendsForAll", userAux);
     }
 }
