@@ -40,7 +40,7 @@ public class FriendsService {
         return friendsRepository.friendsUser2(pageable ,User2_id);
     }
 
-    public Page<Friend> getFriendByUser1(Pageable pageable, Long User1_id) {
+    public Page<Friend> getFriendByUser(Pageable pageable, Long User1_id) {
         return friendsRepository.friendsUser1(pageable ,User1_id);
     }
 

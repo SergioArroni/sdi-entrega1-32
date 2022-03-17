@@ -35,17 +35,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser1(pageable, activeUser.getId());
-        Page<Friend> friends2 = FriendsService.getFriendByUser2(pageable, activeUser.getId());
-        if(friends2.getContent() != null) {
-            if (friends.getContent() == null) {
-                friends = friends2;
-            }
-            if(friends != null) {
-                for (Friend friend : friends2)
-                    friends.getContent().add(friend);
-            }
-        }
+        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
         if(friends != null)
             CodeAuxFriends(model, friends);
         return "friend/list";
@@ -95,9 +85,16 @@ public class FriendsController {
     }
 
     private void CodeAuxFriends(Model model, Page<Friend> friends) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
         List<FriendsForAll> amigosDeVerdad = new ArrayList<FriendsForAll>();
         for (Friend friend : friends) {
-            User amigo = usersService.getUser(friend.getUser2_id());
+            User amigo;
+            if(friend.getUser2_id() != activeUser.getId())
+                amigo = usersService.getUser(friend.getUser2_id());
+            else
+                amigo = usersService.getUser(friend.getUser1_id());
             if (amigo != null)
                 amigosDeVerdad.add(new FriendsForAll(friend, amigo));
         }
