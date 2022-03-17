@@ -22,7 +22,7 @@ public class PublicationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Publication publication = (Publication) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "score", "Error.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "Error.empty");
 
     }
 

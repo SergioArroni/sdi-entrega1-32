@@ -49,6 +49,15 @@ public class PublicationsController {
         return "publication/list";
     }
 
+    @RequestMapping("/publication/list/update")
+    public String updateList(Model model, Pageable pageable, Principal principal){
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        Page<Publication> marks = publicationsService.getPublicationsForUser(pageable, user);
+        model.addAttribute("publicationsList", marks.getContent() );
+        return "publication/list :: tablePublications";
+    }
+
     @RequestMapping(value = "/publication/add", method = RequestMethod.POST)
     public String setPublication(@Validated Publication publication, BindingResult result, Model model) {
         publicationValidator.validate(publication, result);

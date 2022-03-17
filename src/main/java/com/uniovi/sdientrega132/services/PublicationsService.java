@@ -27,10 +27,7 @@ public class PublicationsService {
 
     public Page<Publication> getPublicationsForUser(Pageable pageable, User user) {
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
-        if (user.getRole().equals("ROLE_STUDENT")) {
-            publications = publicationsRepository.findAllByUser(pageable, user);}
-        if (user.getRole().equals("ROLE_PROFESSOR")) {
-            publications = getPublications(pageable); }
+        publications = publicationsRepository.findAllByUser(pageable, user);
         return publications;
     }
 

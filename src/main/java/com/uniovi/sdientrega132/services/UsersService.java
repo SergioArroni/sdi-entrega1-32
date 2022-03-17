@@ -43,10 +43,6 @@ public class UsersService {
         return users;
     }
 
-    public User getUserByEmail(String email){
-        return usersRepository.findByEmail(email);
-    }
-
     public void addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
