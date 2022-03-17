@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132;
 
 import com.uniovi.sdientrega132.pageobjects.*;
+import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,14 +18,11 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver ="C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
+    static String Geckodriver = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
 
     //Común a Windows y a MACOSX
     static WebDriver driver = getDriver(PathFirefox, Geckodriver);
     static String URL = "http://localhost:8090";
-
-
-
 
 
     @Autowired
@@ -38,17 +36,21 @@ class SdiEntrega132ApplicationTests {
     }
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         driver.navigate().to(URL);
     }
+
     //Después de cada prueba se borran las cookies del navegador
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         driver.manage().deleteAllCookies();
     }
+
     //Antes de la primera prueba
     @BeforeAll
-    static public void begin() {}
+    static public void begin() {
+    }
+
     //Al finalizar la última prueba
     @AfterAll
     static public void end() {
@@ -90,6 +92,7 @@ class SdiEntrega132ApplicationTests {
         PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
         PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
     }
+
     @Test
     @Order(11)
     public void PR11() {
@@ -100,7 +103,7 @@ class SdiEntrega132ApplicationTests {
         PO_LoginView.fillLoginForm(driver, "99999988F", "123456");
 
         //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"user");
+        PO_PrivateView.enterToMenu(driver, "user");
 
         //Accedemos a la lista de usuarios
         PO_PrivateView.listUsers(driver);
@@ -111,13 +114,13 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
 
         //Comprobamos que lista todos los usuarios del sistema
-        List<User> lista = (List<User>)usersRepository.findAll();
+        List<User> lista = (List<User>) usersRepository.findAll();
         int size = lista.size();
-        int numPags = size/3;
-        for (int i=0; i<numPags; i++) {
-            PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",i+1);
-            for (int j=0; j<3; j++){
-                checkText = lista.get(i+j).getEmail();
+        int numPags = size / 3;
+        for (int i = 0; i < numPags; i++) {
+            PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", i + 1);
+            for (int j = 0; j < 3; j++) {
+                checkText = lista.get(i + j).getEmail();
                 result = PO_View.checkElementBy(driver, "text", checkText);
                 System.out.println(i);
                 Assertions.assertEquals(checkText, result.get(0).getText());
@@ -130,5 +133,60 @@ class SdiEntrega132ApplicationTests {
         //System.out.println(result);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
+
+    // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
+    @Test
+    @Order(19)
+    public void PR19() {
+
+    }
+
+    // PR20. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
+    @Test
+    @Order(20)
+    public void PR20() {
+
+    }
+
+
+    // PR21. Mostrar el listado de invitaciones de amistad recibidas. Comprobar con un listado que contenga varias invitaciones recibidas.
+    @Test
+    @Order(21)
+    public void PR21() {
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+
+        // Se despliega el menú de amigos, y se clica en invitationFriends
+        PO_NavView.desplegarAmigos(driver, "invitationFriends");
+
+        // Se comprueba que alex@uniovi.es tenga mas de una 1 peticion de amistad
+        List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
+        Assertions.assertTrue(friends.size() >= 1);
+    }
+
+    // PR22. Sobre el listado de invitaciones recibidas. Hacer clic en el botón/enlace de una de ellas y comprobar que dicha solicitud desaparece del listado de invitaciones.
+    @Test
+    @Order(22)
+    public void PR22() {
+
+    }
+
+    // PR23. Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene los amigos que deben ser
+    @Test
+    @Order(23)
+    public void PR23() {
+        // Rellenamos el formulario de login con datos válidos
+        // Inicio sesión con Pablo, que tiene varios amigos
+        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+
+        // Se despliega el menú de usuarios, y se clica en listFriends
+        PO_NavView.desplegarAmigos(driver, "listFriends");
+
+        // Se comprueba que alex@uniovi.es tiene 6 amigos
+        List<WebElement> usuarios = SeleniumUtils.waitLoadElementsBy(driver, "text", "Email",
+                PO_View.getTimeout());
+        Assertions.assertTrue(usuarios.size() == 6);
+    }
+
 
 }

@@ -81,10 +81,12 @@ public class FriendsController {
         Page<FriendsForAll> userAux = new PageImpl<FriendsForAll>(amigosDeVerdad);
 
         Page<User> users = new PageImpl<>(new LinkedList<>());
+        Page<Friend> friend = new PageImpl<>(new LinkedList<>());
 
+        friend = FriendsService.getFriends(pageable);
         users = usersService.getUsers(pageable);
 
-        model.addAttribute("page", users);
+        model.addAttribute("page", userAux);
         model.addAttribute("friendsForAll", userAux);
     }
 }

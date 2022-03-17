@@ -20,10 +20,8 @@ public class FriendsService {
     private FriendsRepository friendsRepository;
 
 
-    public List<Friend> getFriends() {
-        List<Friend> professors = new ArrayList<Friend>();
-        friendsRepository.findAll().forEach((professors::add));
-        return professors;
+    public Page<Friend> getFriends(Pageable pageable) {
+        return friendsRepository.findAll(pageable);
     }
 
     public Page<Friend> getInvitationsByUser1_id(Pageable pageable, long user1_id) {

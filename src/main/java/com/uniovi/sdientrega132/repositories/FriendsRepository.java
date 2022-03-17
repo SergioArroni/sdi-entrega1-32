@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.repositories;
 
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,5 +33,7 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
 
     @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.accept = true ORDER BY r.User1_id ASC")
     Page<Friend> friendsUser1(Pageable pageable, Long user1_id);
+
+    Page<Friend> findAll(Pageable pageable);
 
 }
