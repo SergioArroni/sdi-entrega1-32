@@ -18,51 +18,55 @@
         $("#tableFriends").load(urlUpdate);
     }); /*]]>*/
     </script>
-
-    <div class="table-responsive">
-        <table class="table table-hover" th:fragment="tableFriends" id="tableFriends">
-            <div th:if="${#lists.isEmpty(friendsForAll)}" class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-warning">
-                        <p>No dispones de ninguna peticion de amistad, :(.</p>
-                    </div>
+    <div th:fragment="tableFriends">
+        <div th:if="${friendsForAll.isEmpty()}" class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <span th:text="#{friend.sad}"></span>
                 </div>
             </div>
-            <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellidos</th>
-                <th scope="col">Email</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="MeCagoEnDios : ${friendsForAll}">
-                <td scope="row" th:text="${MeCagoEnDios.user.name}">Nombre del usuario</td>
-                <td scope="row" th:text="${MeCagoEnDios.user.surname}">Apellidos del usuario</td>
-                <td scope="row" th:text="${MeCagoEnDios.user.email}">Email del usuario</td>
-                <td scope="row"><a></a>
-                    <div>
-                        <button type="button" th:id="${'AceptButton' + MeCagoEnDios.friend.id}" class="btn btn-success">
-                            Aceptar
-                        </button>
-                        <script th:inline="javascript"> /*<![CDATA[*/
-                        $("#AceptButton" + "[[${MeCagoEnDios.friend.id}]]").click(function () {
-                            $.get("/friend/[[${MeCagoEnDios.friend.id}]]/accept", function () {
-                                var numberPage = [[${param.page}]];
-                                var urlUpdate = '/friend/invitation/update';
-                                if (numberPage != null) {
-                                    urlUpdate += "?page=" + numberPage[0];
-                                }
-                                $("#tableFriends").load(urlUpdate);
-                            });
-                        }); /*]]>*/
-                        </script>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover" th:fragment="tableFriends" id="tableFriends">
+
+                <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="MeCagoEnDios : ${friendsForAll}">
+                    <td scope="row" th:text="${MeCagoEnDios.user.name}">Nombre del usuario</td>
+                    <td scope="row" th:text="${MeCagoEnDios.user.surname}">Apellidos del usuario</td>
+                    <td scope="row" th:text="${MeCagoEnDios.user.email}">Email del usuario</td>
+                    <td scope="row"><a></a>
+                        <div>
+                            <button type="button" th:id="${'AceptButton' + MeCagoEnDios.friend.id}"
+                                    class="btn btn-success">
+                                <span th:text="#{button.accept}"></span>
+                            </button>
+                            <script th:inline="javascript"> /*<![CDATA[*/
+                            $("#AceptButton" + "[[${MeCagoEnDios.friend.id}]]").click(function () {
+                                $.get("/friend/[[${MeCagoEnDios.friend.id}]]/accept", function () {
+                                    var numberPage = [[${param.page}]];
+                                    var urlUpdate = '/friend/invitation/update';
+                                    if (numberPage != null) {
+                                        urlUpdate += "?page=" + numberPage[0];
+                                    }
+                                    $("#tableFriends").load(urlUpdate);
+                                });
+                            }); /*]]>*/
+                            </script>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <footer th:replace="fragments/pagination"/>
 </div>

@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface FriendsRepository extends CrudRepository<Friend, Long> {
-
     @Modifying
     @Transactional
     @Query("UPDATE Friend SET accept = ?1 WHERE id = ?2")
@@ -38,6 +37,4 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
     Friend findCoupleFriends(Long user1_id, Long user2_id);
 
     Page<Friend> findAll(Pageable pageable);
-
-
 }

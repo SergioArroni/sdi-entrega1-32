@@ -55,7 +55,7 @@
                 <td scope="row"><a></a>
                 <div>
                     <button type="button" sec:authorize="hasRole('ROLE_USER')" th:id="${'AceptButton' + usuarios.id}" class="btn btn-success">
-                        Enviar amistad
+                        <span th:text="#{button.send}"></span>
                     </button>
                     <script th:inline="javascript"> /*<![CDATA[*/
                     $("#AceptButton" + "[[${usuarios.id}]]").click(function () {

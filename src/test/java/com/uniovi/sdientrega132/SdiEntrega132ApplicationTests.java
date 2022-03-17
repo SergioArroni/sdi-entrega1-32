@@ -185,11 +185,11 @@ class SdiEntrega132ApplicationTests {
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
         PO_NavView.desplegarAmigos(driver, "invitationFriends");
 
-        // Se comprueba que Pablo tiene 1 peticion de amistad
+        // Se comprueba que juan tiene 1 peticion de amistad
         List<WebElement> usuarios = PO_PrivateView.checkElementBy(driver, "text", "Aceptar");
         Assertions.assertTrue(usuarios.size() == 1);
 
-        // Se acepta la petición del usuario "Mongo"
+        // Se acepta la petición del usuario "Sara"
         PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
 
         // Se comprueba que ahora ya se ha aceptado la petición, por tanto no hay peticiones pendientes
