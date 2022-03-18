@@ -68,9 +68,27 @@ public class InsertSampleDataService {
         user7 = usersService.getUserByEmail(user7.getEmail());
         user8 = usersService.getUserByEmail(user8.getEmail());
 
-        friendsService.addFriend(new Friend(1L, user2.getId(), false));
-        friendsService.addFriend(new Friend(1L, user3.getId(), false));
-        friendsService.addFriend(new Friend(1L, user4.getId(), false));
+        //friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
+        //friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
+        //friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
+        //friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
+/**
+        friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
+        friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
+        friendsService.addFriend(new Friend(user4.getId(), user3.getId(), false));
+*/
 
     }
 }
