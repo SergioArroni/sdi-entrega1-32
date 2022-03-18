@@ -1,8 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
-
-import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
