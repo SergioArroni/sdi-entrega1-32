@@ -62,6 +62,7 @@ public class InsertSampleDataService {
         usersService.addUser(user6);
         usersService.addUser(user7);
         usersService.addUser(user8);
+        usersService.addUser(admin);
 
         user1 = usersService.getUserByEmail(user1.getEmail());
         user2 = usersService.getUserByEmail(user2.getEmail());
