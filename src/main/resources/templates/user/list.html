@@ -9,15 +9,13 @@
 
     <form class="form-inline" action="/user/list">
         <div class="form-group">
-            <input name="searchText" type="text" class="form-control" size="50"
+            <input id="search-input" name="searchText" type="text" class="form-control" size="50"
                    th:placeholder="#{user.search}">
-            <!--placeholder="Buscar por email o nombre del usuario">-->
         </div>
         <button type="submit" class="btn btn-primary" th:text="#{button.search}"></button>
     </form>
 
-    <p th:text="#{user.list.message}">Los usuarios que actualmente figuran en el sistema son los
-        siguientes:</p>
+    <p th:text="#{user.list.message}"></p>
     <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
     <script> th:inline="javascript">
         /*<![CDATA[*/
@@ -43,7 +41,7 @@
                 <th scope="col"></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
             <tr class="usersTable" id="trid" th:each="user : ${usersList}">
                 <td scope="row" th:text="${user.email}">ejemplo@uniovi.es</td>
                 <td scope="row" th:text="${user.name}">Nombre del usuario</td>

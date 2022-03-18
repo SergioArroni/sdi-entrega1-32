@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -161,7 +162,129 @@ class SdiEntrega132ApplicationTests {
             result = PO_View.checkElementBy(driver, "text", checkText);
             Assertions.assertEquals(checkText, result.get(0).getText());
         }
+    }
 
+    //[Prueba16] Hacer una búsqueda con el campo vacío y comprobar que se muestra la página que
+    //corresponde con el listado usuarios existentes en el sistema.
+    @Test
+    @Order(16)
+    public void PR16() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
 
+        //Entramos en el menú de usuarios
+        PO_PrivateView.enterToMenu(driver,"users-menu");
+        //Accedemos a la lista de usuarios
+        PO_PrivateView.listPageUsers(driver);
+
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "");
+
+        //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
+        User activeUser = usersRepository.findByEmail("user01@email.com");
+
+        List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
+        String checkText;
+        int pageSize = result.size();
+        List<User> lista = usersRepository.findAllStandard(activeUser);
+        int size = lista.size();
+        int numPags = size/pageSize;
+        int usersInLastPage = size%pageSize;
+        for (int i=0; i<numPags; i++) {
+            PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",i+1);
+            for (int j=0; j<pageSize; j++) {
+                checkText = lista.get(i*pageSize+j).getEmail();
+                result = PO_View.checkElementBy(driver, "text", checkText);
+                Assertions.assertEquals(checkText, result.get(0).getText());
+            }
+        }
+        //Nos movemos a la última página
+        PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",numPags+1);
+        for (int j=0; j<usersInLastPage; j++) {
+            checkText = lista.get(numPags*pageSize+j).getEmail();
+            result = PO_View.checkElementBy(driver, "text", checkText);
+            Assertions.assertEquals(checkText, result.get(0).getText());
+        }
+    }
+
+    //[Prueba17] Hacer una búsqueda escribiendo en el campo un texto que no exista y comprobar que se
+    //muestra la página que corresponde, con la lista de usuarios vacía.
+    @Test
+    @Order(17)
+    public void PR17() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        //Entramos en el menú de usuarios
+        PO_PrivateView.enterToMenu(driver,"users-menu");
+        //Accedemos a la lista de usuarios
+        PO_PrivateView.listPageUsers(driver);
+
+        //Hacemos una búsqueda escribiendo un texto que no exista
+        PO_PrivateView.fillSearch(driver, "hola");
+
+        //Comprobamos que aparece la lista de usuarios vacía
+        List<WebElement> result = PO_View.checkElementBy(driver, "id", "tbody");
+
+        int numUsers = result.get(0).getSize().getHeight();
+        Assertions.assertEquals(0, numUsers);
+
+    }
+
+    //[Prueba18] Hacer una búsqueda con un texto específico y comprobar que se muestra la página que
+    //corresponde, con la lista de usuarios en los que el texto especificado sea parte de su nombre, apellidos o
+    //de su email.
+    @Test
+    @Order(18)
+    public void PR18() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        //Entramos en el menú de usuarios
+        PO_PrivateView.enterToMenu(driver,"users-menu");
+        //Accedemos a la lista de usuarios
+        PO_PrivateView.listPageUsers(driver);
+
+        //Hacemos una búsqueda con un texto específico
+        PO_PrivateView.fillSearch(driver, "n");
+
+        //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
+        User activeUser = usersRepository.findByEmail("user01@email.com");
+
+        List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
+        String checkText = "N";
+        int pageSize = result.size();
+        List<User> lista = usersRepository.findAllStandard(activeUser);
+        List<User> lista2 = new ArrayList<>();
+        for (User user : lista) {
+            if (user.getName().contains(checkText)||user.getEmail().contains(checkText)){
+                lista2.add(user);
+            }
+        }
+        int size = lista2.size();
+        int numPags = size/pageSize;
+        int usersInLastPage = size%pageSize;
+        for (int i=0; i<numPags; i++) {
+            PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",i+1);
+            for (int j=0; j<pageSize; j++) {
+                checkText = lista2.get(i*pageSize+j).getEmail();
+                result = PO_View.checkElementBy(driver, "text", checkText);
+                Assertions.assertEquals(checkText, result.get(0).getText());
+            }
+        }
+        //Nos movemos a la última página
+        PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",numPags+1);
+        for (int j=0; j<usersInLastPage; j++) {
+            checkText = lista2.get(numPags*pageSize+j).getEmail();
+            result = PO_View.checkElementBy(driver, "text", checkText);
+            Assertions.assertEquals(checkText, result.get(0).getText());
+        }
+        
     }
 }

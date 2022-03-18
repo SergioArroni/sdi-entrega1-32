@@ -35,4 +35,14 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(index).click();
     }
 
+    static public void fillSearch(WebDriver driver, String textp) {
+        WebElement text = driver.findElement(By.name("searchText"));
+        text.click();
+        text.clear();
+        text.sendKeys(textp);
+        //Pulsar el boton de Alta.
+        By boton = By.className("btn"); //btn btn-primary
+        driver.findElement(boton).click();
+    }
+
 }
