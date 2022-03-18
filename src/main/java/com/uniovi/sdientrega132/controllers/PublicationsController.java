@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.UUID;
 
 @Controller
 public class PublicationsController {
@@ -45,6 +47,18 @@ public class PublicationsController {
     @RequestMapping("/publication/list")
     public String getList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
+        publications = publicationsService.getPublicationsForUser(pageable, user);
+
+        model.addAttribute("publicationsList", publications.getContent());
+        model.addAttribute("page", publications);
+
+        return "publication/list";
+    }
+
+    @RequestMapping("/publication/list/{email}")
+    public String getFriendsList(Model model, Pageable pageable, @PathVariable String email) {
         User user = usersService.getUserByEmail(email);
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
         publications = publicationsService.getPublicationsForUser(pageable, user);
@@ -80,10 +94,11 @@ public class PublicationsController {
 
             try {
                 byte[] bytes = imagen.getBytes();
-                Path rutaCompleta = Paths.get(ruta + "//" + imagen.getOriginalFilename());
+                String nombreImagen = UUID.randomUUID()+".png";
+                Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(imagen.getOriginalFilename());
+                publication.setFoto(nombreImagen);
             } catch (IOException e) {
                 System.out.println("Fallo con la imagen");
                 e.printStackTrace();
