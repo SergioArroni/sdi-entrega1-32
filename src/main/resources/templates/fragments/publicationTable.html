@@ -2,9 +2,9 @@
 <table class="table table-hover" th:fragment="tablePublications" id="tablePublications">
     <thead>
     <tr>
-        <th scope="col">Título</th>
-        <th scope="col">Publicación</th>
-        <th scope="col">Fecha de publicación</th>
+        <th scope="col" th:text="#{publication.title}">Título</th>
+        <th scope="col" th:text="#{publication.text}">Publicación</th>
+        <th scope="col" th:text="#{publication.date}">Fecha de publicación</th>
     </tr>
     </thead>
     <tbody>

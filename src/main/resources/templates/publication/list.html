@@ -6,7 +6,7 @@
 <nav th:replace="fragments/nav"/>
 
 <div class="container" id="main-container">
-    <h2>Publicaciones</h2>
+    <h2 th:text="#{publication.publications}">Publicaciones</h2>
     <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -24,7 +24,7 @@
         <table class="table table-hover" th:fragment="tablePublications" id="tablePublications" th:replace="fragments/publicationTable" />
     </div>
     <footer th:replace="fragments/pagination"/>
-    <div th:if="${#lists.isEmpty(publicationsList)}"> No hay publicaciones </div>
+    <div th:if="${#lists.isEmpty(publicationsList)}" th:text="#{publication.nopublication}"]> No hay publicaciones </div>
 </div>
 <footer th:replace="fragments/footer"/>
 

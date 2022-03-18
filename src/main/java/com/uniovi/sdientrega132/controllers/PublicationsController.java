@@ -16,9 +16,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.Date;
 import java.util.LinkedList;
 
 @Controller
@@ -59,11 +65,30 @@ public class PublicationsController {
     }
 
     @RequestMapping(value = "/publication/add", method = RequestMethod.POST)
-    public String setPublication(@Validated Publication publication, BindingResult result, Model model) {
+    public String setPublication(@Validated Publication publication,
+                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model) {
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
             model.addAttribute("usersList", usersService.getUsers());
             return "publication/add";
+        }
+
+        publication.setPublishingDate(new Date());
+        if (!imagen.isEmpty()) {
+            Path directorio = Paths.get("src//main//resources//static//images");
+            String ruta = directorio.toFile().getAbsolutePath();
+
+            try {
+                byte[] bytes = imagen.getBytes();
+                Path rutaCompleta = Paths.get(ruta + "//" + imagen.getOriginalFilename());
+                Files.write(rutaCompleta, bytes);
+
+                publication.setFoto(imagen.getOriginalFilename());
+            } catch (IOException e) {
+                System.out.println("Fallo con la imagen");
+                e.printStackTrace();
+            }
+
         }
 
         publicationsService.addPublication(publication);
