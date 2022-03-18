@@ -26,7 +26,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Publication> publications;
 
-    public User(){}
     @ManyToMany
     private List<Friend> amigos;
 
