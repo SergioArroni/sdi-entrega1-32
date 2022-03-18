@@ -67,9 +67,15 @@ public class UsersService {
     }
 
     public List<User> getUsers() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         usersRepository.findAll().forEach(users::add);
         return users;
+    }
+
+
+    public void addFriends(User u, Long id2) {
+        u.addFriend(id2);
+        //usersRepository.updateFriends(u.getId(),u.getFriends());
     }
 
 }

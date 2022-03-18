@@ -23,7 +23,7 @@ import java.util.List;
 @Controller
 public class FriendsController {
     @Autowired
-    private FriendsService FriendsService;
+    private FriendsService friendsService;
 
     @Autowired
     private UsersService usersService;
@@ -33,7 +33,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
         if (friends != null)
             CodeAuxFriends(model, friends);
         return "friend/list";
@@ -44,20 +44,20 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
         return "friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/accept", method = RequestMethod.GET)
     public String setResendTrue(@PathVariable Long id) {
-        FriendsService.setFriendInvitationSend(true, id);
+        friendsService.setFriendInvitationSend(true, id);
         return "redirect:/friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/noaccept", method = RequestMethod.GET)
     public String setResendFalse(@PathVariable Long id) {
-        FriendsService.setFriendInvitationSend(false, id);
+        friendsService.setFriendInvitationSend(false, id);
         return "redirect:/friend/invitation";
     }
 
@@ -66,7 +66,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
 
         return "friend/invitation :: tableFriends";
@@ -77,12 +77,15 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        if (FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
-                && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null){
-            FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
-            activeUser.addAmigo(userId2);
+        if (friendsService.getCoupleFriends(activeUser.getId(), userId2) == null
+                && friendsService.getCoupleFriends(userId2, activeUser.getId()) == null) {
+            friendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+            System.out.println("Hola");
+            //usersService.addFriends(activeUser, userId2);
+            for (Long f : activeUser.getFriends()) {
+                System.out.println(f.toString());
+            }
         }
-
         return "redirect:/user/list";
     }
 
@@ -113,7 +116,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
 
         CodeAuxFriends(model, friends);
         return "friend/list :: tableFriends";

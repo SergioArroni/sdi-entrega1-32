@@ -4,9 +4,12 @@ import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
 
 
 public interface UsersRepository extends CrudRepository<User, Long> {
@@ -26,5 +29,4 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT r FROM User r WHERE r.email = ?1 ORDER BY r.email ASC")
     Page<Friend> findUserByEmail(Pageable pageable, Long user2_id);
-
 }

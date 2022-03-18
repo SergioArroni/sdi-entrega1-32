@@ -1,4 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
@@ -33,8 +34,6 @@ public class UsersController {
     @Autowired
     private RolesService rolesService;
 
-
-
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
         signUpFormValidator.validate(user, result);
@@ -54,8 +53,8 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<User> users = new PageImpl<>(new LinkedList<>());
-        List<User> usersAmigos = new ArrayList<>();
+        Page<User> users;
+        List<User> usersFriends = new ArrayList<>();
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
@@ -65,13 +64,18 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
+        System.out.println(activeUser.getId());
+        for (Long f:activeUser.getFriends()) {
+            System.out.println("2"+f.toString());
+        }
 
         for (User u : users) {
-                if(activeUser.esAmigo(u) && !usersAmigos.contains(u)) {
-                    usersAmigos.add(u);
+                if(activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
+                    usersFriends.add(u);
                 }
         }
-        Page<User> aux = new PageImpl<>(usersAmigos);
+        Page<User> aux = new PageImpl<>(usersFriends);
+        model.addAttribute("actualUser", activeUser);
         model.addAttribute("usersList", users.getContent());
         model.addAttribute("usersListFriends", aux);
         model.addAttribute("page", users);

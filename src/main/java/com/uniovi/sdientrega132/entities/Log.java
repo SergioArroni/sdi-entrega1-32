@@ -62,7 +62,6 @@ public class Log {
     @Override
     public String toString() {
         return "Log{" +
-                "id=" + id +
                 ", type='" + type + '\'' +
                 ", time='" + time + '\'' +
                 ", description='" + description + '\'' +

@@ -3,9 +3,12 @@ package com.uniovi.sdientrega132;
 import java.util.List;
 import java.util.Locale;
 
+import com.uniovi.sdientrega132.controllers.LogsController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -25,6 +28,9 @@ public class CustomConfiguration implements WebMvcConfigurer {
     @Value("${spring.data.web.pageable.default-page-size}")
     private int size;
 
+    @Autowired
+    private LogsController log;
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -42,7 +48,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LogInterceptor logInterceptor() {
-        LogInterceptor logInterceptor = new LogInterceptor();
+        LogInterceptor logInterceptor = new LogInterceptor(log);
         return logInterceptor;
     }
 

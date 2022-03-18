@@ -66,20 +66,23 @@
                     <td scope="row"><a></a>
                         <div>
                             <button type="button" sec:authorize="hasRole('ROLE_USER')"
-                                    th:id="${'AceptButton' + var.id}" class="btn btn-success">
+                                    th:id="${'AceptButton' + var.id}" class="btn btn-success" th:onclick="${actualUser.addFriend(var.id)}">
                                 <span th:text="#{button.send}"></span>
                             </button>
-                            <script th:inline="javascript"> /*<![CDATA[*/
-                            $("#AceptButton" + "[[${var.id}]]").click(function () {
-                                $.get("/friend/send/[[${var.id}]]", function () {
-                                    var numberPage = [[${param.page}]];
-                                    var urlUpdate = '/user/list/update';
-                                    if (numberPage != null) {
-                                        urlUpdate += "?page=" + numberPage[0];
-                                    }
-                                    $("#tableFriends").load(urlUpdate);
-                                });
-                            }); /*]]>*/
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                    $("#AceptButton" + "[[${var.id}]]").click(function () {
+                                        $.get("/friend/send/[[${var.id}]]", function () {
+                                            var numberPage = [[${param.page}]];
+                                            var urlUpdate = '/user/list/update';
+                                            if (numberPage != null) {
+                                                urlUpdate += "?page=" + numberPage[0];
+                                            }
+                                            $("#tableFriends").load(urlUpdate);
+                                        });
+
+                                    });
+                                /*]]>*/
                             </script>
                         </div>
                     </td>

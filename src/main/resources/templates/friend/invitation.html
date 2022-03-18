@@ -39,19 +39,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="MeCagoEnDios : ${friendsForAll}">
-                    <td scope="row" th:text="${MeCagoEnDios.user.name}">Nombre del usuario</td>
-                    <td scope="row" th:text="${MeCagoEnDios.user.surname}">Apellidos del usuario</td>
-                    <td scope="row" th:text="${MeCagoEnDios.user.email}">Email del usuario</td>
+                <tr th:each="var : ${friendsForAll}">
+                    <td scope="row" th:text="${var.user.name}">Nombre del usuario</td>
+                    <td scope="row" th:text="${var.user.surname}">Apellidos del usuario</td>
+                    <td scope="row" th:text="${var.user.email}">Email del usuario</td>
                     <td scope="row"><a></a>
                         <div>
-                            <button type="button" th:id="${'AceptButton' + MeCagoEnDios.friend.id}"
+                            <button type="button" th:id="${'AceptButton' + var.friend.id}"
                                     class="btn btn-success">
                                 <span th:text="#{button.accept}"></span>
                             </button>
                             <script th:inline="javascript"> /*<![CDATA[*/
-                            $("#AceptButton" + "[[${MeCagoEnDios.friend.id}]]").click(function () {
-                                $.get("/friend/[[${MeCagoEnDios.friend.id}]]/accept", function () {
+                            $("#AceptButton" + "[[${var.friend.id}]]").click(function () {
+                                $.get("/friend/[[${var.friend.id}]]/accept", function () {
                                     var numberPage = [[${param.page}]];
                                     var urlUpdate = '/friend/invitation/update';
                                     if (numberPage != null) {
