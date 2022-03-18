@@ -64,19 +64,19 @@
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/signup" th:text="#{signup.message}">
                         <i class='fas fa-user-alt' style='font-size:16px'></i>
-                        <span>Registrate</span>
+                        <span th:text="#{nav.signup}"></span>
                     </a>
                 </li>
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/login" th:text="#{login.message}">
                         <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
-                        <span>Identifícate</span>
+                        <span th:text="#{login.message}"></span>
                     </a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <i class='fas fa-sign-out-alt' style='font-size:16px'></i>
-                        <span>Desconectar</span>
+                <li id="logout_link" sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/logout"> <!--th:text="#{login.message}">-->
+                        <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
+                        <span th:text="#{logout.message}"></span>
                     </a>
                 </li>
             </ul>

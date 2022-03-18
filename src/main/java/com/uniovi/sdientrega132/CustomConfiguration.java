@@ -1,5 +1,8 @@
 package com.uniovi.sdientrega132;
 
+import java.util.List;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import java.util.List;
-import java.util.Locale;
-
 @Configuration
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
-
 public class CustomConfiguration implements WebMvcConfigurer {
 
     @Value("${spring.data.web.pageable.page-parameter}")
@@ -30,6 +23,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Value("${spring.data.web.pageable.default-page-size}")
     private int size;
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
