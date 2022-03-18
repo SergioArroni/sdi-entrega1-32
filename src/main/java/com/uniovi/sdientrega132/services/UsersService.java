@@ -27,12 +27,6 @@ public class UsersService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Value("${spring.data.web.pageable.page-parameter}")
-    private int page;
-
-    @Value("${spring.data.web.pageable.search-page-size}")
-    private int searchSize;
-
     public Page<User> getUsers(Pageable pageable) {
         Page<User> users = usersRepository.findAll(pageable);
         return users;
@@ -48,10 +42,9 @@ public class UsersService {
         usersRepository.save(user);
     }
 
-    public Page<User> searchUserByEmailAndName(String searchText, User user) {
+    public Page<User> searchUserByEmailAndName(String searchText, User user, Pageable pageable) {
         Page<User> users = new PageImpl<User>(new LinkedList<User>());
         searchText  = "%"+searchText+"%";
-        Pageable pageable = PageRequest.of(page,searchSize);
         if (user.getRole().equals("ROLE_USER")) {
             users = usersRepository.searchByEmailAndName(pageable, searchText);
         }
