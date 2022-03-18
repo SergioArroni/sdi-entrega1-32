@@ -61,7 +61,7 @@ public class UsersController {
         Page<User> users = new PageImpl<>(new LinkedList<>());
         List<User> usersAmigos = new ArrayList<>();
         if (searchText != null && !searchText.isEmpty())
-            users = usersService.searchUserByEmailAndName(searchText, activeUser);
+            users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
                 users = usersService.getUsers(pageable);
