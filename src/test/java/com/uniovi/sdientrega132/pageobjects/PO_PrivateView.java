@@ -14,12 +14,18 @@ public class PO_PrivateView extends PO_NavView {
         //Pinchamos en la opción de lista de notas.
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'user/list')]");
         elements.get(0).click();
+    }
+
+    static public void listPageUsers(WebDriver driver){
+        //Pinchamos en la opción de lista de notas.
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@href, 'user/list')]");
+        elements.get(0).click();
         //Esperamos a que se muestren los enlaces de paginación la lista de notas
         elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
     }
 
     static public void enterToMenu(WebDriver driver, String menu){
-        //Pinchamos en la opción de menú de Notas: //li[contains(@id, 'marks-menu')]/a
+        //Pinchamos en la opción de menú de Notas: //li[contains(@id, 'users-menu')]/a
         List<WebElement> elements = PO_View.checkElementBy(driver, "id", menu);
         elements.get(0).click();
     }

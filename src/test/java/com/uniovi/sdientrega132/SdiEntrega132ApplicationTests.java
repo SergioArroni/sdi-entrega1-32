@@ -9,6 +9,11 @@ import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import java.util.List;
@@ -17,7 +22,7 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver ="C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
+    static String Geckodriver ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
     static WebDriver driver = getDriver(PathFirefox, Geckodriver);
@@ -56,7 +61,6 @@ class SdiEntrega132ApplicationTests {
         driver.quit();
     }
 
-    //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
     @Test
     @Order(1)
     public void PR01() {
@@ -90,45 +94,74 @@ class SdiEntrega132ApplicationTests {
         PO_View.checkElementBy(driver, "text", "Regístrate como usuario");
         PO_SignUpView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
     }
+    //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
     @Test
     @Order(11)
     public void PR11() {
-        System.out.println("TEST 11");
         //Vamos al formulario de logueo
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "99999988F", "123456");
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
         //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"user");
-
+        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
         PO_PrivateView.listUsers(driver);
 
-        //Comprobamos que entramos en la lista usuarios
-        String checkText = "Usuarios";
-        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
         //Comprobamos que lista todos los usuarios del sistema
         List<User> lista = (List<User>)usersRepository.findAll();
-        int size = lista.size();
-        int numPags = size/3;
-        for (int i=0; i<numPags; i++) {
-            PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",i+1);
-            for (int j=0; j<3; j++){
-                checkText = lista.get(i+j).getEmail();
-                result = PO_View.checkElementBy(driver, "text", checkText);
-                System.out.println(i);
-                Assertions.assertEquals(checkText, result.get(0).getText());
+        String checkText;
+        List<WebElement> result;
 
-            }
+        for (int i=0; i<lista.size(); i++) {
+            checkText = lista.get(i).getEmail();
+            result = PO_View.checkElementBy(driver, "text", checkText);
+            Assertions.assertEquals(checkText, result.get(0).getText());
         }
 
-        checkText = "99999990A";
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        //System.out.println(result);
-        Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba15] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema,
+    //excepto el propio usuario y aquellos que sean Administradores
+    @Test
+    @Order(15)
+    public void PR15() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        //Entramos en el menú de usuarios
+        PO_PrivateView.enterToMenu(driver,"users-menu");
+        //Accedemos a la lista de usuarios
+        PO_PrivateView.listPageUsers(driver);
+
+        //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
+        User activeUser = usersRepository.findByEmail("user01@email.com");
+
+        List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
+        String checkText;
+        int pageSize = result.size();
+        List<User> lista = usersRepository.findAllStandard(activeUser);
+        int size = lista.size();
+        int numPags = size/pageSize;
+        int usersInLastPage = size%pageSize;
+        for (int i=0; i<numPags; i++) {
+            PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",i+1);
+            for (int j=0; j<pageSize; j++) {
+                checkText = lista.get(i*pageSize+j).getEmail();
+                result = PO_View.checkElementBy(driver, "text", checkText);
+                Assertions.assertEquals(checkText, result.get(0).getText());
+            }
+        }
+        //Nos movemos a la última página
+        PO_PrivateView.clickOn(driver,"//a[contains(@class, 'page-link')]",numPags+1);
+        for (int j=0; j<usersInLastPage; j++) {
+            checkText = lista.get(numPags*pageSize+j).getEmail();
+            result = PO_View.checkElementBy(driver, "text", checkText);
+            Assertions.assertEquals(checkText, result.get(0).getText());
+        }
+
+
+    }
 }
