@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,17 +56,22 @@ public class UsersController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
+        List<User> listUsers = new ArrayList<>();
         if (searchText!=null && !searchText.isEmpty())
-            users = usersService.searchUserByEmailAndName(searchText,activeUser);
+            users = usersService.searchUserByEmailAndName(searchText,activeUser, pageable);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
-                users = usersService.getUsers(pageable);
+                listUsers = usersService.getUsers();
             } else {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-        model.addAttribute("usersList",users.getContent());
-        model.addAttribute("page",users);
+        if (listUsers.isEmpty()) {
+            model.addAttribute("usersList", users.getContent());
+            model.addAttribute("page", users);
+        } else {
+            model.addAttribute("usersList", listUsers);
+        }
         return "user/list";
     }
 
@@ -73,7 +79,19 @@ public class UsersController {
     public String updateList(Model model, Pageable pageable, Principal principal){
         String email = principal.getName(); // Email es el name de la autenticación
         User user = usersService.getUserByEmail(email);
-        model.addAttribute("usersList", usersService.getUsers(pageable) );
+        Page<User> users = new PageImpl<>(new LinkedList<>());
+        List<User> listUsers = new ArrayList<>();
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            listUsers = usersService.getUsers();
+        } else {
+            users = usersService.getStandardUsers(user, pageable);
+        }
+        if (listUsers.isEmpty()) {
+            model.addAttribute("usersList", users.getContent());
+            model.addAttribute("page", users);
+        } else {
+            model.addAttribute("usersList", listUsers);
+        }
         return "user/list :: tableUsers";
     }
 

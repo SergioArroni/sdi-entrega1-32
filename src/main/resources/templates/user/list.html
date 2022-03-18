@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
 <head th:replace="fragments/head"/>
 <body>
 <!-- Barra de Navegación superior -->
@@ -10,7 +10,7 @@
     <form class="form-inline" action="/user/list">
         <div class="form-group">
             <input name="searchText" type="text" class="form-control" size="50"
-                    th:placeholder="#{user.search}">
+                   th:placeholder="#{user.search}">
             <!--placeholder="Buscar por email o nombre del usuario">-->
         </div>
         <button type="submit" class="btn btn-primary" th:text="#{button.search}"></button>
@@ -44,7 +44,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr id="trid" th:each="user : ${usersList}">
+            <tr class="usersTable" id="trid" th:each="user : ${usersList}">
                 <td scope="row" th:text="${user.email}">ejemplo@uniovi.es</td>
                 <td scope="row" th:text="${user.name}">Nombre del usuario</td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${user.surname}">Apellidos del usuario</td>
@@ -81,7 +81,8 @@
         /*]]>*/
         </script>
     </div>
-    <footer th:replace="fragments/pagination"/>
+    <footer sec:authorize="hasRole('ROLE_USER')" th:replace="fragments/pagination"/>
+
 </div>
 <footer th:replace="fragments/footer"/>
 </body>
