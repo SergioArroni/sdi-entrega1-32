@@ -34,23 +34,23 @@ public class InsertSampleDataService {
         user3.setPassword("user03");
         user3.setRole(rolesService.getRoles()[0]);
         //Usuario normal (ROLE_STANDARDUSER)
-        User user4 = new User("Juan", "Martinez", "user04@uniovi.es");
+        User user4 = new User("Juan", "Martinez", "user04@email.com");
         user4.setPassword("user04");
         user4.setRole(rolesService.getRoles()[0]);
         //Usuario normal (ROLE_STANDARDUSER)
-        User user5 = new User("Alex", "Delgado", "user05@uniovi.es");
+        User user5 = new User("Alex", "Delgado", "user05@email.com");
         user5.setPassword("user05");
         user5.setRole(rolesService.getRoles()[0]);
         //Usuario normal (ROLE_STANDARDUSER)
-        User user6 = new User("Luis", "Garcia", "user06@uniovi.es");
+        User user6 = new User("Luis", "Garcia", "user06@email.com");
         user6.setPassword("user06");
         user6.setRole(rolesService.getRoles()[0]);
         //Usuario normal (ROLE_STANDARDUSER)
-        User user7 = new User("Clara", "Alvarez", "user07@uniovi.es");
+        User user7 = new User("Clara", "Alvarez", "user07@email.com");
         user7.setPassword("user07");
         user7.setRole(rolesService.getRoles()[0]);
         //Usuario normal (ROLE_STANDARDUSER)
-        User user8 = new User("Lucia", "Alvarez", "user08@uniovi.es");
+        User user8 = new User("Lucia", "Alvarez", "user08@email.com");
         user8.setPassword("user08");
         user8.setRole(rolesService.getRoles()[0]);
 
