@@ -34,7 +34,8 @@ public class FriendsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
-        CodeAuxFriends(model, friends);
+        if (friends != null)
+            CodeAuxFriends(model, friends);
         return "friend/list";
     }
 
@@ -49,13 +50,13 @@ public class FriendsController {
     }
 
     @RequestMapping(value = "/friend/{id}/accept", method = RequestMethod.GET)
-    public String setResendTrue( @PathVariable Long id) {
+    public String setResendTrue(@PathVariable Long id) {
         FriendsService.setFriendInvitationSend(true, id);
         return "redirect:/friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/noaccept", method = RequestMethod.GET)
-    public String setResendFalse( @PathVariable Long id) {
+    public String setResendFalse(@PathVariable Long id) {
         FriendsService.setFriendInvitationSend(false, id);
         return "redirect:/friend/invitation";
     }
@@ -67,7 +68,43 @@ public class FriendsController {
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
+
         return "friend/invitation :: tableFriends";
+    }
+
+    @RequestMapping("/friend/send/{userId2}")
+    public String sendInvitationTo(@PathVariable Long userId2) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        if (FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
+                && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null){
+            FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+            activeUser.addAmigo(userId2);
+        }
+
+        return "redirect:/user/list";
+    }
+
+    private void CodeAuxFriends(Model model, Page<Friend> friends) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        List<FriendsForAll> amigosDeVerdad = new ArrayList<>();
+        for (Friend friend : friends) {
+            User amigo;
+            if (friend.getUser2_id() != activeUser.getId())
+                amigo = usersService.getUser(friend.getUser2_id());
+            else
+                amigo = usersService.getUser(friend.getUser1_id());
+            if (amigo != null)
+                amigosDeVerdad.add(new FriendsForAll(friend, amigo));
+        }
+
+        Page<FriendsForAll> userAux = new PageImpl<>(amigosDeVerdad);
+
+        model.addAttribute("page", friends);
+        model.addAttribute("friendsForAll", userAux);
     }
 
     @RequestMapping("/friend/list/update")
@@ -82,18 +119,4 @@ public class FriendsController {
         return "friend/list :: tableFriends";
     }
 
-    private void CodeAuxFriends(Model model, Page<Friend> friends) {
-        List<FriendsForAll> amigosDeVerdad = new ArrayList<>();
-
-        for (Friend friend : friends) {
-            User amigo = usersService.getUser(friend.getUser2_id());
-            if (amigo != null) {
-                amigosDeVerdad.add(new FriendsForAll(friend, amigo));
-            }
-        }
-        Page<FriendsForAll> userAux = new PageImpl<>(amigosDeVerdad);
-
-        model.addAttribute("page", friends);
-        model.addAttribute("friendsForAll", userAux);
-    }
 }

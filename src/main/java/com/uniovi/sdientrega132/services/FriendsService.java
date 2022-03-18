@@ -55,8 +55,6 @@ public class FriendsService {
     }
 
     public void setFriendInvitationSend(boolean revised, Long id) {
-        //Friend friend = friendsRepository.findById(id).get();
-
         friendsRepository.updateResend(revised, id);
     }
 

@@ -39,19 +39,18 @@ public class UsersController {
     private FriendsService friendsService;
 
 
-    @RequestMapping(value="/signup", method= RequestMethod.POST)
-    public String signup(@Validated User user, BindingResult result){
-        signUpFormValidator.validate(user,result);
-        if(result.hasErrors()) {
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@Validated User user, BindingResult result) {
+        signUpFormValidator.validate(user, result);
+        if (result.hasErrors()) {
             return "signup";
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
-        return "redirect:home";
+        return "redirect:/user/list";
+        //return "redirect:/home";
     }
-
-
 
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
@@ -60,8 +59,9 @@ public class UsersController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
-        if (searchText!=null && !searchText.isEmpty())
-            users = usersService.searchUserByEmailAndName(searchText,activeUser);
+        List<User> usersAmigos = new ArrayList<>();
+        if (searchText != null && !searchText.isEmpty())
+            users = usersService.searchUserByEmailAndName(searchText, activeUser);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
                 users = usersService.getUsers(pageable);
@@ -69,8 +69,16 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-        model.addAttribute("usersList",users.getContent());
-        model.addAttribute("page",users);
+
+        for (User u : users) {
+                if(activeUser.esAmigo(u) && !usersAmigos.contains(u)) {
+                    usersAmigos.add(u);
+                }
+        }
+        Page<User> hugoMeComeLosCojonesV2 = new PageImpl<>(usersAmigos);
+        model.addAttribute("usersList", users.getContent());
+        model.addAttribute("usersListFriends", hugoMeComeLosCojonesV2);
+        model.addAttribute("page", users);
         return "user/list";
     }
 
@@ -113,6 +121,5 @@ public class UsersController {
     public String home(Model model) {
         return "home";
     }
-
 
 }
