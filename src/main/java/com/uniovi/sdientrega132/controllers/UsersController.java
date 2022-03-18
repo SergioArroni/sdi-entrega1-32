@@ -35,8 +35,7 @@ public class UsersController {
     private SignUpFormValidator signUpFormValidator;
     @Autowired
     private RolesService rolesService;
-    @Autowired
-    private FriendsService friendsService;
+
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -75,9 +74,9 @@ public class UsersController {
                     usersAmigos.add(u);
                 }
         }
-        Page<User> hugoMeComeLosCojonesV2 = new PageImpl<>(usersAmigos);
+        Page<User> aux = new PageImpl<>(usersAmigos);
         model.addAttribute("usersList", users.getContent());
-        model.addAttribute("usersListFriends", hugoMeComeLosCojonesV2);
+        model.addAttribute("usersListFriends", aux);
         model.addAttribute("page", users);
         return "user/list";
     }
