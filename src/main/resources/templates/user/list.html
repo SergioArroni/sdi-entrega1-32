@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
 <!-- Barra de Navegación superior -->
@@ -17,20 +17,21 @@
 
     <p th:text="#{user.list.message}"></p>
     <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
-    <script> th:inline="javascript">
+    <script> th:inline = "javascript" >
         /*<![CDATA[*/
-        $( "#updateButton" ).click(function() {
+        $("#updateButton").click(function () {
             var numberPage = [[${param.page}]];
             var urlUpdate = '/user/list/update';
-            if (numberPage != null ){
-                urlUpdate += "?page="+numberPage[0];
+            if (numberPage != null) {
+                urlUpdate += "?page=" + numberPage[0];
             }
             $("#tableUsers").load(urlUpdate);
         });
     /*]]>*/
     </script>
     <div class="table-responsive">
-        <table class="table table-hover" th:fragment="tableUsers" id="tableUsers" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+        <table class="table table-hover" th:fragment="tableUsers" id="tableUsers"
+               xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
             <thead>
             <tr>
                 <th scope="col">Email</th>
@@ -42,37 +43,62 @@
             </tr>
             </thead>
             <tbody id="tbody">
-            <tr class="usersTable" id="trid" th:each="user : ${usersList}">
-                <td scope="row" th:text="${user.email}">ejemplo@uniovi.es</td>
-                <td scope="row" th:text="${user.name}">Nombre del usuario</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${user.surname}">Apellidos del usuario</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}!=${#authentication.getName()}" scope="row">
-                    <input type="checkbox" th:value="${user.id}">
+            <tr class="usersTable" id="trid" th:each="var : ${usersList}">
+                <td scope="row" th:text="${var.email}">ejemplo@uniovi.es</td>
+                <td scope="row" th:text="${var.name}">Nombre del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${var.surname}">Apellidos del usuario</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" 
+                    th:if="${var.email}!=${#authentication.getName()}" 
+                    scope="row">
+                    <input type="checkbox" th:value="${var.id}">
                 </td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.email}==${#authentication.getName()}" scope="row">
-
+                <td sec:authorize="hasRole('ROLE_ADMIN')"
+                    th:if="${var.email}==${#authentication.getName()}"
+                    scope="row">
                 </td>
+                <div th:unless="${usersListFriends.getContent().contains(var)}">
+                    <td scope="row"><a></a>
+                        <div>
+                            <button type="button" sec:authorize="hasRole('ROLE_USER')"
+                                    th:id="${'AceptButton' + var.id}" class="btn btn-success">
+                                <span th:text="#{button.send}"></span>
+                            </button>
+                            <script th:inline="javascript"> /*<![CDATA[*/
+                            $("#AceptButton" + "[[${var.id}]]").click(function () {
+                                $.get("/friend/send/[[${var.id}]]", function () {
+                                    var numberPage = [[${param.page}]];
+                                    var urlUpdate = '/user/list/update';
+                                    if (numberPage != null) {
+                                        urlUpdate += "?page=" + numberPage[0];
+                                    }
+                                    $("#tableFriends").load(urlUpdate);
+                                });
+                            }); /*]]>*/
+                            </script>
+                        </div>
+                    </td>
+                </div>
             </tr>
             </tbody>
         </table>
-        <button type="button" sec:authorize="hasRole('ROLE_ADMIN')" id="deleteButton" class="btn btn-default" th:text="#{button.delete}"></button>
-        <script> th:inline="javascript">
+        <button type="button" sec:authorize="hasRole('ROLE_ADMIN')" id="deleteButton" class="btn btn-default"
+                th:text="#{button.delete}"></button>
+        <script> th:inline = "javascript" >
             /*<![CDATA[*/
 
-            $( "#deleteButton" ).click(function() {
+            $("#deleteButton").click(function () {
                 var urlUpdate = '/user/delete?ids=';
                 var selected = '';
-                $('#trid input[type=checkbox]').each(function(){
-                    if(this.checked) {
-                        selected += $(this).val()+',';
-                        urlUpdate += $(this).val()+',';
+                $('#trid input[type=checkbox]').each(function () {
+                    if (this.checked) {
+                        selected += $(this).val() + ',';
+                        urlUpdate += $(this).val() + ',';
                     }
                 });
                 if (selected != '') {
                     urlUpdate = urlUpdate.substring(0, urlUpdate.length - 1);
-                    location.href="http://localhost:8090"+urlUpdate;
-                }
-                else
+                    location.href = "http://localhost:8090" + urlUpdate;
+                } else
                     alert('Debes seleccionar al menos una opción.');
 
             });

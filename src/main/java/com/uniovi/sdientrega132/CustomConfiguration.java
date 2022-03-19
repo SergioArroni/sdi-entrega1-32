@@ -1,19 +1,20 @@
 package com.uniovi.sdientrega132;
 
+import java.util.List;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.List;
-import java.util.Locale;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CustomConfiguration implements WebMvcConfigurer {
@@ -30,6 +31,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
         localeResolver.setDefaultLocale(new Locale("es", "ES"));
         return localeResolver;
     }
+
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor =
@@ -37,9 +39,17 @@ public class CustomConfiguration implements WebMvcConfigurer {
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
     }
+
+    @Bean
+    public LogInterceptor logInterceptor() {
+        LogInterceptor logInterceptor = new LogInterceptor();
+        return logInterceptor;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(logInterceptor());
     }
 
     @Override

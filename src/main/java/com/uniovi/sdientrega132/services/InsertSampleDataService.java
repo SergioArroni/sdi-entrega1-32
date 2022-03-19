@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.services;
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import javax.annotation.PostConstruct;
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private PublicationsService publicationsService;
     @Autowired
     private FriendsService friendsService;
     @Autowired
@@ -73,9 +76,35 @@ public class InsertSampleDataService {
         user7 = usersService.getUserByEmail(user7.getEmail());
         user8 = usersService.getUserByEmail(user8.getEmail());
 
-        friendsService.addFriend(new Friend(1L, user2.getId(), false));
-        friendsService.addFriend(new Friend(1L, user3.getId(), false));
-        friendsService.addFriend(new Friend(1L, user4.getId(), false));
+        //friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
+        //friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
+        //friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
+        //friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
+        //friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
+/**
+        friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
+        friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
+        friendsService.addFriend(new Friend(user4.getId(), user3.getId(), false));
+*/
+
+        Publication pub1 = new Publication("publicacion 1 de Andrea", "probando las publicaciones", user1);
+        Publication pub2 = new Publication("Hola :P", "Esto es aburrido", user6);
+        Publication pub3 = new Publication("publicacion 2 de Andrea", "buscando amigos", user1);
+
+        publicationsService.addPublication(pub1);
+        publicationsService.addPublication(pub2);
+        publicationsService.addPublication(pub3);
 
     }
 }

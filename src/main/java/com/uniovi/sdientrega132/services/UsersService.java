@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.services;
-import com.uniovi.sdientrega132.entities.Friend;
+
 import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,10 +35,6 @@ public class UsersService {
     public Page<User> getStandardUsers(User user, Pageable pageable) {
         Page<User> users = usersRepository.findAllStandard(pageable, user);
         return users;
-    }
-
-    public User getUserByEmail(String email){
-        return usersRepository.findByEmail(email);
     }
 
     public void addUser(User user) {
@@ -60,6 +60,16 @@ public class UsersService {
 
     public User getUser(Long id) {
         return usersRepository.findById(id).get();
+    }
+
+    public User getUserByEmail(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<User>();
+        usersRepository.findAll().forEach(users::add);
+        return users;
     }
 
 }
