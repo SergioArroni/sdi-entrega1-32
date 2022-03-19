@@ -4,6 +4,7 @@ import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
+import com.uniovi.sdientrega132.services.LogService;
 import com.uniovi.sdientrega132.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,9 @@ public class FriendsController {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    public static LogService logService;
 
     @RequestMapping("/friend/list")
     public String getListRealFriendsByUser(Model model, Pageable pageable) {

@@ -29,15 +29,14 @@ public class LogsController {
     @Autowired
     private LogService logService;
 
-    @Autowired
-    private UsersService usersService;
+    public void LogInEx(String username) {
+        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), username);
+        System.out.println(l);
+        logService.addlog(l);
+    }
 
-    public void LogOut() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        User activeUser = usersService.getUserByEmail(email);
-        System.out.println(activeUser);
-        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), activeUser.getEmail());
+    public void LogInEr(String username) {
+        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), username);
         System.out.println(l);
         logService.addlog(l);
     }

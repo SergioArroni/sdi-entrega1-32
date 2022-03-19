@@ -28,9 +28,6 @@ public class CustomConfiguration implements WebMvcConfigurer {
     @Value("${spring.data.web.pageable.default-page-size}")
     private int size;
 
-    @Autowired
-    private LogsController log;
-
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -48,14 +45,13 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LogInterceptor logInterceptor() {
-        LogInterceptor logInterceptor = new LogInterceptor(log);
-        return logInterceptor;
+        return new LogInterceptor();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
-        registry.addInterceptor(logInterceptor());
+        registry.addInterceptor(logInterceptor()).addPathPatterns("/*");;
     }
 
     @Override
