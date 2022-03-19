@@ -2,6 +2,9 @@ package com.uniovi.sdientrega132.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name="publication")
@@ -13,6 +16,9 @@ public class Publication {
     private String text;
     private Date publishingDate;
     private String foto;
+
+    @ManyToMany
+    private List<User> recomendaciones;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -27,6 +33,7 @@ public class Publication {
         this.user=user;
         publishingDate = new Date();
         foto = "";
+        recomendaciones = new ArrayList<User>();
     }
 
     public long getId() {
@@ -75,6 +82,14 @@ public class Publication {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public List<User> getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(List<User> recomendaciones) {
+        this.recomendaciones = recomendaciones;
     }
 
     @Override
