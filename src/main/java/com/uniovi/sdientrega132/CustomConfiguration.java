@@ -31,6 +31,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
         localeResolver.setDefaultLocale(new Locale("es", "ES"));
         return localeResolver;
     }
+
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor =
@@ -38,9 +39,17 @@ public class CustomConfiguration implements WebMvcConfigurer {
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
     }
+
+    @Bean
+    public LogInterceptor logInterceptor() {
+        LogInterceptor logInterceptor = new LogInterceptor();
+        return logInterceptor;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(logInterceptor());
     }
 
     @Override
