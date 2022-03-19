@@ -38,7 +38,7 @@
                 </script>
             </div>
         </td>
-        <td th:text="${publicacion.recomendaciones.size()}">10</td>
+        <td th:text= "${publicacion.recomendaciones.size()}">10</td>
     </tr>
     </tbody>
 
@@ -50,7 +50,7 @@
         <td th:if="${!#strings.isEmpty(publicacion.foto)}">
             <img class="img.thumbnail rounded float-left" th:src="@{'/images/' + ${publicacion.foto}}" >
         </td>
-        <td></td>
+        <td th:text="#{publication.alredyRecommend}">Ya has recomendado esta publicación</td>
         <td th:text="${publicacion.recomendaciones.size()}">10</td>
     </tr>
     </tbody>

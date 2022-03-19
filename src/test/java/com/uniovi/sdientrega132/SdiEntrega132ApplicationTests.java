@@ -1,6 +1,9 @@
 package com.uniovi.sdientrega132;
 
+import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.pageobjects.*;
+import com.uniovi.sdientrega132.repositories.PublicationsRepository;
+import com.uniovi.sdientrega132.services.PublicationsService;
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
@@ -19,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -34,6 +38,9 @@ class SdiEntrega132ApplicationTests {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private PublicationsRepository publicationsRepository;
 
     public static WebDriver getDriver(String PathFirefox, String Geckodriver) {
         System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -394,6 +401,52 @@ class SdiEntrega132ApplicationTests {
         String checkText = "user01@email.com";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+        PO_PrivateView.logout(driver);
+    }
+
+    // PR35. Acceder a las publicaciones de un amigo y recomendar una publicación. Comprobar que el
+    //número de recomendaciones se ha incrementado en uno y que no aparece el botón/enlace recomendar.
+    @Test
+    @Order(35)
+    public void PR35() {
+        //Nos loggeamos con el user01, que tiene 1 amigo (user06) con publicaciones
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Se despliega el menú de amigos, y se clica en lista de amigos
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
+
+        //Comprobamos que el título de la publicación es el que debería ser.
+        String checkText = "Hola :P";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//button[contains(@class, 'btn btn-success')]", 0);
+
+        // Se despliega el menú de amigos, y se clica en lista de amigos
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
+
+        //Comprobamos que el la publicación sigue apareciendo
+
+        List<Publication> pubs = (List<Publication>)publicationsRepository.findAll();
+
+        Assertions.assertEquals(1, pubs.get(1).getRecomendaciones().size());
+
+        //Comprobamos que el boton ya no está y aparece el texto correspondiente
+        checkText = "Ya has recomendado esta publicación ";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
         PO_PrivateView.logout(driver);
     }
 }
