@@ -66,7 +66,7 @@
                     <td scope="row"><a></a>
                         <div>
                             <button type="button" sec:authorize="hasRole('ROLE_USER')"
-                                    th:id="${'AceptButton' + var.id}" class="btn btn-success" th:onclick="${actualUser.addFriend(var.id)}">
+                                    th:id="${'AceptButton' + var.id}" class="btn btn-success">
                                 <span th:text="#{button.send}"></span>
                             </button>
                             <script th:inline="javascript">
@@ -78,7 +78,7 @@
                                             if (numberPage != null) {
                                                 urlUpdate += "?page=" + numberPage[0];
                                             }
-                                            $("#tableFriends").load(urlUpdate);
+                                            $("#tableUsers").load(urlUpdate);
                                         });
                                     });
                                 /*]]>*/
