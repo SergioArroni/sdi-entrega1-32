@@ -27,10 +27,10 @@ public class UsersService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Page<User> getUsers(Pageable pageable) {
-        Page<User> users = usersRepository.findAll(pageable);
+    /*public List<User> getUsers() {
+        List<User> users = (List<User>) usersRepository.findAll();
         return users;
-    }
+    }*/
 
     public Page<User> getStandardUsers(User user, Pageable pageable) {
         Page<User> users = usersRepository.findAllStandard(pageable, user);
