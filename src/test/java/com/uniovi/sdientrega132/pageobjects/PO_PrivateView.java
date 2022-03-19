@@ -29,6 +29,12 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(index).click();
     }
 
+    static public List<WebElement> click(WebDriver driver, String click, int lugar){
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", click);
+        elements.get(lugar).click();
+        return elements;
+    }
+
     static public void clickCheck(WebDriver driver, String text, int pos) {
         List<WebElement> elements = PO_View.checkElementBy(driver, "text", text);
         Assertions.assertEquals(text, elements.get(pos).getText());

@@ -3,6 +3,7 @@ package com.uniovi.sdientrega132.controllers;
 import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.PublicationsService;
 import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.validators.PublicationValidator;
@@ -45,6 +46,9 @@ public class PublicationsController {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private FriendsService friendsService;
+
     @RequestMapping("/publication/list")
     public String getList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
@@ -66,22 +70,29 @@ public class PublicationsController {
         User user = usersService.getUserByEmail(email);
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
         publications = publicationsService.getPublicationsForUser(pageable, user);
-        List<Publication> publicactionRecommended = new ArrayList<Publication>();
-        List<Publication> publicactionNotRecommended = new ArrayList<Publication>();
-
-        for(Publication pub : publications){
-            if(pub.getRecomendaciones().contains(userAut)){
-                publicactionRecommended.add(pub);
-            }
-            else{
-                publicactionNotRecommended.add(pub);
-            }
+        if(friendsService.getCoupleFriends(userAut.getId(), user.getId()) == null &&
+                friendsService.getCoupleFriends(user.getId(), userAut.getId()) == null){
+            model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
+            model.addAttribute("publicationsRecommended", new ArrayList<Publication>());
+            model.addAttribute("page", publications);
         }
-        Page<Publication> publicationsRecommended = new PageImpl<Publication>(publicactionRecommended);
-        Page<Publication> publicationsNotRecommended = new PageImpl<Publication>(publicactionNotRecommended);
-        model.addAttribute("publicationsNotRecommended", publicationsNotRecommended.getContent());
-        model.addAttribute("publicationsRecommended", publicationsRecommended.getContent());
-        model.addAttribute("page", publications);
+        else {
+            List<Publication> publicactionRecommended = new ArrayList<Publication>();
+            List<Publication> publicactionNotRecommended = new ArrayList<Publication>();
+
+            for (Publication pub : publications) {
+                if (pub.getRecomendaciones().contains(userAut)) {
+                    publicactionRecommended.add(pub);
+                } else {
+                    publicactionNotRecommended.add(pub);
+                }
+            }
+            Page<Publication> publicationsRecommended = new PageImpl<Publication>(publicactionRecommended);
+            Page<Publication> publicationsNotRecommended = new PageImpl<Publication>(publicactionNotRecommended);
+            model.addAttribute("publicationsNotRecommended", publicationsNotRecommended.getContent());
+            model.addAttribute("publicationsRecommended", publicationsRecommended.getContent());
+            model.addAttribute("page", publications);
+        }
 
         return "publication/list";
     }

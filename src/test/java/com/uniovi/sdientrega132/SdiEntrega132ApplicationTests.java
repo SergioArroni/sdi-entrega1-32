@@ -24,10 +24,11 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    //static String Geckodriver ="C:\\nada.exe;
+    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverHugo);
     static String URL = "http://localhost:8090";
 
 
@@ -277,31 +278,54 @@ class SdiEntrega132ApplicationTests {
         //Vamos al formulario de logueo
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
 
-        // Se despliega el menú de usuarios, y se clica en listUser
-        //PO_NavView.desplegarUsuarios(driver, "listUser");
-        PO_PrivateView.listUsers(driver);
+        //Hacemos una búsqueda para el usuario 6
+        PO_PrivateView.fillSearch(driver, "user06");
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
 
-        // Se acepta la petición del usuario "Sara"
-        PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
+        PO_PrivateView.logout(driver);
 
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
+
+        String checkText = "user01@email.com";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        PO_PrivateView.logout(driver);
     }
 
-    // PR20. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
+    // PR20. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
+    //que ya le habíamos enviado la invitación previamente.
     @Test
     @Order(20)
     public void PR20() {
-        //Vamos al formulario de logueo
+        //Volvemos a enviar una petición de amistad desde el usuario 1
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
 
-        // Se despliega el menú de usuarios, y se clica en listUser
-        PO_NavView.desplegarUsuarios(driver, "listUser");
+        //Hacemos una búsqueda para el usuario 6
+        PO_PrivateView.fillSearch(driver, "user06");
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
 
-        // Se acepta la petición del usuario "Sara"
-        PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
+        PO_PrivateView.logout(driver);
+
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
+
+        //Deberíamos de tener una sola invitación, no dos.
+        // Se comprueba que user06@email.com tiene 1 invitación
+        List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
+        Assertions.assertTrue(friends.size() == 1);
     }
 
 
@@ -309,53 +333,68 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(21)
     public void PR21() {
+        //Le enviamos otra petición de amistad al user06, que ya tenía una del user01.
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user03@email.com", "user03");
 
-        // Se despliega el menú de amigos, y se clica en invitationFriends
-        PO_NavView.desplegarAmigos(driver, "invitationFriends");
+        //Hacemos una búsqueda para el usuario 6
+        PO_PrivateView.fillSearch(driver, "user06");
+        //Primera invitación
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
 
-        // Se comprueba que alex@uniovi.es tenga mas de una 1 peticion de amistad
+        PO_PrivateView.logout(driver);
+
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
+
+        // Se comprueba que user06@email.com tenga 2 peticiones de amistad
         List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
-        Assertions.assertTrue(friends.size() >= 1);
+        Assertions.assertTrue(friends.size() == 2);
     }
 
     // PR22. Sobre el listado de invitaciones recibidas. Hacer clic en el botón/enlace de una de ellas y comprobar que dicha solicitud desaparece del listado de invitaciones.
     @Test
     @Order(22)
     public void PR22() {
+        //Nos loggeamos con el user06, que tiene 2 invitaciones pendientes.
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
 
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
-        PO_NavView.desplegarAmigos(driver, "invitationFriends");
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
-        // Se comprueba que juan tiene 1 peticion de amistad
+        PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton1')]", 0);
+
+        // Se comprueba que user06 tiene 1 peticion de amistad
         List<WebElement> usuarios = PO_PrivateView.checkElementBy(driver, "text", "Aceptar");
         Assertions.assertTrue(usuarios.size() == 1);
-
-        // Se acepta la petición del usuario "Sara"
-        PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
-
-        // Se comprueba que ahora ya se ha aceptado la petición, por tanto no hay peticiones pendientes
-        PO_PrivateView.clickCheck(driver, "No dispones de ninguna peticion de amistad, :(",0);
+        PO_PrivateView.logout(driver);
     }
 
     // PR23. Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene los amigos que deben ser
     @Test
     @Order(23)
     public void PR23() {
+        //Nos loggeamos con el user06, que tiene 1 amigo (user01)
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        // Inicio sesión con Pablo, que tiene varios amigos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
 
-        // Se despliega el menú de usuarios, y se clica en listFriends
-        PO_NavView.desplegarAmigos(driver, "listFriends");
+        // Se despliega el menú de amigos, y se clica en lista de amigos
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
 
-        // Se comprueba que alex@uniovi.es tiene 6 amigos
-        List<WebElement> usuarios = SeleniumUtils.waitLoadElementsBy(driver, "text", "Email",
-                PO_View.getTimeout());
-        Assertions.assertTrue(usuarios.size() == 6);
+        // Se comprueba que user06 tiene un nuevo amigo
+        String checkText = "user01@email.com";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        PO_PrivateView.logout(driver);
     }
-
 }
+
