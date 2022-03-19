@@ -34,6 +34,9 @@ public class UsersController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private LogsController logsController;
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
         signUpFormValidator.validate(user, result);
@@ -42,6 +45,7 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
+        System.out.println("C");
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
         return "redirect:/user/list";
         //return "redirect:/home";

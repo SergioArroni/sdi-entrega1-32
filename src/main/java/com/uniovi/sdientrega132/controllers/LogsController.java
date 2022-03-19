@@ -26,11 +26,17 @@ import java.util.List;
 
 @Controller
 public class LogsController {
+
     @Autowired
     private LogService logService;
 
-    public void LogInEx(String username) {
-        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), username);
+    @Autowired
+    private UsersService usersService;
+
+    public void LogInEx() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), email);
         System.out.println(l);
         logService.addlog(l);
     }

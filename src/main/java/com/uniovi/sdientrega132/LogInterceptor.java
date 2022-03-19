@@ -19,15 +19,13 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
         System.out.println("Interceptar la petición");
         System.out.println(request.getRequestURL());
-        if (request.getRequestURL().toString().equals("http://localhost:8090/login")) {
-            logsController.LogInEx("manolo");
-        }
-        else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")){
+        System.out.println(request.getSession().getAttributeNames());
+
+        if (request.getRequestURL().toString().equals("http://localhost:8090/login") && request.getSession() != null) {
+            logsController.LogInEx();
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error") && request.getSession() != null) {
             logsController.LogInEr("manolo");
         }
-        // Búscar el parámetro "limite"
-        Integer parametroLimite = ServletRequestUtils.getIntParameter(request, "limite", 0);
-        System.out.println(parametroLimite);
         return true;
     }
 

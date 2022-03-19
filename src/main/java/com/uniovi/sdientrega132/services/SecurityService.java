@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.services;
 
+import com.uniovi.sdientrega132.entities.Log;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 @Service
 public class SecurityService {
     @Autowired
@@ -18,6 +22,9 @@ public class SecurityService {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private LogService logService;
+
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
     public String findLoggedInEmail() {
@@ -25,6 +32,7 @@ public class SecurityService {
         if (userDetails instanceof UserDetails) {
             return ((UserDetails) userDetails).getUsername();
         }
+        System.out.println("B");
         return null;
     }
 
@@ -33,6 +41,7 @@ public class SecurityService {
         UsernamePasswordAuthenticationToken aToken = new UsernamePasswordAuthenticationToken(userDetails, password,
                 userDetails.getAuthorities());
         authenticationManager.authenticate(aToken);
+        System.out.println("A");
         if (aToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(aToken);
             logger.debug(String.format("Auto login %s successfully!", email));
