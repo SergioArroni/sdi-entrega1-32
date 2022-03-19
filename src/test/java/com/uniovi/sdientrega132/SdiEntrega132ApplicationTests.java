@@ -101,13 +101,9 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(11)
     public void PR11() {
-        //Vamos al formulario de logueo
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //Logueo como administrador
+        PO_LoginView.login(driver, "admin@email.com", "admin");
 
-        //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
         PO_PrivateView.listUsers(driver);
 
@@ -129,15 +125,11 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(15)
     public void PR15() {
-        //Vamos al formulario de logueo
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Logueo como usuario estándar
+        PO_LoginView.login(driver, "user01@email.com", "user01");
 
-        //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
-        PO_PrivateView.listPageUsers(driver);
+        PO_PrivateView.listUsers(driver);
 
         //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
         User activeUser = usersRepository.findByEmail("user01@email.com");
@@ -171,15 +163,11 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(16)
     public void PR16() {
-        //Vamos al formulario de logueo
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Logueo como usuario estándar
+        PO_LoginView.login(driver, "user01@email.com", "user01");
 
-        //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
-        PO_PrivateView.listPageUsers(driver);
+        PO_PrivateView.listUsers(driver);
 
         //Hacemos una búsqueda con el campo vacío
         PO_PrivateView.fillSearch(driver, "");
@@ -216,15 +204,11 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(17)
     public void PR17() {
-        //Vamos al formulario de logueo
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Logueo como usuario estándar
+        PO_LoginView.login(driver, "user01@email.com", "user01");
 
-        //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
-        PO_PrivateView.listPageUsers(driver);
+        PO_PrivateView.listUsers(driver);
 
         //Hacemos una búsqueda escribiendo un texto que no exista
         PO_PrivateView.fillSearch(driver, "hola");
@@ -243,15 +227,11 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(18)
     public void PR18() {
-        //Vamos al formulario de logueo
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        //Rellenamos el formulario
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Logueo como usuario estándar
+        PO_LoginView.login(driver, "user01@email.com", "user01");
 
-        //Entramos en el menú de usuarios
-        PO_PrivateView.enterToMenu(driver,"users-menu");
         //Accedemos a la lista de usuarios
-        PO_PrivateView.listPageUsers(driver);
+        PO_PrivateView.listUsers(driver);
 
         //Hacemos una búsqueda con un texto específico
         PO_PrivateView.fillSearch(driver, "n");
@@ -294,11 +274,14 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(19)
     public void PR19() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de usuarios, y se clica en listUser
-        PO_NavView.desplegarUsuarios(driver, "listUser");
+        //PO_NavView.desplegarUsuarios(driver, "listUser");
+        PO_PrivateView.listUsers(driver);
 
         // Se acepta la petición del usuario "Sara"
         PO_PrivateView.enviarAceptarPeticion(driver, "Sara");
@@ -309,8 +292,10 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(20)
     public void PR20() {
+        //Vamos al formulario de logueo
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de usuarios, y se clica en listUser
         PO_NavView.desplegarUsuarios(driver, "listUser");
@@ -325,7 +310,7 @@ class SdiEntrega132ApplicationTests {
     @Order(21)
     public void PR21() {
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de amigos, y se clica en invitationFriends
         PO_NavView.desplegarAmigos(driver, "invitationFriends");
@@ -340,7 +325,7 @@ class SdiEntrega132ApplicationTests {
     @Order(22)
     public void PR22() {
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "juan@uniovi.es", "123456");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
         PO_NavView.desplegarAmigos(driver, "invitationFriends");
@@ -362,7 +347,7 @@ class SdiEntrega132ApplicationTests {
     public void PR23() {
         // Rellenamos el formulario de login con datos válidos
         // Inicio sesión con Pablo, que tiene varios amigos
-        PO_LoginView.fillLoginForm(driver, "alex@uniovi.es", "123456");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de usuarios, y se clica en listFriends
         PO_NavView.desplegarAmigos(driver, "listFriends");
