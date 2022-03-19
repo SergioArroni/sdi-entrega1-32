@@ -113,7 +113,6 @@ public class User {
 
     public void addFriend(Long u) {
         var fri = getFriends();
-        System.out.println(fri);
         fri.add(u);
         setFriends(fri);
     }

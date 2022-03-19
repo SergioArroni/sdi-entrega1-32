@@ -84,11 +84,8 @@ public class FriendsController {
         if (friendsService.getCoupleFriends(activeUser.getId(), userId2) == null
                 && friendsService.getCoupleFriends(userId2, activeUser.getId()) == null) {
             friendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
-            System.out.println("Hola");
-            usersService.addFriends(activeUser, userId2);
-            for (Long f : activeUser.getFriends()) {
-                System.out.println(f.toString());
-            }
+            activeUser.addFriend(userId2);
+            usersService.addUser(activeUser);
         }
         return "redirect:/user/list";
     }

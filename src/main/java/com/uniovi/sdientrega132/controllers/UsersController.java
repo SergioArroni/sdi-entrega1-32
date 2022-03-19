@@ -1,4 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
+
 import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
@@ -58,7 +59,7 @@ public class UsersController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<User> users;
-        List<User> usersFriends = new ArrayList<>();
+        Set<Long> usersFriends = new HashSet<>();
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
@@ -68,20 +69,14 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-        System.out.println(activeUser.getId());
-        for (Long f:activeUser.getFriends()) {
-            System.out.println("2"+f.toString());
-        }
-
         for (User u : users) {
-                if(activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                    usersFriends.add(u);
-                }
+            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
+                usersFriends.add(u.getId());
+            }
         }
-        Page<User> aux = new PageImpl<>(usersFriends);
         model.addAttribute("actualUser", activeUser);
         model.addAttribute("usersList", users.getContent());
-        model.addAttribute("usersListFriends", aux);
+        model.addAttribute("usersListFriends", usersFriends);
         model.addAttribute("page", users);
         return "user/list";
     }
@@ -90,6 +85,17 @@ public class UsersController {
     public String updateList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName(); // Email es el name de la autenticación
         User user = usersService.getUserByEmail(email);
+
+        Page<User> users= usersService.getUsers(pageable);
+
+        Set<Long> usersFriends = new HashSet<>();
+        for (User u : users) {
+            if (user.isFriend(u.getId()) && !usersFriends.contains(u)) {
+                usersFriends.add(u.getId());
+            }
+        }
+        System.out.println("Hola");
+        model.addAttribute("usersListFriends", usersFriends);
         model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
     }
