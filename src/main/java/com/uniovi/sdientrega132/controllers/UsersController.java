@@ -114,9 +114,11 @@ public class UsersController {
     public String login(Model model, String error, String logout) {
         if (error != null) {
             model.addAttribute("error", "");
+            logsController.LogInEr();
         }
         if (logout != null) {
             model.addAttribute("message", "");
+            logsController.LogOut();
         }
         return "login";
     }

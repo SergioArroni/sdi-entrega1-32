@@ -19,16 +19,20 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
         System.out.println("Interceptar la petición");
         System.out.println(request.getRequestURL());
-        System.out.println(request.getSession().getAttributeNames());
 
-        if (request.getRequestURL().toString().equals("http://localhost:8090/login") && request.getSession() != null) {
+        System.out.println(request.getMethod());
+
+        if (request.getRequestURL().toString().equals("http://localhost:8090/login")) {
             logsController.LogInEx();
-        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error") && request.getSession() != null) {
-            logsController.LogInEr("manolo");
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")) {
+            logsController.LogInEr();
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/signup") && request.getMethod().equals("POST")) {
+            logsController.LogAlta(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
+            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
+        } else {
+            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
         }
         return true;
     }
-
-
 }
 

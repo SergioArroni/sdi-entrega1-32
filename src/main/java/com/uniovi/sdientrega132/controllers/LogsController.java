@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -41,10 +43,51 @@ public class LogsController {
         logService.addlog(l);
     }
 
-    public void LogInEr(String username) {
-        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), username);
+    public void LogOut() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), email);
         System.out.println(l);
         logService.addlog(l);
     }
 
+    public void LogInEr() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), email);
+        System.out.println(l);
+        logService.addlog(l);
+    }
+
+    public void LogPET(String pathInfo, String method, Enumeration<String> parameterNames) {
+
+        var iter = parameterNames.asIterator();
+
+        String parametros = "";
+
+        for (Iterator<String> it = iter; it.hasNext(); ) {
+            String param = it.next();
+            parametros += param + " ";
+        }
+
+        Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
+        System.out.println(l);
+        logService.addlog(l);
+    }
+
+    public void LogAlta(String pathInfo, String method, Enumeration<String> parameterNames) {
+
+        var iter = parameterNames.asIterator();
+
+        String parametros = "";
+
+        for (Iterator<String> it = iter; it.hasNext(); ) {
+            String param = it.next();
+            parametros += param + " ";
+        }
+
+        Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
+        System.out.println(l);
+        logService.addlog(l);
+    }
 }

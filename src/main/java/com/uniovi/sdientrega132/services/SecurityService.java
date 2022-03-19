@@ -32,7 +32,6 @@ public class SecurityService {
         if (userDetails instanceof UserDetails) {
             return ((UserDetails) userDetails).getUsername();
         }
-        System.out.println("B");
         return null;
     }
 
@@ -41,7 +40,6 @@ public class SecurityService {
         UsernamePasswordAuthenticationToken aToken = new UsernamePasswordAuthenticationToken(userDetails, password,
                 userDetails.getAuthorities());
         authenticationManager.authenticate(aToken);
-        System.out.println("A");
         if (aToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(aToken);
             logger.debug(String.format("Auto login %s successfully!", email));

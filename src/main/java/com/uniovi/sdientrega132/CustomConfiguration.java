@@ -51,7 +51,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
-        registry.addInterceptor(logInterceptor()).addPathPatterns("/*");;
+        registry.addInterceptor(logInterceptor());
     }
 
     @Override
