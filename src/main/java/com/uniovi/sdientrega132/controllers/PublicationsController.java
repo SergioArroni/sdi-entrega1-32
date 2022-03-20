@@ -90,8 +90,9 @@ public class PublicationsController {
 
         publication.setPublishingDate(new Date());
         if (!imagen.isEmpty()) {
-            Path directorio = Paths.get("src//main//resources//static//images");
-            String ruta = directorio.toFile().getAbsolutePath();
+//            Path directorio = Paths.get("src//main//resources//static//images");
+//            String ruta = directorio.toFile().getAbsolutePath();
+            String ruta = "C://Productos";
 
             try {
                 byte[] bytes = imagen.getBytes();
