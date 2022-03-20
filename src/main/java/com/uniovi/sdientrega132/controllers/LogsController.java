@@ -1,30 +1,19 @@
 package com.uniovi.sdientrega132.controllers;
 
-import com.uniovi.sdientrega132.entities.Friend;
-import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.Log;
-import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.LogService;
+import com.uniovi.sdientrega132.services.UserDetailsServiceImpl;
 import com.uniovi.sdientrega132.services.UsersService;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 
 @Controller
 public class LogsController {
@@ -35,26 +24,32 @@ public class LogsController {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    private String emailLogin;
+    private String emailInvalid;
+
+
     public void LogInEx() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), email);
+        emailLogin = auth.getName();
+        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), emailLogin);
         System.out.println(l);
         logService.addlog(l);
     }
 
     public void LogOut() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), email);
+        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), emailLogin);
+        emailLogin=null;
         System.out.println(l);
         logService.addlog(l);
     }
 
     public void LogInEr() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), email);
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //String email=auth.getName();
+        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), userDetailsService.getEmailInvalid());
         System.out.println(l);
         logService.addlog(l);
     }
@@ -89,5 +84,9 @@ public class LogsController {
         Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
         System.out.println(l);
         logService.addlog(l);
+    }
+
+    public void emailInvalid(String email) {
+        this.emailInvalid=email;
     }
 }

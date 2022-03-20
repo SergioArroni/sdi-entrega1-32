@@ -22,10 +22,16 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         System.out.println(request.getMethod());
 
-        if (request.getRequestURL().toString().equals("http://localhost:8090/login")) {
+        if (request.getRequestURL().toString().equals("http://localhost:8090/home")) {
             logsController.LogInEx();
-        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")) {
+        }else if (request.getRequestURL().toString().equals("http://localhost:8090/user/list")) {
+            logsController.LogInEx();
+        }
+        else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")) {
             logsController.LogInEr();
+        }
+        else if (request.getRequestURL().toString().equals("http://localhost:8090/login?logout")) {
+            logsController.LogOut();
         } else if (request.getRequestURL().toString().equals("http://localhost:8090/signup") && request.getMethod().equals("POST")) {
             logsController.LogAlta(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
             logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());

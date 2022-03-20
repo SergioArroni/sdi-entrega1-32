@@ -1,6 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
 
-import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
@@ -8,7 +7,6 @@ import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,6 +49,7 @@ public class UsersController {
         return "redirect:/user/list";
         //return "redirect:/home";
     }
+
 
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
