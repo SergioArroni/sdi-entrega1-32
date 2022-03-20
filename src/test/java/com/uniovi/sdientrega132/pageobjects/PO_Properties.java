@@ -5,7 +5,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PO_Properties {
+    public static int getSPANISH() {
+        return SPANISH;
+    }
 
+    public static int getENGLISH() {
+        return ENGLISH;
+    }
 
     static private String Path;
     static final int SPANISH = 0;
@@ -26,13 +32,5 @@ public class PO_Properties {
         //result = new String(value.getBytes(StandardCharsets.ISO_8859_1),  StandardCharsets.UTF_8);
         result = new String(value.getBytes(StandardCharsets.UTF_8),  StandardCharsets.UTF_8);
         return result;
-    }
-
-    public static int getSPANISH() {
-        return SPANISH;
-    }
-
-    public static int getENGLISH() {
-        return ENGLISH;
     }
 }

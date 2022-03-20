@@ -50,6 +50,8 @@ public class PO_View {
         return  SeleniumUtils.waitLoadElementsBy(driver, type, text, getTimeout());
     }
 
-
+    static public List<WebElement> checkKey(WebDriver driver, String key, int i) {
+        return  SeleniumUtils.waitLoadElementsBy(driver, "text", p.getString(key, i), getTimeout());
+    }
 
 }
