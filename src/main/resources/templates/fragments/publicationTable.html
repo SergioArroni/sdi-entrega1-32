@@ -17,8 +17,8 @@
         <td th:text="${publication.title}"> Ejercicio 1</td>
         <td th:text="${publication.text}">10</td>
         <td th:text="${publication.publishingDate}">10</td>
-        <td th:if="${!#strings.isEmpty(publication.foto)}">
-            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.foto}}" >
+        <td th:if="${!#strings.isEmpty(publication.photo)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
         </td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.user.email}"></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" th:text="${publication.state}"></td>

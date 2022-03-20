@@ -7,10 +7,7 @@ import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.validators.PublicationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,22 +15,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
 public class PublicationsController {
-
-    @Autowired
-    private HttpSession httpSession;
 
     @Autowired
     private PublicationValidator publicationValidator;
@@ -49,7 +40,7 @@ public class PublicationsController {
                           @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        Page<Publication> publications;
         if (user.getRole().equals("ROLE_ADMIN")) {
             if (searchText != null && !searchText.isEmpty())
                 publications = publicationsService.searchPublications(searchText, pageable);
@@ -68,7 +59,7 @@ public class PublicationsController {
     @RequestMapping("/publication/list/{email}")
     public String getFriendsList(Model model, Pageable pageable, @PathVariable String email) {
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        Page<Publication> publications;
         publications = publicationsService.getPublicationsForFriend(pageable, user);
 
         model.addAttribute("publicationsList", publications.getContent());
@@ -99,8 +90,6 @@ public class PublicationsController {
 
         publication.setPublishingDate(new Date());
         if (!imagen.isEmpty()) {
-//            Path directorio = Paths.get("src//main//resources//static//images");
-//            String ruta = directorio.toFile().getAbsolutePath();
             String ruta = "C://Productos";
 
             try {
@@ -109,7 +98,7 @@ public class PublicationsController {
                 Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(nombreImagen);
+                publication.setPhoto(nombreImagen);
             } catch (IOException e) {
                 System.out.println("Fallo con la imagen");
                 e.printStackTrace();
@@ -133,8 +122,8 @@ public class PublicationsController {
     }
 
     @RequestMapping(value = "/publication/edit")
-    public String editState(@RequestParam(value = "", required = false) Long id,
-                          @RequestParam(value = "", required = false) String state) {
+    public String editState(@RequestParam(required = false) Long id,
+                          @RequestParam(required = false) String state) {
         System.out.println("Modificado estado "+state);
         publicationsService.editStateOf(id, state);
 
