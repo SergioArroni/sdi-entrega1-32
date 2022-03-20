@@ -655,7 +655,7 @@ class SdiEntrega132ApplicationTests {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
 
-        driver.get("http://localhost:8090/publication/list/user01@email.com");
+        driver.get("http://localhost:8090/publication/listFriend/user01@email.com");
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
