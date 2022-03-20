@@ -436,16 +436,41 @@ class SdiEntrega132ApplicationTests {
         //Pulsamos el enlace para ver las publicaciones del user06
         PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
 
-        //Comprobamos que el la publicación sigue apareciendo
-
-        List<Publication> pubs = (List<Publication>)publicationsRepository.findAll();
-
-        Assertions.assertEquals(1, pubs.get(1).getRecomendaciones().size());
-
-        //Comprobamos que el boton ya no está y aparece el texto correspondiente
-        checkText = "Ya has recomendado esta publicación ";
+        //Comprobamos que el título de la publicación es el que debería ser.
+        checkText = "Hola :P";
         result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Comprobamos que el la publicación tiene 1 recomendación
+        checkText = "1 Recs.";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Comprobamos que el boton ya no está y aparece el texto correspondiente
+        checkText = "Ya has recomendado esta publicación";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        PO_PrivateView.logout(driver);
+    }
+
+    // PR36. Utilizando un acceso vía URL u otra alternativa, tratar de recomendar una publicación de un
+    //usuario con el que no se mantiene una relación de amistad.
+    @Test
+    @Order(36)
+    public void PR36() {
+        //Nos loggeamos con el user04, que no es amigo del user06
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+
+        driver.get("http://localhost:8090/publication/listFriend/user06@email.com");
+
+        //Comprobamos que no aparecen publicaciones de amigos
+        String checkText = "No hay publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
 
         PO_PrivateView.logout(driver);
     }

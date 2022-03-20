@@ -92,6 +92,10 @@ public class Publication {
         this.recomendaciones = recomendaciones;
     }
 
+    public String printRecomendations(){
+        return recomendaciones.size() + " Recs.";
+    }
+
     @Override
     public String toString() {
         return "Publication{" +
