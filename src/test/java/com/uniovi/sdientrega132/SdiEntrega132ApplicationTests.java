@@ -19,11 +19,11 @@ import java.util.List;
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     //static String Geckodriver ="C:\\nada.exe;
-    //static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
-    static String GeckodriverSergio ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+    //static String GeckodriverSergio ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverSergio);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverHugo);
     static String URL = "http://localhost:8090";
 
 
@@ -334,7 +334,7 @@ class SdiEntrega132ApplicationTests {
         //Le enviamos otra petición de amistad al user06, que ya tenía una del user01.
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user03@email.com", "user03");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         //Hacemos una búsqueda para el usuario 6
         PO_PrivateView.fillSearch(driver, "user06");
@@ -368,6 +368,10 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
         PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton1')]", 0);
+
+        // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
         // Se comprueba que user06 tiene 1 peticion de amistad
         List<WebElement> usuarios = PO_PrivateView.checkElementBy(driver, "text", "Aceptar");
