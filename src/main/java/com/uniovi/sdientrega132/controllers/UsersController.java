@@ -7,6 +7,7 @@ import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class UsersController {
@@ -60,14 +59,14 @@ public class UsersController {
         User activeUser = usersService.getUserByEmail(email);
       
         List<User> listUsers = new ArrayList<>();
-        Page<User> users;
+        Page<User> users= new PageImpl<>(new LinkedList<>());
         Set<Long> usersFriends = new HashSet<>();
       
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
-                listUsers = usersService.getUsers();
+                listUsers = usersService.getUsers(pageable);
             } else {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
@@ -102,7 +101,7 @@ public class UsersController {
         List<User> listUsers = new ArrayList<>();
         Set<Long> usersFriends = new HashSet<>();
         if (user.getRole().equals("ROLE_ADMIN")) {
-            listUsers = usersService.getUsers();
+            listUsers = usersService.getUsers(pageable);
         } else {
             users = usersService.getStandardUsers(user, pageable);
         }

@@ -29,4 +29,8 @@ public class LogsService {
     public void deleteAllLogs() {
         logsRepository.deleteAll();
     }
+
+    public void addLog(Log log){
+        logsRepository.save(log);
+    }
 }

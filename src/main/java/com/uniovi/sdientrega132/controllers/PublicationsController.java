@@ -1,6 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
 
-import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
@@ -113,10 +112,10 @@ public class PublicationsController {
 
     @RequestMapping(value = "/publication/add", method = RequestMethod.POST)
     public String setPublication(@Validated Publication publication,
-                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model) {
+                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model, Pageable pageable) {
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
-            model.addAttribute("usersList", usersService.getUsers());
+            model.addAttribute("usersList", usersService.getUsers(pageable));
             return "publication/add";
         }
 
@@ -144,8 +143,8 @@ public class PublicationsController {
     }
 
     @RequestMapping(value = "/publication/add")
-    public String getPublication(Model model) {
-        model.addAttribute("usersList", usersService.getUsers());
+    public String getPublication(Model model, Pageable pageable) {
+        model.addAttribute("usersList", usersService.getUsers(pageable));
         model.addAttribute("publication", new Publication());
         return "publication/add";
     }
