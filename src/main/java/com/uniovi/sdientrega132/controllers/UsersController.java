@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class UsersController {
@@ -46,8 +48,7 @@ public class UsersController {
         usersService.addUser(user);
         System.out.println("C");
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
-        return "redirect:/user/list";
-        //return "redirect:/home";
+        return "redirect:/home";
     }
 
 
@@ -57,22 +58,35 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
+      
+        List<User> listUsers = new ArrayList<>();
         Page<User> users;
         Set<Long> usersFriends = new HashSet<>();
+      
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
-                users = usersService.getUsers(pageable);
+                listUsers = usersService.getUsers();
             } else {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
+
+        if (listUsers.isEmpty()) {
+            model.addAttribute("usersList", users.getContent());
+            model.addAttribute("page", users);
+        } else {
+            model.addAttribute("usersList", listUsers);
+        }
+
+
         for (User u : users) {
             if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
                 usersFriends.add(u.getId());
             }
         }
+
         model.addAttribute("actualUser", activeUser);
         model.addAttribute("usersList", users.getContent());
         model.addAttribute("usersListFriends", usersFriends);
@@ -84,16 +98,27 @@ public class UsersController {
     public String updateList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName(); // Email es el name de la autenticación
         User user = usersService.getUserByEmail(email);
-
-        Page<User> users= usersService.getUsers(pageable);
-
+        Page<User> users = new PageImpl<>(new LinkedList<>());
+        List<User> listUsers = new ArrayList<>();
         Set<Long> usersFriends = new HashSet<>();
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            listUsers = usersService.getUsers();
+        } else {
+            users = usersService.getStandardUsers(user, pageable);
+        }
+        if (listUsers.isEmpty()) {
+            model.addAttribute("usersList", users.getContent());
+            model.addAttribute("page", users);
+        } else {
+            model.addAttribute("usersList", listUsers);
+        }
+
         for (User u : users) {
             if (user.isFriend(u.getId()) && !usersFriends.contains(u)) {
                 usersFriends.add(u.getId());
             }
         }
-        System.out.println("Hola");
+      
         model.addAttribute("usersListFriends", usersFriends);
         model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";

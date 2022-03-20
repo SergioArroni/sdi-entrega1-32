@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-
 public interface UsersRepository extends CrudRepository<User, Long> {
 
     User findByEmail(String email);
@@ -20,6 +19,9 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u <> ?1 AND u.role = 'ROLE_USER' ORDER BY u.id ASC")
     Page<User> findAllStandard(Pageable pageable, User user);
+
+    @Query("SELECT u FROM User u WHERE u <> ?1 AND u.role = 'ROLE_USER' ORDER BY u.id ASC")
+    List<User> findAllStandard(User user);
 
     @Query("SELECT u from User u WHERE (LOWER(u.name) LIKE LOWER(?1) OR LOWER(u.email) LIKE LOWER(?1))")
     Page<User> searchByEmailAndName(Pageable pageable, String searchText);

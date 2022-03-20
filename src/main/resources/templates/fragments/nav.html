@@ -41,6 +41,14 @@
                         <a class="dropdown-item" href="/publication/list">Listado de publicaciones</a>
                     </div>
                 </li>
+                <li id= "logs-menu" class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" id="logsDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"> Logs
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/logs/list">Listado de logs</a>
+                    </div>
+                </li>
             </ul>
         </div>
         <div class="justify-content-end">
