@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -37,10 +38,15 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
-        if (friends != null)
-            CodeAuxFriends(model, friends);
-        return "friend/list";
+        Page<Friend> friends = new PageImpl<>(new LinkedList<>());
+        if (activeUser != null) {
+            friends = friendsService.getFriendByUser(pageable, activeUser.getId());
+            if (friends != null)
+                CodeAuxFriends(model, friends);
+            return "friend/list";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     @RequestMapping("/friend/invitation")
@@ -84,8 +90,8 @@ public class FriendsController {
         if (friendsService.getCoupleFriends(activeUser.getId(), userId2) == null
                 && friendsService.getCoupleFriends(userId2, activeUser.getId()) == null) {
             friendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
-            activeUser.addFriend(userId2);
-            usersService.addUser(activeUser);
+            //activeUser.addFriend(userId2);
+            //usersService.addUser(activeUser);
         }
         return "redirect:/user/list";
     }

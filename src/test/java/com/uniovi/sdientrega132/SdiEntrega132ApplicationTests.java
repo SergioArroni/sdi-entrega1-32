@@ -62,7 +62,7 @@ class SdiEntrega132ApplicationTests {
         //Cerramos el navegador al finalizar las pruebas
         driver.quit();
     }
-
+/**
     @Test
     @Order(1)
     public void PR01() {
@@ -268,7 +268,7 @@ class SdiEntrega132ApplicationTests {
         }
         
     }
-
+*/
     // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(19)

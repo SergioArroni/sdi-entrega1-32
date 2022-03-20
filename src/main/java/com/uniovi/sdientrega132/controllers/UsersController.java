@@ -72,6 +72,12 @@ public class UsersController {
             }
         }
 
+        for (User u : users) {
+            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
+                usersFriends.add(u.getId());
+            }
+        }
+
         if (listUsers.isEmpty()) {
             model.addAttribute("usersList", users.getContent());
             model.addAttribute("page", users);
@@ -79,17 +85,8 @@ public class UsersController {
             model.addAttribute("usersList", listUsers);
         }
 
-
-        for (User u : users) {
-            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                usersFriends.add(u.getId());
-            }
-        }
-
         model.addAttribute("actualUser", activeUser);
-        model.addAttribute("usersList", users.getContent());
         model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("page", users);
         return "user/list";
     }
 
@@ -119,7 +116,6 @@ public class UsersController {
         }
       
         model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
     }
 
