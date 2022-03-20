@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class PO_NavView extends PO_View {
 
@@ -60,6 +62,14 @@ public class PO_NavView extends PO_View {
         assertTrue(elementos.size() == 1);
         // Ahora lo clickamos
         elementos.get(0).click();
+    }
+
+    public static void desplegarAmigos(WebDriver driver, String textoOpcion) {
+        // clickamos la opción de Usuarios
+        PO_PrivateView.clickOn(driver, "friends-menu", 0);
+        // Esperamos a que aparezca el menú
+        PO_PrivateView.clickOn(driver, textoOpcion, 0);
+
     }
 
     public static void desplegarPublicaciones(WebDriver driver, String textoOpcion) {
