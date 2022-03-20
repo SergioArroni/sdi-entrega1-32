@@ -1,8 +1,12 @@
 package com.uniovi.sdientrega132;
 
+import com.uniovi.sdientrega132.voter.FriendPublicationsVoter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,16 +16,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    public AccessDecisionManager accessDecisionManagerFriendPublication(){
+        List<AccessDecisionVoter<? extends Object>> decisionVoters
+                = Arrays.asList(new FriendPublicationsVoter());
+        return new UnanimousBased(decisionVoters);
     }
 
     @Override
@@ -31,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/css/**", "/images/**", "/script/**", "/", "/signup", "/login/**").permitAll()
                     .antMatchers("/user/list").hasAnyRole("USER","ADMIN")
+//                    .antMatchers("/publication/list/**").authenticated().accessDecisionManager(accessDecisionManagerFriendPublication())
                     //.antMatchers("/professor/details/*").hasAnyAuthority("ROLE_PROFESSOR", "ROLE_ADMIN")
                     //.antMatchers("/professor/**").hasAnyRole("ADMIN")
                     .anyRequest().permitAll()

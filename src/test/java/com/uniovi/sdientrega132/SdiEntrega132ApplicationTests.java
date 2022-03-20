@@ -446,17 +446,14 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertTrue(pub2.get(0)!=null);
     }
 
-    // PR28. Probar que se muestran todas las publicaciones de un amigo
+    // PR28. Probar que no se puede acceder a las publicaciones de un usuario por URL sin ser su amigo
     @Test
     @Order(28)
     public void PR28() {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
 
-        // Entramos en la ventana de amigos
-        PO_NavView.desplegarAmigos(driver, "listFriends");
-
-        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ver publicaciones", PO_View.getTimeout()).get(0).click();
+        driver.get("http://localhost:8090/publication/list/user01@email.com");
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
@@ -464,6 +461,61 @@ class SdiEntrega132ApplicationTests {
 
         List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
         Assertions.assertTrue(pub2.get(0)!=null);
+    }
+
+    // PR44. Probar que se puede crear una publicación con imagen
+    @Test
+    @Order(44)
+    public void PR44() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos un título
+        List<WebElement> title = SeleniumUtils.waitLoadElementsBy(driver, "id", "title", PO_View.getTimeout());
+        title.get(0).sendKeys("Prueba título");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Añadimos la imagen
+        WebElement uploadElement = driver.findElement(By.id("file"));
+        uploadElement.sendKeys("C:\\Productos\\Prueba.png");
+//        driver.findElement(By.name("send")).click();
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        List<WebElement> elements = PO_View.checkElementBy(driver, "class", "img.thumbnail rounded float-left");
+        Assertions.assertTrue(elements.size()==1);
+    }
+
+    // PR45. Probar que se puede crear una publicación sin imagen
+    @Test
+    @Order(45)
+    public void PR45() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Entramos en la ventana de creación
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos un título
+        List<WebElement> title = SeleniumUtils.waitLoadElementsBy(driver, "id", "title", PO_View.getTimeout());
+        title.get(0).sendKeys("Prueba título");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        List<WebElement> nuevaPublicacion = SeleniumUtils.waitLoadElementsBy(driver, "text", "Prueba título", PO_View.getTimeout());
+
+        Assertions.assertTrue(nuevaPublicacion.get(0)!=null);
     }
 
 }
