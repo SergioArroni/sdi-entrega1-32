@@ -80,7 +80,8 @@ public class PublicationsController {
 
     @RequestMapping(value = "/publication/add", method = RequestMethod.POST)
     public String setPublication(@Validated Publication publication,
-                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model) {
+                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model,
+                                 Principal principal) {
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
             model.addAttribute("usersList", usersService.getUsers());
@@ -89,8 +90,9 @@ public class PublicationsController {
 
         publication.setPublishingDate(new Date());
         if (!imagen.isEmpty()) {
-            Path directorio = Paths.get("src//main//resources//static//images");
-            String ruta = directorio.toFile().getAbsolutePath();
+//            Path directorio = Paths.get("src//main//resources//static//images");
+//            String ruta = directorio.toFile().getAbsolutePath();
+            String ruta = "C://Productos";
 
             try {
                 byte[] bytes = imagen.getBytes();
@@ -105,6 +107,10 @@ public class PublicationsController {
             }
 
         }
+
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        publication.setUser(user);
 
         publicationsService.addPublication(publication);
         return "redirect:/publication/list";

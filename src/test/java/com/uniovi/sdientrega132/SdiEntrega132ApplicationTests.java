@@ -3,6 +3,7 @@ package com.uniovi.sdientrega132;
 import com.uniovi.sdientrega132.pageobjects.*;
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -356,6 +357,113 @@ class SdiEntrega132ApplicationTests {
         List<WebElement> usuarios = SeleniumUtils.waitLoadElementsBy(driver, "text", "Email",
                 PO_View.getTimeout());
         Assertions.assertTrue(usuarios.size() == 6);
+    }
+
+    // PR24. Crear una publicación y comprobar que se ha creado correctamente
+    @Test
+    @Order(24)
+    public void PR24() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Entramos en la ventana de creación
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos un título
+        List<WebElement> title = SeleniumUtils.waitLoadElementsBy(driver, "id", "title", PO_View.getTimeout());
+        title.get(0).sendKeys("Prueba título");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        List<WebElement> nuevaPublicacion = SeleniumUtils.waitLoadElementsBy(driver, "text", "Prueba título", PO_View.getTimeout());
+
+        Assertions.assertTrue(nuevaPublicacion.get(0)!=null);
+    }
+
+    // PR25. Probar que si se intenta crear una publicación sin título, la aplicación no lo permite
+    @Test
+    @Order(25)
+    public void PR25() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Entramos en la ventana de creación
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        // Comprobamos que no ha pasado a ninguna otra ventana
+        List<WebElement> paginaAgregar = SeleniumUtils.waitLoadElementsBy(driver, "text", "Subir publicación", PO_View.getTimeout());
+
+        Assertions.assertTrue(paginaAgregar.get(0)!=null);
+    }
+
+    // PR26. Probar que se muestran todas las publicaciones de un usuario
+    @Test
+    @Order(26)
+    public void PR26() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Entramos en la ventana de creación
+        PO_NavView.desplegarPublicaciones(driver, "listPublication");
+
+        // Comprobamos que están todas las publicaciones
+        List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub1.get(0)!=null);
+
+        List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub2.get(0)!=null);
+    }
+
+    // PR27. Probar que se muestran todas las publicaciones de un amigo
+    @Test
+    @Order(27)
+    public void PR27() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
+
+        // Entramos en la ventana de amigos
+        PO_NavView.desplegarAmigos(driver, "listFriends");
+
+        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ver publicaciones", PO_View.getTimeout()).get(0).click();
+
+        // Comprobamos que están todas las publicaciones
+        List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub1.get(0)!=null);
+
+        List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub2.get(0)!=null);
+    }
+
+    // PR28. Probar que se muestran todas las publicaciones de un amigo
+    @Test
+    @Order(28)
+    public void PR28() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
+
+        // Entramos en la ventana de amigos
+        PO_NavView.desplegarAmigos(driver, "listFriends");
+
+        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ver publicaciones", PO_View.getTimeout()).get(0).click();
+
+        // Comprobamos que están todas las publicaciones
+        List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub1.get(0)!=null);
+
+        List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
+        Assertions.assertTrue(pub2.get(0)!=null);
     }
 
 }

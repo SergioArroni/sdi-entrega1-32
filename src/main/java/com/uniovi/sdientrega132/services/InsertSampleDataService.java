@@ -85,7 +85,7 @@ public class InsertSampleDataService {
         //friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
         //friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
         //friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
-/**
+
         friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
         friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
         friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
@@ -96,7 +96,6 @@ public class InsertSampleDataService {
         friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
         friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
         friendsService.addFriend(new Friend(user4.getId(), user3.getId(), false));
-*/
 
         Publication pub1 = new Publication("publicacion 1 de Andrea", "probando las publicaciones", user1);
         Publication pub2 = new Publication("Hola :P", "Esto es aburrido", user6);
