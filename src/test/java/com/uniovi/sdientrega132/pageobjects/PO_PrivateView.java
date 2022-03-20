@@ -29,6 +29,17 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(index).click();
     }
 
+
+    public static void deleteUser(WebDriver driver, String string) {
+        clickOnHRef(driver, "/user/delete/"+string); //primero de la lista
+    }
+
+    static public void login(WebDriver driver, String dnip, String passwordp) {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, dnip, passwordp); //Comprobamos que entramos en la pagina privada de Alumno
+    }
+
     static public void clickCheck(WebDriver driver, String text, int pos) {
         List<WebElement> elements = PO_View.checkElementBy(driver, "text", text);
         Assertions.assertEquals(text, elements.get(pos).getText());
@@ -45,6 +56,8 @@ public class PO_PrivateView extends PO_NavView {
         driver.findElement(boton).click();
     }
 
+
+
     static public void fillSearch(WebDriver driver, String textp) {
         WebElement text = driver.findElement(By.name("searchText"));
         text.click();
@@ -54,5 +67,6 @@ public class PO_PrivateView extends PO_NavView {
         By boton = By.className("btn"); 
         driver.findElement(boton).click();
     }
+
 
 }

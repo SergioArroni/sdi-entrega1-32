@@ -1,5 +1,3 @@
-package com.uniovi.sdientrega132.pageobjects;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -35,4 +33,5 @@ public class PO_Properties {
     public static int getENGLISH() {
         return ENGLISH;
     }
+
 }
