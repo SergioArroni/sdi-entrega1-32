@@ -5,9 +5,9 @@
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"></nav>
 <div class="container">
-    <h2>Invitaciones</h2>
-    <p>Las invitaciones pendientes son las siguientes:</p>
-    <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+    <h2><span th:text="#{friend.invitation}"></span></h2>
+    <p><span th:text="#{friend.invitation.message}"></span></p>
+    <button type="button" id="updateButton" class="btn btn-default"><span th:text="#{button.update}"></span></button>
     <script th:inline="javascript"> /*<![CDATA[*/
     $("#updateButton").click(function () {
         var numberPage = [[${param.page}]];
@@ -30,17 +30,17 @@
 
                 <thead>
                 <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellidos</th>
-                    <th scope="col">Email</th>
+                    <th scope="col"><span th:text="#{friend.invitation.nameTable}"></span></th>
+                    <th scope="col"><span th:text="#{friend.invitation.surnameTable}"></span></th>
+                    <th scope="col"><span th:text="#{friend.invitation.emailTable}"></span></th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="var : ${friendsForAll}">
-                    <td th:text="${var.user.name}">Nombre del usuario</td>
-                    <td th:text="${var.user.surname}">Apellidos del usuario</td>
-                    <td th:text="${var.user.email}">Email del usuario</td>
+                    <td th:text="${var.user.name}"><span th:text="#{friend.invitation.name}"></span></td>
+                    <td th:text="${var.user.surname}"><span th:text="#{friend.invitation.email}"></span></td>
+                    <td th:text="${var.user.email}"><span th:text="#{friend.invitation.surname}"></span></td>
                     <td><a></a>
                         <div>
                             <button type="button" th:id="${'AceptButton' + var.user.id}"
