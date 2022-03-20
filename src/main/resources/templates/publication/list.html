@@ -7,7 +7,16 @@
 
 <div class="container" id="main-container">
     <h2 th:text="#{publication.publications}">Publicaciones</h2>
-    <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
+
+    <form sec:authorize="hasRole('ROLE_ADMIN')" class="form-inline" action="/publication/list">
+        <div class="form-group">
+            <input id="search-input" name="searchText" type="text" class="form-control" size="50"
+                   th:placeholder="#{publication.search}">
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="#{button.search}"></button>
+    </form>
+
+    <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
     <script th:inline="javascript">
         /*<![CDATA[*/
         $( "#updateButton" ).click(function() {

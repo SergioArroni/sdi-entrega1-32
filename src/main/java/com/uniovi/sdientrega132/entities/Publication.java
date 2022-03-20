@@ -28,7 +28,7 @@ public class Publication {
         this.user=user;
         publishingDate = new Date();
         foto = "";
-        state = "ACEPTADA";
+        state = "Aceptada";
     }
 
     public long getId() {

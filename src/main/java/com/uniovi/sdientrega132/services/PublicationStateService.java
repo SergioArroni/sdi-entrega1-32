@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PublicationStateService {
-    String[] states = {"ACEPTADA", "MODERADA", "CENSURADA"};
+    String[] states = {"Aceptada", "Moderada", "Censurada"};
     public String[] getStates() {
         return states;
     }

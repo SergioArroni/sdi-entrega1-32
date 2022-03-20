@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +26,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -45,12 +45,16 @@ public class PublicationsController {
     private UsersService usersService;
 
     @RequestMapping("/publication/list")
-    public String getList(Model model, Pageable pageable, Principal principal) {
+    public String getList(Model model, Pageable pageable, Principal principal,
+                          @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
         if (user.getRole().equals("ROLE_ADMIN")) {
-            publications = publicationsService.getPublications(pageable);
+            if (searchText != null && !searchText.isEmpty())
+                publications = publicationsService.searchPublications(searchText, pageable);
+            else
+                publications = publicationsService.getPublications(pageable);
         } else {
             publications = publicationsService.getPublicationsForUser(pageable, user);
         }
@@ -64,8 +68,8 @@ public class PublicationsController {
     @RequestMapping("/publication/list/{email}")
     public String getFriendsList(Model model, Pageable pageable, @PathVariable String email) {
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
-        publications = publicationsService.getPublicationsForUser(pageable, user);
+        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        publications = publicationsService.getPublicationsForFriend(pageable, user);
 
         model.addAttribute("publicationsList", publications.getContent());
         model.addAttribute("page", publications);
@@ -77,8 +81,8 @@ public class PublicationsController {
     public String updateList(Model model, Pageable pageable, Principal principal){
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> marks = publicationsService.getPublicationsForUser(pageable, user);
-        model.addAttribute("publicationsList", marks.getContent() );
+        Page<Publication> publications = publicationsService.getPublicationsForUser(pageable, user);
+        model.addAttribute("publicationsList", publications.getContent() );
         return "publication/list :: tablePublications";
     }
 
@@ -128,8 +132,12 @@ public class PublicationsController {
         return "publication/add";
     }
 
-//    public void handleFileUpload(FileUpload event) throws IOException {
-//
-//    }
+    @RequestMapping(value = "/publication/edit")
+    public String editState(@RequestParam(value = "", required = false) Long id,
+                          @RequestParam(value = "", required = false) String state) {
+        publicationsService.editStateOf(id, state);
+
+        return "redirect:/publication/list";
+    }
 
 }
