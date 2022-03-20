@@ -3,8 +3,6 @@ package com.uniovi.sdientrega132.controllers;
 import com.uniovi.sdientrega132.entities.Log;
 import com.uniovi.sdientrega132.services.LogService;
 import com.uniovi.sdientrega132.services.UserDetailsServiceImpl;
-import com.uniovi.sdientrega132.services.UsersService;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,14 +20,9 @@ public class LogsController {
     private LogService logService;
 
     @Autowired
-    private UsersService usersService;
-
-    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     private String emailLogin;
-    private String emailInvalid;
-
 
     public void LogInEx() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -47,8 +40,7 @@ public class LogsController {
     }
 
     public void LogInEr() {
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //String email=auth.getName();
+
         Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), userDetailsService.getEmailInvalid());
         System.out.println(l);
         logService.addlog(l);
@@ -86,7 +78,4 @@ public class LogsController {
         logService.addlog(l);
     }
 
-    public void emailInvalid(String email) {
-        this.emailInvalid=email;
-    }
 }
