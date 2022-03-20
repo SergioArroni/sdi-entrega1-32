@@ -20,15 +20,15 @@
                 <th scope="col"><span th:text="#{signup.name}"></span></th>
                 <th scope="col"><span th:text="#{signup.surname}"></span></th>
                 <th scope="col">Email:</th>
-                <th scope="col"></th>
+                <th scope="col"><span th:text="#{publication.publications}"></span></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="pol: ${friendsForAll}">
+            <tr th:each="pol : ${friendsForAll}">
                 <td scope="row" th:text="${pol.user.name}">Nombre del usuario</td>
                 <td scope="row" th:text="${pol.user.surname}">Apellidos del usuario</td>
                 <td scope="row" th:text="${pol.user.email}">Email del usuario</td>
-                </td>
+                <td scope="row"><a id="getPublications" th:href="${'/publication/list/' + pol.user.email}">Ver publicaciones</a></td>
             </tr>
             </tbody>
         </table>
