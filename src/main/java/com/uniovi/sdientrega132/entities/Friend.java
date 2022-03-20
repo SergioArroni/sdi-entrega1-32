@@ -33,29 +33,12 @@ public class Friend {
         this.id = id;
     }
 
-
     public Long getUser1_id() {
         return User1_id;
     }
 
-    public void setUser1_id(Long user1_id) {
-        this.User1_id = user1_id;
-    }
-
     public Long getUser2_id() {
         return User2_id;
-    }
-
-    public void setUser2_id(Long user2_id) {
-        this.User2_id = user2_id;
-    }
-
-    public Boolean getAccept() {
-        return accept;
-    }
-
-    public void setAccept(Boolean accept) {
-        this.accept = accept;
     }
 
     @Override

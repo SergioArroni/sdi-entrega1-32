@@ -42,8 +42,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LogInterceptor logInterceptor() {
-        LogInterceptor logInterceptor = new LogInterceptor();
-        return logInterceptor;
+        return new LogInterceptor();
     }
 
     @Override

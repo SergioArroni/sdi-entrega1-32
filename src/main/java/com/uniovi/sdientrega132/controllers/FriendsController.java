@@ -4,7 +4,7 @@ import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
-import com.uniovi.sdientrega132.services.LogService;
+import com.uniovi.sdientrega132.services.LogsService;
 import com.uniovi.sdientrega132.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings({"SpringJavaStaticMembersAutowiringInspection", "SpringMVCViewInspection"})
 @Controller
 public class FriendsController {
     @Autowired
@@ -31,7 +31,7 @@ public class FriendsController {
     private UsersService usersService;
 
     @Autowired
-    public static LogService logService;
+    public static LogsService logService;
 
     @RequestMapping("/friend/list")
     public String getListRealFriendsByUser(Model model, Pageable pageable) {
@@ -85,8 +85,6 @@ public class FriendsController {
         if (friendsService.getCoupleFriends(activeUser.getId(), userId2) == null
                 && friendsService.getCoupleFriends(userId2, activeUser.getId()) == null) {
             friendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
-            //activeUser.addFriend(userId2);
-            //usersService.addUser(activeUser);
         }
         return "redirect:/user/list";
     }

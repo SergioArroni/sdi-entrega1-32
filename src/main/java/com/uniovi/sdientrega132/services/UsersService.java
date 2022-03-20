@@ -67,9 +67,5 @@ public class UsersService {
     }
 
 
-    public void addFriends(User u, Long id2) {
-        u.addFriend(id2);
-        //usersRepository.updateFriends(u.getId(),u.getFriends());
-    }
 
 }

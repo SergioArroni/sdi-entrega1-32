@@ -1,9 +1,9 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"/>
+<head th:replace="fragments/head"><title>Invitation Friends</title></head>
 <body>
 <!-- Barra de Navegación superior -->
-<nav th:replace="fragments/nav"/>
+<nav th:replace="fragments/nav"></nav>
 <div class="container">
     <h2>Invitaciones</h2>
     <p>Las invitaciones pendientes son las siguientes:</p>
@@ -12,9 +12,7 @@
     $("#updateButton").click(function () {
         var numberPage = [[${param.page}]];
         var urlUpdate = '/friend/invitation/update';
-        if (numberPage != null) {
-            urlUpdate += "?page=" + numberPage[0];
-        }
+        urlUpdate += "?page=" + numberPage[0];
         $("#tableFriends").load(urlUpdate);
     }); /*]]>*/
     </script>
@@ -40,23 +38,21 @@
                 </thead>
                 <tbody>
                 <tr th:each="var : ${friendsForAll}">
-                    <td scope="row" th:text="${var.user.name}">Nombre del usuario</td>
-                    <td scope="row" th:text="${var.user.surname}">Apellidos del usuario</td>
-                    <td scope="row" th:text="${var.user.email}">Email del usuario</td>
-                    <td scope="row"><a></a>
+                    <td th:text="${var.user.name}">Nombre del usuario</td>
+                    <td th:text="${var.user.surname}">Apellidos del usuario</td>
+                    <td th:text="${var.user.email}">Email del usuario</td>
+                    <td><a></a>
                         <div>
-                            <button type="button" th:id="${'AceptButton' + var.friend.id}"
+                            <button type="button" th:id="${'AceptButton' + var.user.id}"
                                     class="btn btn-success">
                                 <span th:text="#{button.accept}"></span>
                             </button>
                             <script th:inline="javascript"> /*<![CDATA[*/
-                            $("#AceptButton" + "[[${var.friend.id}]]").click(function () {
+                            $("#AceptButton" + "[[${var.user.id}]]").click(function () {
                                 $.get("/friend/[[${var.friend.id}]]/accept", function () {
                                     var numberPage = [[${param.page}]];
                                     var urlUpdate = '/friend/invitation/update';
-                                    if (numberPage != null) {
-                                        urlUpdate += "?page=" + numberPage[0];
-                                    }
+                                    urlUpdate += "?page=" + numberPage[0];
                                     $("#tableFriends").load(urlUpdate);
                                 });
                             }); /*]]>*/
@@ -68,8 +64,8 @@
             </table>
         </div>
     </div>
-    <footer th:replace="fragments/pagination"/>
+    <footer th:replace="fragments/pagination"></footer>
 </div>
-<footer th:replace="fragments/footer"/>
+<footer th:replace="fragments/footer"></footer>
 </body>
 </html>

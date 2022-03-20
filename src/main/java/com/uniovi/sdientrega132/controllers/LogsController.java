@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -45,6 +44,7 @@ public class LogsController {
         }
     }
 
+    @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping("/logs/list/update")
     public String updateList(Model model) {
         //Comprobamos si es admin por si intentan acceder por la URL
@@ -101,11 +101,11 @@ public class LogsController {
 
         var iter = parameterNames.asIterator();
 
-        String parametros = "";
+        StringBuilder parametros = new StringBuilder();
 
-        for (Iterator<String> it = iter; it.hasNext(); ) {
-            String param = it.next();
-            parametros += param + " ";
+        while (iter.hasNext()) {
+            String param = iter.next();
+            parametros.append(param).append(" ");
         }
 
         Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
@@ -117,11 +117,11 @@ public class LogsController {
 
         var iter = parameterNames.asIterator();
 
-        String parametros = "";
+        StringBuilder parametros = new StringBuilder();
 
-        for (Iterator<String> it = iter; it.hasNext(); ) {
-            String param = it.next();
-            parametros += param + " ";
+        while (iter.hasNext()) {
+            String param = iter.next();
+            parametros.append(param).append(" ");
         }
 
         Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);

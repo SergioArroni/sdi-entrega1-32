@@ -62,7 +62,7 @@ class SdiEntrega132ApplicationTests {
         //Cerramos el navegador al finalizar las pruebas
         driver.quit();
     }
-/**
+
     @Test
     @Order(1)
     public void PR01() {
@@ -268,7 +268,7 @@ class SdiEntrega132ApplicationTests {
         }
         
     }
-*/
+
     // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(19)
@@ -323,7 +323,7 @@ class SdiEntrega132ApplicationTests {
         //Deberíamos de tener una sola invitación, no dos.
         // Se comprueba que user06@email.com tiene 1 invitación
         List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
-        Assertions.assertTrue(friends.size() == 1);
+        Assertions.assertEquals(1, friends.size());
     }
 
 
@@ -351,7 +351,7 @@ class SdiEntrega132ApplicationTests {
 
         // Se comprueba que user06@email.com tenga 2 peticiones de amistad
         List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
-        Assertions.assertTrue(friends.size() == 2);
+        Assertions.assertEquals(2, friends.size());
     }
 
     // PR22. Sobre el listado de invitaciones recibidas. Hacer clic en el botón/enlace de una de ellas y comprobar que dicha solicitud desaparece del listado de invitaciones.
@@ -371,7 +371,7 @@ class SdiEntrega132ApplicationTests {
 
         // Se comprueba que user06 tiene 1 peticion de amistad
         List<WebElement> usuarios = PO_PrivateView.checkElementBy(driver, "text", "Aceptar");
-        Assertions.assertTrue(usuarios.size() == 1);
+        Assertions.assertEquals(1, usuarios.size());
         PO_PrivateView.logout(driver);
     }
 

@@ -115,7 +115,7 @@ public class PublicationsController {
                                  @RequestParam("file")MultipartFile imagen, BindingResult result, Model model, Pageable pageable) {
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
-            model.addAttribute("usersList", usersService.getUsers(pageable));
+            model.addAttribute("usersList", usersService.getUsers());
             return "publication/add";
         }
 
@@ -144,7 +144,7 @@ public class PublicationsController {
 
     @RequestMapping(value = "/publication/add")
     public String getPublication(Model model, Pageable pageable) {
-        model.addAttribute("usersList", usersService.getUsers(pageable));
+        model.addAttribute("usersList", usersService.getUsers());
         model.addAttribute("publication", new Publication());
         return "publication/add";
     }

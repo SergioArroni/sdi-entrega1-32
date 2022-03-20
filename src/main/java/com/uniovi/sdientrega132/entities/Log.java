@@ -1,10 +1,9 @@
 package com.uniovi.sdientrega132.entities;
 
-import com.sun.istack.NotNull;
-
-import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "log")
@@ -47,16 +46,8 @@ public class Log {
         return time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

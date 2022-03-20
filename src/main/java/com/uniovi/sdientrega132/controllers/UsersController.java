@@ -1,6 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
 
-import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
@@ -51,17 +50,18 @@ public class UsersController {
         return "redirect:/home";
     }
 
+
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
                              @RequestParam(value = "", required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-      
+
         List<User> listUsers = new ArrayList<>();
-        Page<User> users;
+        Page<User> users = new PageImpl<>(new LinkedList<>());
         Set<Long> usersFriends = new HashSet<>();
-      
+
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
@@ -72,24 +72,16 @@ public class UsersController {
             }
         }
 
-        if (listUsers.isEmpty()) {
-            model.addAttribute("usersList", users.getContent());
-            model.addAttribute("page", users);
-        } else {
-            model.addAttribute("usersList", listUsers);
-        }
-
+        AuxCodeList(model, activeUser, users, listUsers);
 
         for (User u : users) {
-            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
+            if (activeUser.isFriend(u.getId())) {
                 usersFriends.add(u.getId());
             }
         }
 
         model.addAttribute("actualUser", activeUser);
-        model.addAttribute("usersList", users.getContent());
         model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("page", users);
         return "user/list";
     }
 
@@ -105,22 +97,25 @@ public class UsersController {
         } else {
             users = usersService.getStandardUsers(user, pageable);
         }
-        if (listUsers.isEmpty()) {
-            model.addAttribute("usersList", users.getContent());
-            model.addAttribute("page", users);
-        } else {
-            model.addAttribute("usersList", listUsers);
-        }
+        AuxCodeList(model, user, users, listUsers);
 
         for (User u : users) {
             if (user.isFriend(u.getId()) && !usersFriends.contains(u)) {
                 usersFriends.add(u.getId());
             }
         }
-      
+
         model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
+    }
+
+    private void AuxCodeList(Model model, User user, Page<User> users, List<User> listUsers) {
+        if (listUsers.isEmpty()) {
+            model.addAttribute("usersList", users.getContent());
+            model.addAttribute("page", users);
+        } else {
+            model.addAttribute("usersList", listUsers);
+        }
     }
 
     @GetMapping("/user/delete")
