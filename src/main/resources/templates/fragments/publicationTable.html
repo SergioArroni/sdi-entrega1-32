@@ -24,44 +24,45 @@
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" th:text="${publication.state}"></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')">
             <script th:inline = "javascript">
-
+                window.onload=function(){
+                    var publicationid = [[${publication.id}]];
+                    var newState = [[${publication.state}]];
+                    checkState(publicationid, newState);
+                };
                 function checkState(publicationid, state) {
                     console.log("state changing "+state);
                     if (state===('Aceptada')) {
-                        document.querySelector('#' + publicationid + 'aceptada').checked = true;
+                        document.querySelector('#aceptada'+publicationid).checked = true;
                     } else if (state===('Moderada')) {
-                        document.querySelector('#' + publicationid + 'moderada').checked = true;
+                        document.querySelector('#moderada'+publicationid).checked = true;
 
                     } else if (state===('Censurada')) {
-                        document.querySelector('#' + publicationid + 'censurada').checked = true;
+                        document.querySelector('#censurada'+publicationid).checked = true;
                     }
-
                 }
             </script>
             <div>
-                <input type="radio" th:id="${publication.id+'aceptada'}" value="aceptada" th:name=${publication.id}
-                       th:attr="onclick=|changeState('${publication.id}','Aceptada')|" checked>
-                <label th:for="${publication.id+'aceptada'}">Aceptada</label>
+                <input type="radio" th:id="'aceptada'+${publication.id}" value="aceptada" th:name=${publication.id}
+                       th:attr="onclick=|changeState('${publication.id}','Aceptada')|">
+                <label th:for="'aceptada'+${publication.id}">Aceptada</label>
             </div>
             <div>
-                <input type="radio" th:id="${publication.id+'moderada'}" value="moderada" th:name=${publication.id}
+                <input type="radio" th:id="'moderada'+${publication.id}" value="moderada" th:name=${publication.id}
                        th:attr="onclick=|changeState('${publication.id}','Moderada')|">
-                <label th:for="${publication.id+'moderada'}" >Moderada</label>
+                <label th:for="'moderada'+${publication.id}" >Moderada</label>
             </div>
             <div>
-                <input type="radio" th:id="${publication.id+'censurada'}" value="censurada" th:name=${publication.id}
+                <input type="radio" th:id="'censurada'+${publication.id}" value="censurada" th:name=${publication.id}
                        th:attr="onclick=|changeState('${publication.id}','Censurada')|">
-                <label th:for="${publication.id+'censurada'}">Censurada</label>
+                <label th:for="'censurada'+${publication.id}">Censurada</label>
             </div>
             <script th:inline = "javascript" >
                 function changeState(publicationid, newState) {
                     $("#"+publicationid).text(newState);
-                    checkState(publicationid, newState);
+
                     var urlUpdate = '/publication/edit?id='+publicationid+'&state='+newState;
-
                     location.href = "http://localhost:8090" + urlUpdate;
-
-
+                    checkState(publicationid, newState);
                 }
             </script>
         </td>
