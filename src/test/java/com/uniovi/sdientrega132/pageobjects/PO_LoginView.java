@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.pageobjects;
 
 
+import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,10 +21,12 @@ public class PO_LoginView extends PO_NavView {
         driver.findElement(boton).click();
     }
 
+
     public static void login(WebDriver driver, String email, String password) {
         //Vamos al formulario de logueo
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         //Rellenamos el formulario
         PO_LoginView.fillLoginForm(driver, email, password);
     }
+
 }

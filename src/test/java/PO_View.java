@@ -1,5 +1,3 @@
-package com.uniovi.sdientrega132.pageobjects;
-
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,7 +6,7 @@ import java.util.List;
 
 public class PO_View {
     protected static PO_Properties p = new PO_Properties("messages");
-    protected static int timeout = 50;
+    protected static int timeout = 2;
 
     public static int getTimeout() {
         return timeout;

@@ -7,7 +7,9 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+
 public class PO_NavView extends PO_View {
+
     /**
      * Clic en una de las opciones principales (a href) y comprueba que se vaya a la vista con el elemento de
      * tipo type con el texto Destino
@@ -51,20 +53,20 @@ public class PO_NavView extends PO_View {
         Selectedlanguage.get(0).click();
     }
 
-    public static void desplegarAmigos(WebDriver driver, String textoOpcion) {
-        // clickamos la opción de Usuarios
-        PO_PrivateView.clickOn(driver, "friends-menu", 0);
-        // Esperamos a que aparezca el menú
-        PO_PrivateView.clickOn(driver, textoOpcion, 0);
 
+    public static void clickOnHRef(WebDriver driver, String texto) {
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "@href", texto, getTimeout());
+        // Tiene que haber un sólo elemento.
+        assertTrue(elementos.size() == 1);
+        // Ahora lo clickamos
+        elementos.get(0).click();
     }
 
-    public static void desplegarUsuarios(WebDriver driver, String textoOpcion) {
-        // clickamos la opción de Usuarios
-        PO_PrivateView.clickOn(driver, "users-menu", 0);
+    public static void desplegarPublicaciones(WebDriver driver, String textoOpcion) {
+        // clickamos la opción de Publicaciones
+        SeleniumUtils.waitLoadElementsBy(driver, "id", "publicationsDropdown", PO_View.getTimeout()).get(0).click();
         // Esperamos a que aparezca el menú
-        PO_PrivateView.clickOn(driver, textoOpcion, 0);
-
+        SeleniumUtils.waitLoadElementsBy(driver, "id", textoOpcion, PO_View.getTimeout()).get(0).click();
     }
 
 }
