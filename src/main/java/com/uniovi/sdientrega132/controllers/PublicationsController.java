@@ -48,8 +48,12 @@ public class PublicationsController {
     public String getList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
-        publications = publicationsService.getPublicationsForUser(pageable, user);
+        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            publications = publicationsService.getPublications(pageable);
+        } else {
+            publications = publicationsService.getPublicationsForUser(pageable, user);
+        }
 
         model.addAttribute("publicationsList", publications.getContent());
         model.addAttribute("page", publications);
@@ -82,6 +86,7 @@ public class PublicationsController {
     public String setPublication(@Validated Publication publication,
                                  @RequestParam("file")MultipartFile imagen, BindingResult result, Model model,
                                  Principal principal) {
+        publication.setState("ACEPTADA");
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
             model.addAttribute("usersList", usersService.getUsers());

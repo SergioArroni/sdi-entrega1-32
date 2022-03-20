@@ -13,6 +13,7 @@ public class Publication {
     private String text;
     private Date publishingDate;
     private String foto;
+    private String state;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -27,6 +28,7 @@ public class Publication {
         this.user=user;
         publishingDate = new Date();
         foto = "";
+        state = "ACEPTADA";
     }
 
     public long getId() {
@@ -75,6 +77,14 @@ public class Publication {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
