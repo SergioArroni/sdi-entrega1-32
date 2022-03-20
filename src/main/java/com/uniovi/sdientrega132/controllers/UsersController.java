@@ -1,6 +1,4 @@
 package com.uniovi.sdientrega132.controllers;
-
-import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
@@ -37,8 +35,7 @@ public class UsersController {
     @Autowired
     private RolesService rolesService;
 
-    @Autowired
-    private LogsController logsController;
+
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
@@ -48,7 +45,6 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
-        System.out.println("C");
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
         return "redirect:/home";
     }
@@ -59,11 +55,9 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-      
+        Page<User> users = new PageImpl<>(new LinkedList<>());
         List<User> listUsers = new ArrayList<>();
-        Page<User> users;
-        Set<Long> usersFriends = new HashSet<>();
-      
+        List<User> usersAmigos = new ArrayList<>();
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
@@ -73,7 +67,6 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-
         if (listUsers.isEmpty()) {
             model.addAttribute("usersList", users.getContent());
             model.addAttribute("page", users);
@@ -81,17 +74,13 @@ public class UsersController {
             model.addAttribute("usersList", listUsers);
         }
 
-
         for (User u : users) {
-            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                usersFriends.add(u.getId());
-            }
+                if(activeUser.esAmigo(u) && !usersAmigos.contains(u)) {
+                    usersAmigos.add(u);
+                }
         }
-
-        model.addAttribute("actualUser", activeUser);
-        model.addAttribute("usersList", users.getContent());
-        model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("page", users);
+        Page<User> aux = new PageImpl<>(usersAmigos);
+        model.addAttribute("usersListFriends", aux);
         return "user/list";
     }
 
@@ -101,7 +90,6 @@ public class UsersController {
         User user = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
         List<User> listUsers = new ArrayList<>();
-        Set<Long> usersFriends = new HashSet<>();
         if (user.getRole().equals("ROLE_ADMIN")) {
             listUsers = usersService.getUsers();
         } else {
@@ -113,15 +101,6 @@ public class UsersController {
         } else {
             model.addAttribute("usersList", listUsers);
         }
-
-        for (User u : users) {
-            if (user.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                usersFriends.add(u.getId());
-            }
-        }
-      
-        model.addAttribute("usersListFriends", usersFriends);
-        model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
     }
 
@@ -145,11 +124,9 @@ public class UsersController {
     public String login(Model model, String error, String logout) {
         if (error != null) {
             model.addAttribute("error", "");
-            logsController.LogInEr();
         }
         if (logout != null) {
             model.addAttribute("message", "");
-            logsController.LogOut();
         }
         return "login";
     }
