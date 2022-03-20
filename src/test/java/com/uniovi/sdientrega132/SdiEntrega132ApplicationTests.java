@@ -10,9 +10,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import java.util.ArrayList;
 
@@ -25,12 +32,10 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    //static String Geckodriver ="C:\\nada.exe;
-    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
-    //static String GeckodriverSergio ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    static String Geckodriver ="C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverHugo);
+    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
     static String URL = "http://localhost:8090";
 
 
@@ -385,8 +390,7 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.logout(driver);
     }
 
-    // PR20. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
-    //que ya le habíamos enviado la invitación previamente.
+    // PR20. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(20)
     public void PR20() {
@@ -644,17 +648,14 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertTrue(pub2.get(0)!=null);
     }
 
-    // PR28. Probar que se muestran todas las publicaciones de un amigo
+    // PR28. Probar que no se puede acceder a las publicaciones de un usuario por URL sin ser su amigo
     @Test
     @Order(28)
     public void PR28() {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
 
-        // Entramos en la ventana de amigos
-        PO_NavView.desplegarAmigos(driver, "listFriends");
-
-        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ver publicaciones", PO_View.getTimeout()).get(0).click();
+        driver.get("http://localhost:8090/publication/list/user01@email.com");
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
@@ -664,6 +665,60 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertTrue(pub2.get(0)!=null);
     }
 
+    // PR44. Probar que se puede crear una publicación con imagen
+    @Test
+    @Order(44)
+    public void PR44() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos un título
+        List<WebElement> title = SeleniumUtils.waitLoadElementsBy(driver, "id", "title", PO_View.getTimeout());
+        title.get(0).sendKeys("Prueba título");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Añadimos la imagen
+        WebElement uploadElement = driver.findElement(By.id("file"));
+        uploadElement.sendKeys("C:\\Productos\\Prueba.png");
+//        driver.findElement(By.name("send")).click();
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        List<WebElement> elements = PO_View.checkElementBy(driver, "class", "img.thumbnail rounded float-left");
+        Assertions.assertTrue(elements.size()==1);
+    }
+
+    // PR45. Probar que se puede crear una publicación sin imagen
+    @Test
+    @Order(45)
+    public void PR45() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Entramos en la ventana de creación
+        PO_NavView.desplegarPublicaciones(driver, "addPublication");
+
+        // Añadimos un título
+        List<WebElement> title = SeleniumUtils.waitLoadElementsBy(driver, "id", "title", PO_View.getTimeout());
+        title.get(0).sendKeys("Prueba título");
+
+        // Añadimos el contenido
+        List<WebElement> content = PO_View.checkElementBy(driver, "id", "text");
+        content.get(0).sendKeys("Prueba contenido");
+
+        // Confirmamos
+        driver.findElement(By.id("post")).click();
+
+        List<WebElement> nuevaPublicacion = SeleniumUtils.waitLoadElementsBy(driver, "text", "Prueba título", PO_View.getTimeout());
+
+        Assertions.assertTrue(nuevaPublicacion.get(0)!=null);
+    }
 
 }
 

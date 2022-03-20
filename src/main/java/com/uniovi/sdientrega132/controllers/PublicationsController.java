@@ -24,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.*;
 
@@ -67,6 +69,7 @@ public class PublicationsController {
         String emailAut = principal.getName();
         User userAut = usersService.getUserByEmail(emailAut);
         User user = usersService.getUserByEmail(email);
+
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
         publications = publicationsService.getPublicationsForUser(pageable, user);
         if(friendsService.getCoupleFriends(userAut.getId(), user.getId()) == null &&
@@ -121,6 +124,13 @@ public class PublicationsController {
         }
 
         publication.setPublishingDate(new Date());
+
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        publication.setUser(user);
+
+        publicationsService.addPublication(publication);
+
         if (!imagen.isEmpty()) {
 //            Path directorio = Paths.get("src//main//resources//static//images");
 //            String ruta = directorio.toFile().getAbsolutePath();
@@ -128,11 +138,13 @@ public class PublicationsController {
 
             try {
                 byte[] bytes = imagen.getBytes();
-                String nombreImagen = UUID.randomUUID()+".png";
+                String nombreImagen = publication.getId()+".png";
                 Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(nombreImagen);
+                publication.setFoto(publication.getId()+"");
+
+                publicationsService.addPublication(publication);
             } catch (IOException e) {
                 System.out.println("Fallo con la imagen");
                 e.printStackTrace();
@@ -140,11 +152,6 @@ public class PublicationsController {
 
         }
 
-        String email = principal.getName();
-        User user = usersService.getUserByEmail(email);
-        publication.setUser(user);
-
-        publicationsService.addPublication(publication);
         return "redirect:/publication/list";
     }
 
