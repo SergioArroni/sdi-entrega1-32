@@ -21,24 +21,24 @@ public class FriendPublicationsVoter implements AccessDecisionVoter<FilterInvoca
     private FriendsService friendsService;
 
     @Override
-    public int vote(Authentication authentication, FilterInvocation filter, Collection<ConfigAttribute> attributes){
+    public int vote(Authentication authentication, FilterInvocation filter, Collection<ConfigAttribute> attributes) {
         String url = filter.getRequestUrl();
 //        if (url=="/publication/list/user01@email.com") {
-            String[] urlDividida = url.split("/");
-            String emailFriend = urlDividida[urlDividida.length - 1];
-            String emailUser = authentication.getName();
+        String[] urlDividida = url.split("/");
+        String emailFriend = urlDividida[urlDividida.length - 1];
+        String emailUser = authentication.getName();
 
-            User friend = usersService.getUserByEmail(emailFriend);
-            User user = usersService.getUserByEmail(emailUser);
+        User friend = usersService.getUserByEmail(emailFriend);
+        User user = usersService.getUserByEmail(emailUser);
 
-            Friend friendRelation = friendsService.getCoupleFriends(friend.getId(), user.getId());
+        Friend friendRelation = friendsService.getCoupleFriends(friend.getId(), user.getId());
 
-            System.out.println("Petición a : " + filter.getRequestUrl());
-            if (friendRelation != null) {
-                return ACCESS_GRANTED;
-            } else {
-                return ACCESS_DENIED;
-            }
+        System.out.println("Petición a : " + filter.getRequestUrl());
+        if (friendRelation != null) {
+            return ACCESS_GRANTED;
+        } else {
+            return ACCESS_DENIED;
+        }
 //        }
 //        return ACCESS_GRANTED;
     }

@@ -1,6 +1,6 @@
 package com.uniovi.sdientrega132;
 
-import com.uniovi.sdientrega132.voter.FriendPublicationsVoter;
+import com.uniovi.sdientrega132.voter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

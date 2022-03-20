@@ -66,9 +66,9 @@ public class PO_NavView extends PO_View {
 
     public static void desplegarAmigos(WebDriver driver, String textoOpcion) {
         // clickamos la opción de Usuarios
-        PO_PrivateView.clickOn(driver, "friends-menu", 0);
+        SeleniumUtils.waitLoadElementsBy(driver, "id", "friendsDropdown", PO_View.getTimeout()).get(0).click();
         // Esperamos a que aparezca el menú
-        PO_PrivateView.clickOn(driver, textoOpcion, 0);
+        SeleniumUtils.waitLoadElementsBy(driver, "id", textoOpcion, PO_View.getTimeout()).get(0).click();
 
     }
 
