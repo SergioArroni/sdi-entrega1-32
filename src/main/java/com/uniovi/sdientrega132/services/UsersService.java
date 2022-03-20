@@ -60,9 +60,9 @@ public class UsersService {
         return usersRepository.findByEmail(email);
     }
 
-    public List<User> getUsers(Pageable pageable) {
+    public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        usersRepository.findAll(pageable).forEach(users::add);
+        usersRepository.findAll().forEach(users::add);
         return users;
     }
 

@@ -1,6 +1,5 @@
 package com.uniovi.sdientrega132.controllers;
 
-
 import com.uniovi.sdientrega132.entities.Log;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.LogsService;

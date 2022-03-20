@@ -38,15 +38,10 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = new PageImpl<>(new LinkedList<>());
-        if (activeUser != null) {
-            friends = friendsService.getFriendByUser(pageable, activeUser.getId());
-            if (friends != null)
-                CodeAuxFriends(model, friends);
-            return "friend/list";
-        } else {
-            return "redirect:/login";
-        }
+        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
+        if (friends != null)
+            CodeAuxFriends(model, friends);
+        return "friend/list";
     }
 
     @RequestMapping("/friend/invitation")

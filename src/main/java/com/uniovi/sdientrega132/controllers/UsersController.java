@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
@@ -50,7 +51,6 @@ public class UsersController {
         return "redirect:/home";
     }
 
-
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
                              @RequestParam(value = "", required = false) String searchText) {
@@ -59,22 +59,16 @@ public class UsersController {
         User activeUser = usersService.getUserByEmail(email);
       
         List<User> listUsers = new ArrayList<>();
-        Page<User> users= new PageImpl<>(new LinkedList<>());
+        Page<User> users;
         Set<Long> usersFriends = new HashSet<>();
       
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
             if (activeUser.getRole().equals("ROLE_ADMIN")) {
-                listUsers = usersService.getUsers(pageable);
+                listUsers = usersService.getUsers();
             } else {
                 users = usersService.getStandardUsers(activeUser, pageable);
-            }
-        }
-
-        for (User u : users) {
-            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                usersFriends.add(u.getId());
             }
         }
 
@@ -85,8 +79,17 @@ public class UsersController {
             model.addAttribute("usersList", listUsers);
         }
 
+
+        for (User u : users) {
+            if (activeUser.isFriend(u.getId()) && !usersFriends.contains(u)) {
+                usersFriends.add(u.getId());
+            }
+        }
+
         model.addAttribute("actualUser", activeUser);
+        model.addAttribute("usersList", users.getContent());
         model.addAttribute("usersListFriends", usersFriends);
+        model.addAttribute("page", users);
         return "user/list";
     }
 
@@ -98,7 +101,7 @@ public class UsersController {
         List<User> listUsers = new ArrayList<>();
         Set<Long> usersFriends = new HashSet<>();
         if (user.getRole().equals("ROLE_ADMIN")) {
-            listUsers = usersService.getUsers(pageable);
+            listUsers = usersService.getUsers();
         } else {
             users = usersService.getStandardUsers(user, pageable);
         }
@@ -116,6 +119,7 @@ public class UsersController {
         }
       
         model.addAttribute("usersListFriends", usersFriends);
+        model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
     }
 
