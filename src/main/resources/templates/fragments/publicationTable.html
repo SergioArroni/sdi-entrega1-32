@@ -21,19 +21,29 @@
             <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.foto}}" >
         </td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.user.email}"></td>
-        <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" th:text="${publication.state}"></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" class="estadoActual" th:text="${publication.state}"></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')">
             <script th:inline = "javascript">
                 window.onload=function(){
-                    var publicationid = [[${publication.id}]];
-                    var newState = [[${publication.state}]];
-                    checkState(publicationid, newState);
-                };
+                    var tabla=document.getElementsByClassName("estadoActual")
+
+                    for(let i=0;i<tabla.length; i++){
+
+                        checkState(tabla[i].id,tabla[i].textContent);
+                    }
+
+
+
+                }
+
+
+
                 function checkState(publicationid, state) {
-                    console.log("state changing "+state);
+
                     if (state===('Aceptada')) {
                         document.querySelector('#aceptada'+publicationid).checked = true;
                     } else if (state===('Moderada')) {
+
                         document.querySelector('#moderada'+publicationid).checked = true;
 
                     } else if (state===('Censurada')) {
@@ -42,7 +52,7 @@
                 }
             </script>
             <div>
-                <input type="radio" th:id="'aceptada'+${publication.id}" value="aceptada" th:name=${publication.id}
+                <input type="radio" th:id="'aceptada'+${publication.id}" value="aceptada" class="aceptada" th:name=${publication.id}
                        th:attr="onclick=|changeState('${publication.id}','Aceptada')|">
                 <label th:for="'aceptada'+${publication.id}">Aceptada</label>
             </div>
@@ -60,9 +70,11 @@
                 function changeState(publicationid, newState) {
                     $("#"+publicationid).text(newState);
 
-                    var urlUpdate = '/publication/edit?id='+publicationid+'&state='+newState;
-                    location.href = "http://localhost:8090" + urlUpdate;
                     checkState(publicationid, newState);
+                    var urlUpdate = '/publication/edit?id='+publicationid+'&state='+newState;
+
+                    location.href = "http://localhost:8090" + urlUpdate;
+
                 }
             </script>
         </td>
