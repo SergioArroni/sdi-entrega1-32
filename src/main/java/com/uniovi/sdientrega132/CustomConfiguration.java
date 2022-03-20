@@ -3,9 +3,12 @@ package com.uniovi.sdientrega132;
 import java.util.List;
 import java.util.Locale;
 
+import com.uniovi.sdientrega132.controllers.LogsController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -42,8 +45,7 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LogInterceptor logInterceptor() {
-        LogInterceptor logInterceptor = new LogInterceptor();
-        return logInterceptor;
+        return new LogInterceptor();
     }
 
     @Override

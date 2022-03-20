@@ -4,6 +4,7 @@ import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.FriendsForAll;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
+import com.uniovi.sdientrega132.services.LogService;
 import com.uniovi.sdientrega132.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,17 +24,20 @@ import java.util.List;
 @Controller
 public class FriendsController {
     @Autowired
-    private FriendsService FriendsService;
+    private FriendsService friendsService;
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    public static LogService logService;
 
     @RequestMapping("/friend/list")
     public String getListRealFriendsByUser(Model model, Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
         if (friends != null)
             CodeAuxFriends(model, friends);
         return "friend/list";
@@ -44,20 +48,20 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
         return "friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/accept", method = RequestMethod.GET)
     public String setResendTrue(@PathVariable Long id) {
-        FriendsService.setFriendInvitationSend(true, id);
+        friendsService.setFriendInvitationSend(true, id);
         return "redirect:/friend/invitation";
     }
 
     @RequestMapping(value = "/friend/{id}/noaccept", method = RequestMethod.GET)
     public String setResendFalse(@PathVariable Long id) {
-        FriendsService.setFriendInvitationSend(false, id);
+        friendsService.setFriendInvitationSend(false, id);
         return "redirect:/friend/invitation";
     }
 
@@ -66,7 +70,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
 
         return "friend/invitation :: tableFriends";
@@ -77,12 +81,12 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        if (FriendsService.getCoupleFriends(activeUser.getId(), userId2) == null
-                && FriendsService.getCoupleFriends(userId2, activeUser.getId()) == null){
-            FriendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
-            activeUser.addAmigo(userId2);
+        if (friendsService.getCoupleFriends(activeUser.getId(), userId2) == null
+                && friendsService.getCoupleFriends(userId2, activeUser.getId()) == null) {
+            friendsService.addFriend(new Friend(userId2, activeUser.getId(), false));
+            activeUser.addFriend(userId2);
+            usersService.addUser(activeUser);
         }
-
         return "redirect:/user/list";
     }
 
@@ -113,7 +117,7 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Friend> friends = FriendsService.getFriendByUser(pageable, activeUser.getId());
+        Page<Friend> friends = friendsService.getFriendByUser(pageable, activeUser.getId());
 
         CodeAuxFriends(model, friends);
         return "friend/list :: tableFriends";

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ public class UsersService {
     }
 
     public Page<User> searchUserByEmailAndName(String searchText, User user, Pageable pageable) {
-        Page<User> users = new PageImpl<User>(new LinkedList<User>());
+        Page<User> users = new PageImpl<>(new LinkedList<>());
         searchText  = "%"+searchText+"%";
         if (user.getRole().equals("ROLE_USER")) {
             users = usersRepository.searchByEmailAndName(pageable, searchText);
@@ -61,9 +61,15 @@ public class UsersService {
     }
 
     public List<User> getUsers() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         usersRepository.findAll().forEach(users::add);
         return users;
+    }
+
+
+    public void addFriends(User u, Long id2) {
+        u.addFriend(id2);
+        //usersRepository.updateFriends(u.getId(),u.getFriends());
     }
 
 }
