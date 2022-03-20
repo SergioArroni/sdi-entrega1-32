@@ -1,0 +1,32 @@
+<table class="table table-hover" th:fragment="tablePublications" id="tablePublications"
+       xmlns:sec="http://www.w3.org/1999/xhtml">
+    <thead>
+    <tr>
+        <th scope="col" th:text="#{publication.title}">Título</th>
+        <th scope="col" th:text="#{publication.text}">Publicación</th>
+        <th scope="col" th:text="#{publication.date}">Fecha de publicación</th>
+        <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{publication.state}"></th>
+        <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{publication.state.change}"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="publication : ${publicationsList}">
+        <td th:text="${publication.title}"> Ejercicio 1</td>
+        <td th:text="${publication.text}">10</td>
+        <td th:text="${publication.publishingDate}">10</td>
+        <td th:if="${!#strings.isEmpty(publication.foto)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.foto}}" >
+        </td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.state}"></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <!--<select id="state" class="form-control" name="state">
+                <option th:each="state : ${statesList}"
+                        th:value="${state}"
+                        th:text="${state} ">
+                </option>
+            </select>-->
+        </td>
+    </tr>
+    </tbody>
+</table>
