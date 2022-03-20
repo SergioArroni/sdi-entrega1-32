@@ -3,7 +3,7 @@ package com.uniovi.sdientrega132.entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -22,6 +22,9 @@ public class User {
     @Transient
     private String passwordConfirm;
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Publication> publications;
 
     @ManyToMany
     private List<Friend> amigos;
@@ -90,6 +93,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(Set<Publication> publications) {
+        this.publications = publications;
     }
 
     public List<Friend> getAmigos() {
