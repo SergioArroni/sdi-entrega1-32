@@ -135,6 +135,7 @@ public class PublicationsController {
     @RequestMapping(value = "/publication/edit")
     public String editState(@RequestParam(value = "", required = false) Long id,
                           @RequestParam(value = "", required = false) String state) {
+        System.out.println("Modificado estado "+state);
         publicationsService.editStateOf(id, state);
 
         return "redirect:/publication/list";

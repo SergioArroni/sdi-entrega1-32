@@ -12,6 +12,7 @@
     </tr>
     </thead>
     <tbody>
+
     <tr th:each="publication : ${publicationsList}">
         <td th:text="${publication.title}"> Ejercicio 1</td>
         <td th:text="${publication.text}">10</td>
@@ -21,22 +22,25 @@
         </td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.user.email}"></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" th:text="${publication.state}"></td>
-        <td sec:authorize="hasRole('ROLE_ADMIN')" th:attr="onload=|checkState('${publication.id}','{publication.state}')|">
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
             <script th:inline = "javascript">
+
                 function checkState(publicationid, state) {
-                    console.log("state changing"+state);
-                    if (state.equals('Aceptada')) {
+                    console.log("state changing "+state);
+                    if (state===('Aceptada')) {
                         document.querySelector('#' + publicationid + 'aceptada').checked = true;
-                    } else if (state.equals('Moderada')) {
+                    } else if (state===('Moderada')) {
                         document.querySelector('#' + publicationid + 'moderada').checked = true;
-                    } else {
+
+                    } else if (state===('Censurada')) {
                         document.querySelector('#' + publicationid + 'censurada').checked = true;
                     }
+
                 }
             </script>
             <div>
                 <input type="radio" th:id="${publication.id+'aceptada'}" value="aceptada" th:name=${publication.id}
-                       th:attr="onclick=|changeState('${publication.id}','Aceptada')|">
+                       th:attr="onclick=|changeState('${publication.id}','Aceptada')|" checked>
                 <label th:for="${publication.id+'aceptada'}">Aceptada</label>
             </div>
             <div>
@@ -52,8 +56,12 @@
             <script th:inline = "javascript" >
                 function changeState(publicationid, newState) {
                     $("#"+publicationid).text(newState);
+                    checkState(publicationid, newState);
                     var urlUpdate = '/publication/edit?id='+publicationid+'&state='+newState;
+
                     location.href = "http://localhost:8090" + urlUpdate;
+
+
                 }
             </script>
         </td>
