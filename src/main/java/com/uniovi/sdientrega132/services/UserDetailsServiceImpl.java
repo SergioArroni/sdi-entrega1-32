@@ -17,15 +17,23 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UsersRepository usersRepository;
+
+    private String emailInvalid;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = usersRepository.findByEmail(email);
+        this.emailInvalid=email;
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
+
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), grantedAuthorities);
+    }
+
+    public String getEmailInvalid(){
+        return emailInvalid;
     }
 }
