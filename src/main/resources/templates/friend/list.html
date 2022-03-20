@@ -1,9 +1,9 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"/>
+<head th:replace="fragments/head"><title>Friends List</title></head>
 <body>
 <!-- Barra de Navegación superior -->
-<nav th:replace="fragments/nav"/>
+<nav th:replace="fragments/nav"></nav>
 <div class="container">
     <h2><span th:text="#{friend.title}"></span></h2>
     <p><span th:text="#{friend.description}"></span></p>
@@ -25,16 +25,16 @@
             </thead>
             <tbody>
             <tr th:each="pol : ${friendsForAll}">
-                <td scope="row" th:text="${pol.user.name}">Nombre del usuario</td>
-                <td scope="row" th:text="${pol.user.surname}">Apellidos del usuario</td>
-                <td scope="row" th:text="${pol.user.email}">Email del usuario</td>
-                <td scope="row"><a id="getPublications" th:href="${'/publication/list/' + pol.user.email}">Ver publicaciones</a></td>
+                <td th:text="${pol.user.name}">Nombre del usuario</td>
+                <td th:text="${pol.user.surname}">Apellidos del usuario</td>
+                <td th:text="${pol.user.email}">Email del usuario</td>
+                <td><a th:href="${'/publication/listFriend/' + pol.user.email}">Ver publicaciones</a></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <footer th:replace="fragments/pagination"/>
+    <footer th:replace="fragments/pagination"></footer>
 </div>
-<footer th:replace="fragments/footer"/>
+<footer th:replace="fragments/footer"></footer>
 </body>
 </html>

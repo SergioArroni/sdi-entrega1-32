@@ -29,6 +29,11 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(index).click();
     }
 
+    static public List<WebElement> click(WebDriver driver, String click, int lugar){
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", click);
+        elements.get(lugar).click();
+        return elements;
+    }
 
     public static void deleteUser(WebDriver driver, String string) {
         clickOnHRef(driver, "/user/delete/"+string); //primero de la lista
@@ -55,8 +60,6 @@ public class PO_PrivateView extends PO_NavView {
         By boton = By.id( usuario );
         driver.findElement(boton).click();
     }
-
-
 
     static public void fillSearch(WebDriver driver, String textp) {
         WebElement text = driver.findElement(By.name("searchText"));
