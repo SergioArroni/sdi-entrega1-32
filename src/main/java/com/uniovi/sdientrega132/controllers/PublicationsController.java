@@ -103,7 +103,7 @@ public class PublicationsController {
                 Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(nombreImagen);
+                publication.setPhoto(nombreImagen);
             } catch (IOException e) {
                 System.out.println("Fallo con la imagen");
                 e.printStackTrace();

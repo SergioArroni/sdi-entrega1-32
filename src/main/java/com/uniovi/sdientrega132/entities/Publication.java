@@ -12,7 +12,7 @@ public class Publication {
     private String title;
     private String text;
     private Date publishingDate;
-    private String foto;
+    private String photo;
     private String state;
 
     @ManyToOne
@@ -27,7 +27,7 @@ public class Publication {
         this.text=text;
         this.user=user;
         publishingDate = new Date();
-        foto = "";
+        photo = "";
         state = "Aceptada";
     }
 
@@ -71,12 +71,12 @@ public class Publication {
         this.user = user;
     }
 
-    public String getFoto() {
-        return foto;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setFoto(String foto) {
-        this.foto = foto;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getState() {

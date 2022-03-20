@@ -28,17 +28,17 @@
             <div>
                 <input type="radio" th:id="'aceptada'+${publication.id}" value="aceptada" th:name=${publication.id}
                        checked=false th:attr="onclick=|changeState('${publication.id}','Aceptada')|">
-                <label th:for="'aceptada'+${publication.id}">Aceptada</label>
+                <label th:for="'aceptada'+${publication.id}" th:text="#{publication.state.accepted}">Aceptada</label>
             </div>
             <div>
                 <input type="radio" th:id="'moderada'+${publication.id}" value="moderada" th:name=${publication.id}
                        checked=false th:attr="onclick=|changeState('${publication.id}','Moderada')|">
-                <label th:for="'moderada'+${publication.id}" >Moderada</label>
+                <label th:for="'moderada'+${publication.id}" th:text="#{publication.state.moderate}">Moderada</label>
             </div>
             <div>
                 <input type="radio" th:id="'censurada'+${publication.id}" value="censurada" th:name=${publication.id}
                        checked=false th:attr="onclick=|changeState('${publication.id}','Censurada')|">
-                <label th:for="'censurada'+${publication.id}">Censurada</label>
+                <label th:for="'censurada'+${publication.id}" th:text="#{publication.state.censored}">Censurada</label>
             </div>
             <script th:inline = "javascript">
                 var publicationid = [[${publication.id}]];
