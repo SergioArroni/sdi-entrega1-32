@@ -25,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,10 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/css/**", "/images/**", "/script/**", "/", "/signup", "/login/**").permitAll()
                     .antMatchers("/user/list").hasAnyRole("USER","ADMIN")
-                    .antMatchers("/publication/listFriend/**").authenticated().accessDecisionManager(accessDecisionManagerFriendPublication())
-                    //.antMatchers("/professor/details/*").hasAnyAuthority("ROLE_PROFESSOR", "ROLE_ADMIN")
-                    //.antMatchers("/professor/**").hasAnyRole("ADMIN")
-                    .anyRequest().permitAll()
+                    .antMatchers("/friend/*").hasAnyRole("USER","ADMIN")
+                    .antMatchers("/publication/*").hasAnyRole("USER","ADMIN")
+                    .antMatchers("/logs/list").hasAnyRole("ADMIN")
+//                    .antMatchers("/publication/listFriend/**").authenticated().accessDecisionManager(accessDecisionManagerFriendPublication())
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                     .loginPage("/login")

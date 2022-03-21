@@ -1,11 +1,15 @@
 package com.uniovi.sdientrega132.services;
 
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.repositories.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FriendsService {
@@ -31,6 +35,10 @@ public class FriendsService {
 
     public void setFriendInvitationSend(boolean revised, Long id) {
         friendsRepository.updateResend(revised, id);
+    }
+
+    public List<Friend> getFriends(Long id){
+        return friendsRepository.findInvitationsByUser2Id(id);
     }
 
 }

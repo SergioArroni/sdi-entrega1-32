@@ -16,10 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -36,9 +33,6 @@ import java.util.*;
 public class PublicationsController {
 
     @Autowired
-    private HttpSession httpSession;
-
-    @Autowired
     private PublicationValidator publicationValidator;
 
     @Autowired
@@ -51,11 +45,19 @@ public class PublicationsController {
     private FriendsService friendsService;
 
     @RequestMapping("/publication/list")
-    public String getList(Model model, Pageable pageable, Principal principal) {
+    public String getList(Model model, Pageable pageable, Principal principal,
+                          @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
-        publications = publicationsService.getPublicationsForUser(pageable, user);
+        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            if (searchText != null && !searchText.isEmpty())
+                publications = publicationsService.searchPublications(searchText, pageable);
+            else
+                publications = publicationsService.getPublications(pageable);
+        } else {
+            publications = publicationsService.getPublicationsForUser(pageable, user);
+        }
 
         model.addAttribute("publicationsRecommended", publications.getContent());
         //model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
@@ -103,8 +105,8 @@ public class PublicationsController {
     public String updateList(Model model, Pageable pageable, Principal principal){
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> marks = publicationsService.getPublicationsForUser(pageable, user);
-        model.addAttribute("publicationsRecommended", marks.getContent() );
+        Page<Publication> publications = publicationsService.getPublicationsForUser(pageable, user);
+        model.addAttribute("publicationsList", publications.getContent() );
         return "publication/list :: tablePublications";
     }
 
@@ -117,6 +119,7 @@ public class PublicationsController {
     public String setPublication(@Validated Publication publication,
                                  @RequestParam("file")MultipartFile imagen, BindingResult result, Model model,
                                  Principal principal) {
+        publication.setState("Aceptada");
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
             model.addAttribute("usersList", usersService.getUsers());
@@ -162,6 +165,15 @@ public class PublicationsController {
         return "publication/add";
     }
 
+    @RequestMapping(value = "/publication/edit")
+    public String editState(@RequestParam(value = "", required = false) Long id,
+                          @RequestParam(value = "", required = false) String state) {
+        System.out.println("Modificado estado "+state);
+        publicationsService.editStateOf(id, state);
+
+        return "redirect:/publication/list";
+    }
+
     @RequestMapping("/publication/{pubId2}/recommend")
     public String recommendPublication(@PathVariable Long pubId2) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -178,5 +190,9 @@ public class PublicationsController {
 //    public void handleFileUpload(FileUpload event) throws IOException {
 //
 //    }
+
+
+
+
 
 }

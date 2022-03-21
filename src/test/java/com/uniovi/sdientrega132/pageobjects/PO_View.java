@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PO_View {
     protected static PO_Properties p = new PO_Properties("messages");
-    protected static int timeout = 2;
+    protected static int timeout = 20;
 
     public static int getTimeout() {
         return timeout;
@@ -50,6 +50,8 @@ public class PO_View {
         return  SeleniumUtils.waitLoadElementsBy(driver, type, text, getTimeout());
     }
 
-
+    static public List<WebElement> checkKey(WebDriver driver, String key, int i) {
+        return  SeleniumUtils.waitLoadElementsBy(driver, "text", p.getString(key, i), getTimeout());
+    }
 
 }

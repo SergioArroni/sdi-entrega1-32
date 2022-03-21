@@ -15,7 +15,6 @@ public class Friend {
     private Long User2_id;
     private Boolean accept;
 
-
     public Friend() {
     }
 
