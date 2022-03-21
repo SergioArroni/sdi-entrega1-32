@@ -690,11 +690,9 @@ class SdiEntrega132ApplicationTests {
         driver.get("http://localhost:8090/publication/listFriend/user01@email.com");
 
         // Comprobamos que están todas las publicaciones
-        List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
+        List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "Error de autenticación: No eres amigo/a de este usuario", PO_View.getTimeout());
         Assertions.assertTrue(pub1.get(0)!=null);
 
-        List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
-        Assertions.assertTrue(pub2.get(0)!=null);
     }
 
     //PR29. Visualizar al menos cuatro páginas en español/inglés/español (comprobando que algunas de las etiquetas cambian al idioma correspondiente). Ejemplo, Página principal/Opciones Principales de
