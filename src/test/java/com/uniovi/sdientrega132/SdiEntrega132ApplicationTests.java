@@ -219,6 +219,29 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.textIsNotPresentOnPage(driver, "Cierra sesion");
     }
 
+    //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
+    @Test
+    @Order(11)
+    public void PR11() {
+        //Logueo como administrador
+        PO_LoginView.login(driver, "admin@email.com", "admin");
+
+        //Accedemos a la lista de usuarios
+        PO_PrivateView.listUsers(driver);
+
+        //Comprobamos que lista todos los usuarios del sistema
+        List<User> lista = (List<User>) usersRepository.findAll();
+        String checkText;
+        List<WebElement> result;
+
+        for (int i = 0; i < lista.size(); i++) {
+            checkText = lista.get(i).getEmail();
+            result = PO_View.checkElementBy(driver, "text", checkText);
+            Assertions.assertEquals(checkText, result.get(0).getText());
+        }
+
+    }
+
     @Test
     @Order(12)
     public void PR012() {
@@ -282,29 +305,6 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.textIsNotPresentOnPage(driver, "user04@email.com");
     }
 
-    //[Prueba11] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema
-    @Test
-    @Order(11)
-    public void PR11() {
-        //Logueo como administrador
-        PO_LoginView.login(driver, "admin@email.com", "admin");
-
-        //Accedemos a la lista de usuarios
-        PO_PrivateView.listUsers(driver);
-
-        //Comprobamos que lista todos los usuarios del sistema
-        List<User> lista = (List<User>) usersRepository.findAll();
-        String checkText;
-        List<WebElement> result;
-
-        for (int i = 0; i < lista.size(); i++) {
-            checkText = lista.get(i).getEmail();
-            result = PO_View.checkElementBy(driver, "text", checkText);
-            Assertions.assertEquals(checkText, result.get(0).getText());
-        }
-
-    }
-
     //[Prueba15] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema,
     //excepto el propio usuario y aquellos que sean Administradores
     @Test
@@ -335,7 +335,7 @@ class SdiEntrega132ApplicationTests {
             }
         }
         //Nos movemos a la última página
-        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags + 1);
+        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags);
         for (int j = 0; j < usersInLastPage; j++) {
             checkText = lista.get(numPags * pageSize + j).getEmail();
             result = PO_View.checkElementBy(driver, "text", checkText);
@@ -376,7 +376,7 @@ class SdiEntrega132ApplicationTests {
             }
         }
         //Nos movemos a la última página
-        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags + 1);
+        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags);
         for (int j = 0; j < usersInLastPage; j++) {
             checkText = lista.get(numPags * pageSize + j).getEmail();
             result = PO_View.checkElementBy(driver, "text", checkText);
