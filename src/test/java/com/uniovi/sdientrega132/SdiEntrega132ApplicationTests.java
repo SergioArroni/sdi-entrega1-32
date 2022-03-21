@@ -769,6 +769,9 @@ class SdiEntrega132ApplicationTests {
         driver.get("http://localhost:8090/user/list");
 
 
+        String searchText = "Identificate";
+        List<WebElement> element = SeleniumUtils.waitLoadElementsBy(driver, "text", searchText, PO_View.getTimeout());
+        Assertions.assertTrue(element.get(0).getText().equals(searchText));
 
     }
 

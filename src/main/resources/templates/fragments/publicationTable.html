@@ -19,9 +19,6 @@
         <td th:text="${publication.title}"> Ejercicio 1</td>
         <td th:text="${publication.text}">10</td>
         <td th:text="${publication.publishingDate}">10</td>
-        <td th:if="${!#strings.isEmpty(publication.photo)}">
-            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
-        </td>
         <td scope="row"><a></a>
             <div>
                 <button type="button" th:id="${'AceptButton' + publication.id}"
@@ -83,6 +80,9 @@
                 }
             </script>
         </td>
+        <td th:if="${!#strings.isEmpty(publication.photo)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
+        </td>
 
     </tr>
     </tbody>
@@ -92,9 +92,6 @@
         <td th:text="${publication.title}"> Ejercicio 1</td>
         <td th:text="${publication.text}">10</td>
         <td th:text="${publication.publishingDate}">10</td>
-        <td th:if="${!#strings.isEmpty(publication.photo)}">
-            <img class="img.thumbnail rounded float-left" th:src="@{'/images/' + ${publication.photo}}" >
-        </td>
         <td th:text="#{publication.alredyRecommend}">Ya has recomendado esta publicación</td>
         <td th:text="${publication.printRecomendations()}">10</td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.user.email}"></td>
@@ -137,6 +134,12 @@
                 }
             </script>
         </td>
+        <td th:if="${!#strings.isEmpty(publication.photo)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
+        </td>
+        <!--<td th:if="${!#strings.isEmpty(publication.photo)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/images/' + ${publication.photo}}" >
+        </td>-->
 
     </tr>
     </tr>
