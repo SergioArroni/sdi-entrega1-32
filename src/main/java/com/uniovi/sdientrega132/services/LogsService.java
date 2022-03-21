@@ -15,7 +15,7 @@ public class LogsService {
 
     public List<Log> getLogs() {
         List<Log> logs = new ArrayList<>();
-        logsRepository.findAll().forEach(logs::add);
+        logsRepository.findAllLogs().forEach(logs::add);
         return logs;
     }
 
