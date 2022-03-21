@@ -487,7 +487,7 @@ class SdiEntrega132ApplicationTests {
     // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(19)
-    public void PR19() {
+    public void PR19() { 
         //Vamos al formulario de logueo
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
