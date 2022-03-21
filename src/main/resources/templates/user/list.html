@@ -18,8 +18,7 @@
 
     <p th:text="#{user.list.message}"></p>
     <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
-    <script> th:inline = "javascript" >
-        /*<![CDATA[*/
+    <script>
         $("#updateButton").click(function () {
             var numberPage = [[${param.page}]];
             var urlUpdate = '/user/list/update';
@@ -28,7 +27,6 @@
             }
             $("#tableUsers").load(urlUpdate);
         });
-    /*]]>*/
     </script>
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="tableUsers" id="tableUsers"
