@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SdiEntrega132ApplicationTests {
@@ -76,6 +77,20 @@ class SdiEntrega132ApplicationTests {
         String checkText = "Bienvenidos a nuestra red social";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+        //Despues de crearlo nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+        //Despues de ver que se crea correctamente lo borramos
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+
+        WebElement checkbox = elementos.get(elementos.size() - 1).findElement(By.id("selected"));
+        checkbox.click();
+
+        WebElement btnBorrar = driver.findElement(By.id("deleteButton"));
+        btnBorrar.click();
+
     }
 
     // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
@@ -706,6 +721,112 @@ class SdiEntrega132ApplicationTests {
 
 
         PO_PrivateView.logout(driver);
+    }
+
+    @Test
+    @Order(37)
+    public void PR37(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+        elementos.get(0).findElement(By.id("censurada17")).click();
+
+    }
+
+    @Test
+    @Order(38)
+    public void PR38(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+        WebElement elem=elementos.get(0).findElement(By.id("censurada17"));
+        elem.click();
+        //Despues de crearlo nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Pulsamos el enlace para ver las publicaciones del user01
+        driver.get("http://localhost:8090/publication/list");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"publicacion 1 de Andrea");
+
+    }
+
+    @Test
+    @Order(39)
+    public void PR39(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+
+        WebElement elem=elementos.get(1).findElement(By.id("moderada18"));
+        elem.click();
+        //Despues de crearlo nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Pulsamos el enlace para ver las publicaciones del user01
+        driver.get("http://localhost:8090/publication/listFriend/user06@email.com");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Hola :P");
+
+    }
+
+    @Test
+    @Order(40)
+    public void PR40(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "user05@email.com", "user05");
+        driver.get("http://localhost:8090/publication/edit?id=20&state=Censurada");
+
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Cambiar estado");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Estado actual");
+
+    }
+
+    @Test
+    @Order(41)
+    public void PR41(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        driver.get("http://localhost:8090/publication/list");
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "");
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+    }
+
+    @Test
+    @Order(42)
+    public void PR42(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        driver.get("http://localhost:8090/publication/list");
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "Aceptada");
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        Assertions.assertEquals("http://localhost:8090/publication/list?searchText=Aceptada",driver.getCurrentUrl());
+
     }
 }
 

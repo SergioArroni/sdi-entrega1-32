@@ -44,7 +44,7 @@
         </td>
         <td th:text= "${publication.printRecomendations()}">10</td>
         <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${publication.user.email}"></td>
-        <td sec:authorize="hasRole('ROLE_ADMIN')" th:id="${publication.id}" th:text="${publication.state}"></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')" class="state" th:id="${publication.id}" th:text="${publication.state}"></td>
         <td sec:authorize="hasRole('ROLE_ADMIN')">
             <div>
                 <input type="radio" th:id="'aceptada'+${publication.id}" value="aceptada" th:name=${publication.id}
