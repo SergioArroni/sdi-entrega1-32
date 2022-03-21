@@ -70,6 +70,7 @@ class SdiEntrega132ApplicationTests {
         driver.quit();
     }
 
+    //[Prueba1] Registro de Usuario con datos válidos.
     @Test
     @Order(1)
     public void PR01() {
@@ -80,6 +81,9 @@ class SdiEntrega132ApplicationTests {
         String checkText = "Bienvenidos a nuestra red social";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+
+        usersService.deleteAllUsers();
+        insertSampleDataService.init();
     }
 
     // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
@@ -107,7 +111,7 @@ class SdiEntrega132ApplicationTests {
 
     }
 
-
+    //[Prueba3] Registro de Usuario con datos inválidos (repetición de contraseña inválida).
     @Test
     @Order(3)
     public void PR03() {
@@ -124,6 +128,7 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba4] Registro de Usuario con datos inválidos (email existente).
     @Test
     @Order(4)
     public void PR04() {
@@ -140,6 +145,7 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba5] Inicio de sesión con datos válidos (administrador).
     @Test
     @Order(5)
     public void PR05() {
@@ -152,6 +158,7 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba6] Inicio de sesión con datos válidos (usuario estándar).
     @Test
     @Order(6)
     public void PR06() {
@@ -164,6 +171,7 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba7] Inicio de sesión con datos inválidos (usuario estándar, campo email y contraseña vacíos).
     @Test
     @Order(7)
     public void PR07() {
@@ -174,6 +182,8 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "text", PO_View.getTimeout());
     }
 
+    //[Prueba8] Inicio de sesión con datos válidos (usuario estándar, email existente, pero contraseña
+    //incorrecta).
     @Test
     @Order(8)
     public void PR08() {
@@ -185,6 +195,8 @@ class SdiEntrega132ApplicationTests {
 
     }
 
+    //[Prueba9] Hacer clic en la opción de salir de sesión y comprobar que se redirige a la página de inicio de
+    //sesión (Login).
     @Test
     @Order(9)
     public void PR09() {
@@ -205,9 +217,10 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
+    //[Prueba10] Comprobar que el botón cerrar sesión no está visible si el usuario no está autenticado.
     @Test
     @Order(10)
-    public void PR010() {
+    public void PR10() {
         SeleniumUtils.textIsNotPresentOnPage(driver, "Cierra sesion");
         // Vamos al formulario de logeo
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
@@ -247,9 +260,11 @@ class SdiEntrega132ApplicationTests {
 
     }
 
+    //[Prueba12] Ir a la lista de usuarios, borrar el primer usuario de la lista, comprobar que la lista se actualiza
+    //y dicho usuario desaparece.
     @Test
     @Order(12)
-    public void PR012() {
+    public void PR12() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
@@ -261,9 +276,11 @@ class SdiEntrega132ApplicationTests {
 
     }
 
+    //[Prueba13] Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
+    //y dicho usuario desaparece.
     @Test
     @Order(13)
-    public void PR013() {
+    public void PR13() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
@@ -278,9 +295,11 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.textIsNotPresentOnPage(driver, "user15@email.com");
     }
 
+    //[Prueba14] Ir a la lista de usuarios, borrar 3 usuarios, comprobar que la lista se actualiza y dichos usuarios
+    //desaparecen.
     @Test
     @Order(14)
-    public void PR014() {
+    public void PR14() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
@@ -295,6 +314,9 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
         SeleniumUtils.textIsNotPresentOnPage(driver, "user02@email.com");
         SeleniumUtils.textIsNotPresentOnPage(driver, "user03@email.com");
+
+        usersService.deleteAllUsers();
+        insertSampleDataService.init();
     }
 
     //[Prueba15] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema,
@@ -327,7 +349,7 @@ class SdiEntrega132ApplicationTests {
             }
         }
         //Nos movemos a la última página
-        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags);
+        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags + 1);
         for (int j = 0; j < usersInLastPage; j++) {
             checkText = lista.get(numPags * pageSize + j).getEmail();
             result = PO_View.checkElementBy(driver, "text", checkText);
@@ -368,7 +390,7 @@ class SdiEntrega132ApplicationTests {
             }
         }
         //Nos movemos a la última página
-        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags);
+        PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags + 1);
         for (int j = 0; j < usersInLastPage; j++) {
             checkText = lista.get(numPags * pageSize + j).getEmail();
             result = PO_View.checkElementBy(driver, "text", checkText);
