@@ -172,14 +172,14 @@ public class PublicationsController {
             pub.getRecomendaciones().add(activeUser);
             publicationsService.addPublication(pub);
         }
+        return "redirect:/publication/listFriend/" + pub.getUser().getEmail();
     }
 
 //    public void handleFileUpload(FileUpload event) throws IOException {
 //
 //    }
-        return "redirect:/publication/listFriend/" + pub.getUser().getEmail();
 
-    }
+
 
     
 
