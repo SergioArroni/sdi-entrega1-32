@@ -17,6 +17,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.context.annotation.Configuration;
 
+@SuppressWarnings("NullableProblems")
 @Configuration
 public class CustomConfiguration implements WebMvcConfigurer {
 
@@ -62,7 +63,6 @@ public class CustomConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);
-
         registry.addResourceHandler("/Productos/**").addResourceLocations("file:/C:/Productos/");
     }
 

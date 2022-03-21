@@ -2,7 +2,6 @@ package com.uniovi.sdientrega132;
 
 import com.uniovi.sdientrega132.controllers.LogsController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         System.out.println(request.getRequestURL());
 
         System.out.println(request.getMethod());
-
 
         if (request.getRequestURL().toString().equals("http://localhost:8090/login")) {
             point = true;
