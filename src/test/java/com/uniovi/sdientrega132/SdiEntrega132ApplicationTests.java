@@ -593,141 +593,6 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.logout(driver);
     }
 
-    // PR35. Acceder a las publicaciones de un amigo y recomendar una publicación. Comprobar que el
-    //número de recomendaciones se ha incrementado en uno y que no aparece el botón/enlace recomendar.
-    @Test
-    @Order(35)
-    public void PR35() {
-        //Nos loggeamos con el user01, que tiene 1 amigo (user06) con publicaciones
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
-
-        // Se despliega el menú de amigos, y se clica en lista de amigos
-        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
-        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
-
-        //Pulsamos el enlace para ver las publicaciones del user06
-        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
-
-        //Comprobamos que el título de la publicación es el que debería ser.
-        String checkText = "Hola :P";
-        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //Pulsamos el enlace para ver las publicaciones del user06
-        PO_PrivateView.click(driver, "//button[contains(@class, 'btn btn-success')]", 0);
-
-        // Se despliega el menú de amigos, y se clica en lista de amigos
-        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
-        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
-
-        //Pulsamos el enlace para ver las publicaciones del user06
-        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
-
-        //Comprobamos que el título de la publicación es el que debería ser.
-        checkText = "Hola :P";
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //Comprobamos que el la publicación tiene 1 recomendación
-        checkText = "1 Recs.";
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //Comprobamos que el boton ya no está y aparece el texto correspondiente
-        checkText = "Ya has recomendado esta publicación";
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        PO_PrivateView.logout(driver);
-    }
-
-    //PR29. Visualizar al menos cuatro páginas en español/inglés/español (comprobando que algunas de las etiquetas cambian al idioma correspondiente). Ejemplo, Página principal/Opciones Principales de
-    //Usuario/Listado de Usuarios.
-    @Test
-    @Order(29)
-    public void PR29() {
-
-        //Welcome
-
-        PO_HomeView.checkWelcomeToPage(driver, 0);
-
-        PO_HomeView.changeLanguage(driver, "btnEnglish");
-
-        PO_HomeView.checkWelcomeToPage(driver, 1);
-
-        //Users
-
-        //Nos loggeamos con el user01, que tiene 1 amigo (user06) con publicaciones
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
-
-        String checkText = PO_Properties.getString("user.list.message", 1);
-        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        PO_HomeView.changeLanguage(driver, "btnSpanish");
-
-        checkText = PO_Properties.getString("user.list.message", 0);
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //Friends
-
-        // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
-        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
-        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
-
-        checkText = PO_Properties.getString("friend.invitation.message", 0);
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        PO_HomeView.changeLanguage(driver, "btnEnglish");
-
-        checkText = PO_Properties.getString("friend.invitation.message", 1);
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        //Publication
-
-        PO_PrivateView.click(driver, "//li[contains(@id, 'publications-menu')]/a", 0);
-        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/list')]", 0);
-
-        checkText = PO_Properties.getString("publication.title", 1);
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-        PO_HomeView.changeLanguage(driver, "btnSpanish");
-
-        checkText = PO_Properties.getString("publication.title", 0);
-        result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-    }
-
-    // PR36. Utilizando un acceso vía URL u otra alternativa, tratar de recomendar una publicación de un
-    //usuario con el que no se mantiene una relación de amistad.
-    @Test
-    @Order(36)
-    public void PR36() {
-        //Nos loggeamos con el user04, que no es amigo del user06
-        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
-
-        driver.get("http://localhost:8090/publication/listFriend/user06@email.com");
-
-        //Comprobamos que no aparecen publicaciones de amigos
-        String checkText = "No hay publicaciones";
-        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
-        Assertions.assertEquals(checkText, result.get(0).getText());
-
-
-        PO_PrivateView.logout(driver);
-    }
-
     // PR24. Crear una publicación y comprobar que se ha creado correctamente
     @Test
     @Order(24)
@@ -832,6 +697,70 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertTrue(pub2.get(0)!=null);
     }
 
+    //PR29. Visualizar al menos cuatro páginas en español/inglés/español (comprobando que algunas de las etiquetas cambian al idioma correspondiente). Ejemplo, Página principal/Opciones Principales de
+    //Usuario/Listado de Usuarios.
+    @Test
+    @Order(29)
+    public void PR29() {
+
+        //Welcome
+
+        PO_HomeView.checkWelcomeToPage(driver, 0);
+
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+
+        PO_HomeView.checkWelcomeToPage(driver, 1);
+
+        //Users
+
+        //Nos loggeamos con el user01, que tiene 1 amigo (user06) con publicaciones
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        String checkText = PO_Properties.getString("user.list.message", 1);
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+
+        checkText = PO_Properties.getString("user.list.message", 0);
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Friends
+
+        // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
+
+        checkText = PO_Properties.getString("friend.invitation.message", 0);
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+
+        checkText = PO_Properties.getString("friend.invitation.message", 1);
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Publication
+
+        PO_PrivateView.click(driver, "//li[contains(@id, 'publications-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/list')]", 0);
+
+        checkText = PO_Properties.getString("publication.title", 1);
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+
+        checkText = PO_Properties.getString("publication.title", 0);
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+    }
+
     // PR30. Intentar acceder al listado de usuarios sin estar autenticado
     @Test
     @Order(30)
@@ -877,6 +806,77 @@ class SdiEntrega132ApplicationTests {
 
         driver.get("http://localhost:8090/user/list");
 
+    }
+
+    // PR35. Acceder a las publicaciones de un amigo y recomendar una publicación. Comprobar que el
+    //número de recomendaciones se ha incrementado en uno y que no aparece el botón/enlace recomendar.
+    @Test
+    @Order(35)
+    public void PR35() {
+        //Nos loggeamos con el user01, que tiene 1 amigo (user06) con publicaciones
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+
+        // Se despliega el menú de amigos, y se clica en lista de amigos
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
+
+        //Comprobamos que el título de la publicación es el que debería ser.
+        String checkText = "Hola :P";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//button[contains(@class, 'btn btn-success')]", 0);
+
+        // Se despliega el menú de amigos, y se clica en lista de amigos
+        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
+        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
+
+        //Pulsamos el enlace para ver las publicaciones del user06
+        PO_PrivateView.click(driver, "//a[contains(@href, 'publication/listFriend/user06@email.com')]", 0);
+
+        //Comprobamos que el título de la publicación es el que debería ser.
+        checkText = "Hola :P";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Comprobamos que el la publicación tiene 1 recomendación
+        checkText = "1 Recs.";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        //Comprobamos que el boton ya no está y aparece el texto correspondiente
+        checkText = "Ya has recomendado esta publicación";
+        result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+        PO_PrivateView.logout(driver);
+    }
+
+    // PR36. Utilizando un acceso vía URL u otra alternativa, tratar de recomendar una publicación de un
+    //usuario con el que no se mantiene una relación de amistad.
+    @Test
+    @Order(36)
+    public void PR36() {
+        //Nos loggeamos con el user04, que no es amigo del user06
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        // Rellenamos el formulario de login con datos válidos
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+
+        driver.get("http://localhost:8090/publication/listFriend/user06@email.com");
+
+        //Comprobamos que no aparecen publicaciones de amigos
+        String checkText = "No hay publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+
+        PO_PrivateView.logout(driver);
     }
 
     // PR44. Probar que se puede crear una publicación con imagen
