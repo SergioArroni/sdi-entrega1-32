@@ -22,11 +22,11 @@ class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     //static String Geckodriver ="C:\\nada.exe;
     //static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
-    //static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
-    static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
+    //static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverSergio);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverAndrea);
     static String URL = "http://localhost:8090";
 
 
@@ -177,13 +177,8 @@ class SdiEntrega132ApplicationTests {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario, como un usuario normal pero con la contraseña incorrecta
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "12345678");
+        SeleniumUtils.waitTextIsNotPresentOnPage(driver, "text", PO_View.getTimeout());
 
-        List<WebElement> result = PO_LoginView.checkElementByKey(driver, "Error.login",
-                PO_Properties.getSPANISH());
-
-        String checkText = PO_HomeView.getP().getString("Error.login",
-                PO_Properties.getSPANISH());
-        Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
     @Test
@@ -259,6 +254,7 @@ class SdiEntrega132ApplicationTests {
         elementos.get(0).findElement(By.id("selected")).click();
         driver.findElement(By.id("deleteButton")).click();
         SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
+
     }
 
     @Test
@@ -266,32 +262,15 @@ class SdiEntrega132ApplicationTests {
     public void PR013() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
-        /*
-        //Navegamos hasta la última página
-        boolean isNextPage = false;
-        do {
 
-            // Check If There is next page
-            List<WebElement> nextPageLink = driver.findElements(By.id("nextPageOfList"));
-            if ( !nextPageLink.isEmpty() ) {
-                nextPageLink.get(0).click();
-                isNextPage = true;
-            } else {
-                isNextPage = false;
-            }
-
-        } while (isNextPage);
-
-*/
         List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
                 PO_View.getTimeout());
-        // Seleccionamos el último usuario y lo borramos
-        WebElement checkbox = elementos.get(elementos.size() - 1).findElement(By.id("selected"));
+
+        WebElement checkbox = elementos.get(elementos.size() - 2).findElement(By.id("selected"));
         checkbox.click();
 
         WebElement btnBorrar = driver.findElement(By.id("deleteButton"));
         btnBorrar.click();
-
         SeleniumUtils.textIsNotPresentOnPage(driver, "user15@email.com");
     }
 
@@ -304,14 +283,14 @@ class SdiEntrega132ApplicationTests {
         List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
                 PO_View.getTimeout());
 
+        elementos.get(0).findElement(By.id("selected")).click();
         elementos.get(1).findElement(By.id("selected")).click();
         elementos.get(2).findElement(By.id("selected")).click();
-        elementos.get(3).findElement(By.id("selected")).click();
 
         driver.findElement(By.id("deleteButton")).click();
+        SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
         SeleniumUtils.textIsNotPresentOnPage(driver, "user02@email.com");
         SeleniumUtils.textIsNotPresentOnPage(driver, "user03@email.com");
-        SeleniumUtils.textIsNotPresentOnPage(driver, "user04@email.com");
     }
 
     //[Prueba15] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema,
