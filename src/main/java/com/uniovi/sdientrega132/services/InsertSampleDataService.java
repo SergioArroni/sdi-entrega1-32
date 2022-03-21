@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.services;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;

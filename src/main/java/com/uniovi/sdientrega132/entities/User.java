@@ -27,7 +27,7 @@ public class User {
     private Set<Publication> publications;
 
     @ElementCollection
-    private Set<Long> friends = new HashSet<>();
+    private List<Long> friends = new ArrayList<>();
 
     public User() {
     }
@@ -103,11 +103,11 @@ public class User {
         this.publications = publications;
     }
 
-    public Set<Long> getFriends() {
+    public List<Long> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<Long> friends) {
+    public void setFriends(List<Long> friends) {
         this.friends = friends;
     }
 
