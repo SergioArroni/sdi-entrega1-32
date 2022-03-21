@@ -5,6 +5,8 @@
         <th scope="col" th:text="#{publication.title}">Título</th>
         <th scope="col" th:text="#{publication.text}">Publicación</th>
         <th scope="col" th:text="#{publication.date}">Fecha de publicación</th>
+        <th scope="col" th:text="#{publication.recommended}">Recomendar</th>
+        <th scope="col" th:text="#{publication.numRecomendations}">Número de Recomendaciones</th>
         <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{publication.author}"></th>
         <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{publication.state}"></th>
         <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{publication.state.change}"></th>
@@ -62,6 +64,40 @@
                 }
             </script>
         </td>
+        <td scope="row"><a></a>
+            <div>
+                <button type="button" th:id="${'AceptButton' + publicacion.id}"
+                        class="btn btn-success">
+                    <span th:text="#{publication.recommended}"></span>
+                </button>
+                <script th:inline="javascript"> /*<![CDATA[*/
+                $("#AceptButton" + "[[${publicacion.id}]]").click(function () {
+                    $.get("/publication/[[${publicacion.id}]]/recommend", function () {
+                        var numberPage = [[${param.page}]];
+                        var urlUpdate = '/publication/listFriend/update/' + publicacion.user.email;
+                        if (numberPage != null) {
+                            urlUpdate += "?page=" + numberPage[0];
+                        }
+                        $("#tablePublications").load(urlUpdate);
+                    });
+                }); /*]]>*/
+                </script>
+            </div>
+        </td>
+        <td th:text= "${publicacion.printRecomendations()}">10</td>
+    </tr>
+    </tbody>
+
+    <tbody>
+    <tr th:each="publicacion : ${publicationsRecommended}">
+        <td th:text="${publicacion.title}"> Ejercicio 1</td>
+        <td th:text="${publicacion.text}">10</td>
+        <td th:text="${publicacion.publishingDate}">10</td>
+        <td th:if="${!#strings.isEmpty(publicacion.foto)}">
+            <img class="img.thumbnail rounded float-left" th:src="@{'/images/' + ${publicacion.foto}}" >
+        </td>
+        <td th:text="#{publication.alredyRecommend}">Ya has recomendado esta publicación</td>
+        <td th:text="${publicacion.printRecomendations()}">10</td>
     </tr>
     </tbody>
 </table>

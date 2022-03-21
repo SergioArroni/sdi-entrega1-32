@@ -49,4 +49,8 @@ public class PublicationsService {
     }
 
 
+    public Publication getPublication(Long id) {
+        return publicationsRepository.findById(id).get();
+    }
+
 }
