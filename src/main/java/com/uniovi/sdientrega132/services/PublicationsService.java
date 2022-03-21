@@ -53,4 +53,7 @@ public class PublicationsService {
         return publicationsRepository.findById(id).get();
     }
 
+    public void deleteAllPublications() {
+        publicationsRepository.deleteAll();
+    }
 }
