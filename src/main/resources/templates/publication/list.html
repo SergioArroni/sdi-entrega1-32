@@ -33,6 +33,8 @@
     </div>
     <footer th:replace="fragments/pagination"/>
     <div th:if="${#lists.isEmpty(publicationsRecommended)}" th:text="#{publication.nopublication}"]> No hay publicaciones </div>
+    <div th:if="${authorizeError}" th:text="#{Error.publication.notFriends}"]>
+        Error de autenticación: No eres amigo/a de este usuario </div>
 </div>
 <footer th:replace="fragments/footer"/>
 

@@ -81,7 +81,7 @@
             </script>
         </td>
         <td th:if="${!#strings.isEmpty(publication.photo)}">
-            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}+'.png'}" >
         </td>
 
     </tr>
@@ -135,7 +135,7 @@
             </script>
         </td>
         <td th:if="${!#strings.isEmpty(publication.photo)}">
-            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}}" >
+            <img class="img.thumbnail rounded float-left" th:src="@{'/Productos/' + ${publication.photo}+'.png'}" >
         </td>
         <!--<td th:if="${!#strings.isEmpty(publication.photo)}">
             <img class="img.thumbnail rounded float-left" th:src="@{'/images/' + ${publication.photo}}" >

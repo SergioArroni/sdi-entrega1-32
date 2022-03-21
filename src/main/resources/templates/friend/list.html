@@ -28,7 +28,7 @@
                 <td th:text="${pol.user.name}">Nombre del usuario</td>
                 <td th:text="${pol.user.surname}">Apellidos del usuario</td>
                 <td th:text="${pol.user.email}">Email del usuario</td>
-                <td><a th:href="${'/publication/listFriend/' + pol.user.email}">Ver publicaciones</a></td>
+                <td><a id="getPublications" th:href="${'/publication/listFriend/' + pol.user.email}">Ver publicaciones</a></td>
             </tr>
             </tbody>
         </table>

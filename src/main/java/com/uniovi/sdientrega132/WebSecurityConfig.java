@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/friend/*").hasAnyRole("USER","ADMIN")
                     .antMatchers("/publication/*").hasAnyRole("USER","ADMIN")
                     .antMatchers("/logs/list").hasAnyRole("ADMIN")
+                    .antMatchers("/publication/list").authenticated()
 //                    .antMatchers("/publication/listFriend/**").authenticated().accessDecisionManager(accessDecisionManagerFriendPublication())
                 .anyRequest().permitAll()
                 .and()
