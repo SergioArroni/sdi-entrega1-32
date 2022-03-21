@@ -51,6 +51,10 @@ public class User {
         return passwordConfirm;
     }
 
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
     public String getName() {
         return name;
     }
@@ -105,6 +109,19 @@ public class User {
 
     public void setFriends(List<Long> friends) {
         this.friends = friends;
+    }
+
+    public void addFriend(Long u) {
+        var fri = getFriends();
+        fri.add(u);
+        setFriends(fri);
+    }
+
+    public boolean isFriend(Long u) {
+        if (friends.contains(u)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
