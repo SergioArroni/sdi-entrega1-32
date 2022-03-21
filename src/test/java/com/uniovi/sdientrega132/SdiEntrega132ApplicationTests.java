@@ -3,7 +3,8 @@ package com.uniovi.sdientrega132;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.pageobjects.*;
 import com.uniovi.sdientrega132.repositories.PublicationsRepository;
-import com.uniovi.sdientrega132.repositories.UsersRepository;
+import com.uniovi.sdientrega132.services.InsertSampleDataService;
+import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -22,19 +23,22 @@ class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     //static String Geckodriver ="C:\\nada.exe;
     //static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
-    static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
-    //static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    //static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
+    static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverAndrea);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverSergio);
     static String URL = "http://localhost:8090";
 
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UsersService usersService;
 
     @Autowired
     private PublicationsRepository publicationsRepository;
+
+    @Autowired
+    private InsertSampleDataService insertSampleDataService;
 
     public static WebDriver getDriver(String PathFirefox, String Geckodriver) {
         System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -231,7 +235,7 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.listUsers(driver);
 
         //Comprobamos que lista todos los usuarios del sistema
-        List<User> lista = (List<User>) usersRepository.findAll();
+        List<User> lista = usersService.getUsers();
         String checkText;
         List<WebElement> result;
 
@@ -305,12 +309,12 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.listUsers(driver);
 
         //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
-        User activeUser = usersRepository.findByEmail("user01@email.com");
+        User activeUser = usersService.getUserByEmail("user01@email.com");
 
         List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
         String checkText;
         int pageSize = result.size();
-        List<User> lista = usersRepository.findAllStandard(activeUser);
+        List<User> lista = usersService.getStandardUsers(activeUser);
         int size = lista.size();
         int numPags = size / pageSize;
         int usersInLastPage = size % pageSize;
@@ -346,12 +350,12 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.fillSearch(driver, "");
 
         //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
-        User activeUser = usersRepository.findByEmail("user01@email.com");
+        User activeUser = usersService.getUserByEmail("user01@email.com");
 
         List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
         String checkText;
         int pageSize = result.size();
-        List<User> lista = usersRepository.findAllStandard(activeUser);
+        List<User> lista = usersService.getStandardUsers(activeUser);
         int size = lista.size();
         int numPags = size / pageSize;
         int usersInLastPage = size % pageSize;
@@ -410,12 +414,12 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.fillSearch(driver, "n");
 
         //Comprobamos que lista todos los usuarios del sistema menos los admin y él mismo
-        User activeUser = usersRepository.findByEmail("user01@email.com");
+        User activeUser = usersService.getUserByEmail("user01@email.com");
 
         List<WebElement> result = PO_View.checkElementBy(driver, "class", "usersTable");
         String checkText = "N";
         int pageSize = result.size();
-        List<User> lista = usersRepository.findAllStandard(activeUser);
+        List<User> lista = usersService.getStandardUsers(activeUser);
         List<User> lista2 = new ArrayList<>();
         for (User user : lista) {
             if (user.getName().contains(checkText) || user.getEmail().contains(checkText)) {

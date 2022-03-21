@@ -31,6 +31,11 @@ public class UsersService {
         return users;
     }
 
+    public List<User> getStandardUsers(User user) {
+        List<User> users = usersRepository.findAllStandard(user);
+        return users;
+    }
+
     public void addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
