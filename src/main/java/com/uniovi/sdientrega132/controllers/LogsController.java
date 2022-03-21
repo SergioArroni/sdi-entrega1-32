@@ -78,55 +78,51 @@ public class LogsController {
     public void LogInEx() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         emailLogin = auth.getName();
-        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), emailLogin);
-        System.out.println(l);
+        Log l = new Log("LOGIN-EX", Timestamp.from(Instant.now()).toString(), "Username: " + emailLogin);
         logsService.addLog(l);
     }
 
     public void LogOut() {
-        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), emailLogin);
-        emailLogin = null;
-        System.out.println(l);
+        Log l = new Log("LOGOUT", Timestamp.from(Instant.now()).toString(), "Username: " + emailLogin);
         logsService.addLog(l);
     }
 
     public void LogInEr() {
 
-        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), userDetailsService.getEmailInvalid());
+        Log l = new Log("LOGIN-ERR", Timestamp.from(Instant.now()).toString(), "Username: " + userDetailsService.getEmailInvalid());
         System.out.println(l);
         logsService.addLog(l);
     }
 
     public void LogPET(String pathInfo, String method, Enumeration<String> parameterNames) {
 
-        var iter = parameterNames.asIterator();
+        var iter = auxCode(parameterNames);
 
-        StringBuilder parametros = new StringBuilder();
+        Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), "Mapping: " + pathInfo + "\t Method: " + method + "\tParam: " + iter);
 
-        while (iter.hasNext()) {
-            String param = iter.next();
-            parametros.append(param).append(" ");
-        }
-
-        Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
-        System.out.println(l);
         logsService.addLog(l);
     }
 
     public void LogAlta(String pathInfo, String method, Enumeration<String> parameterNames) {
 
+        var iter = auxCode(parameterNames);
+
+
+        Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), "Mapping: " + pathInfo + "\t Method: " + method + "\tParam: " + iter);
+        System.out.println(l);
+        logsService.addLog(l);
+    }
+
+    public StringBuilder auxCode(Enumeration<String> parameterNames) {
         var iter = parameterNames.asIterator();
 
         StringBuilder parametros = new StringBuilder();
 
         while (iter.hasNext()) {
             String param = iter.next();
-            parametros.append(param).append(" ");
+            parametros.append(param).append(", ");
         }
-
-        Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
-        System.out.println(l);
-        logsService.addLog(l);
+        return parametros;
     }
 
 }
