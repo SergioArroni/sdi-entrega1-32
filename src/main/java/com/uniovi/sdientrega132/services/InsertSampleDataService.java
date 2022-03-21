@@ -56,6 +56,35 @@ public class InsertSampleDataService {
         User user8 = new User("Lucia", "Alvarez", "user08@email.com");
         user8.setPassword("user08");
         user8.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user9 = new User("Paco", "Diaz", "user09@email.com");
+        user9.setPassword("user09");
+        user9.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user10 = new User("Juan", "Alonso", "user10@email.com");
+        user10.setPassword("user10");
+        user10.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user11 = new User("Fernando", "Alvarez", "user11@email.com");
+        user11.setPassword("user11");
+        user11.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user12 = new User("Hugo", "Garcia", "user12@email.com");
+        user12.setPassword("user12");
+        user12.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user13 = new User("Miriam", "Gonzalez", "user13@email.com");
+        user13.setPassword("user13");
+        user13.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user14 = new User("Marta", "Alonso", "user14@email.com");
+        user14.setPassword("user14");
+        user14.setRole(rolesService.getRoles()[0]);
+        //Usuario normal (ROLE_STANDARDUSER)
+        User user15 = new User("Sara", "Garcia", "user15@email.com");
+        user15.setPassword("user15");
+        user15.setRole(rolesService.getRoles()[0]);
+
 
         usersService.addUser(user1);
         usersService.addUser(user2);
@@ -65,7 +94,15 @@ public class InsertSampleDataService {
         usersService.addUser(user6);
         usersService.addUser(user7);
         usersService.addUser(user8);
+        usersService.addUser(user9);
+        usersService.addUser(user10);
+        usersService.addUser(user11);
+        usersService.addUser(user12);
+        usersService.addUser(user13);
+        usersService.addUser(user14);
+        usersService.addUser(user15);
         usersService.addUser(admin);
+
 
         user1 = usersService.getUserByEmail(user1.getEmail());
         user2 = usersService.getUserByEmail(user2.getEmail());
@@ -75,6 +112,13 @@ public class InsertSampleDataService {
         user6 = usersService.getUserByEmail(user6.getEmail());
         user7 = usersService.getUserByEmail(user7.getEmail());
         user8 = usersService.getUserByEmail(user8.getEmail());
+        user9 = usersService.getUserByEmail(user9.getEmail());
+        user10 = usersService.getUserByEmail(user10.getEmail());
+        user11 = usersService.getUserByEmail(user11.getEmail());
+        user12 = usersService.getUserByEmail(user12.getEmail());
+        user13 = usersService.getUserByEmail(user13.getEmail());
+        user14 = usersService.getUserByEmail(user14.getEmail());
+        user15 = usersService.getUserByEmail(user15.getEmail());
 
         //friendsService.addFriend(new Friend(user1.getId(), user6.getId(), true));
         //friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
