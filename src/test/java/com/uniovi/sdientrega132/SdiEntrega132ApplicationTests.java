@@ -13,16 +13,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import com.uniovi.sdientrega132.entities.User;
-import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +41,6 @@ class SdiEntrega132ApplicationTests {
 
     @Autowired
     private PublicationsService publicationsService;
-
-    @Autowired
-    private PublicationsRepository publicationsRepository;
 
     @Autowired
     private InsertSampleDataService insertSampleDataService;
@@ -495,7 +484,7 @@ class SdiEntrega132ApplicationTests {
         //Hacemos una búsqueda para el usuario 04
         PO_PrivateView.fillSearch(driver, "user04");
         Long id = usersService.getUserByEmail("user04@email.com").getId();
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton"+id);
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton" + id);
 
         PO_PrivateView.logout(driver);
 
@@ -543,7 +532,7 @@ class SdiEntrega132ApplicationTests {
         Long id = usersService.getUserByEmail("user04@email.com").getId();
 
         //Primera invitación
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton"+id);
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton" + id);
 
         PO_PrivateView.logout(driver);
 
@@ -571,8 +560,8 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
-        Long id = usersService.getUserByEmail("user04@email.com").getId();
-        PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton"+id+"')]", 0);
+        Long id = usersService.getUserByEmail("user08@email.com").getId();
+        PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton" + id + "')]", 0);
 
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
@@ -598,7 +587,7 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
 
         // Se comprueba que user04 tiene un nuevo amigo
-        String checkText = "user08@email.com";
+        String checkText = "user01@email.com";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
         PO_PrivateView.logout(driver);
@@ -625,9 +614,12 @@ class SdiEntrega132ApplicationTests {
         // Confirmamos
         driver.findElement(By.id("post")).click();
 
+        // clickamos la opción de Publicaciones
+        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ultima", PO_View.getTimeout()).get(0).click();
+
         List<WebElement> nuevaPublicacion = SeleniumUtils.waitLoadElementsBy(driver, "text", "Prueba título", PO_View.getTimeout());
 
-        Assertions.assertTrue(nuevaPublicacion.get(0)!=null);
+        Assertions.assertTrue(nuevaPublicacion.get(0) != null);
     }
 
     // PR25. Probar que si se intenta crear una publicación sin título, la aplicación no lo permite
@@ -650,7 +642,7 @@ class SdiEntrega132ApplicationTests {
         // Comprobamos que no ha pasado a ninguna otra ventana
         List<WebElement> paginaAgregar = SeleniumUtils.waitLoadElementsBy(driver, "id", "uploadPublication", PO_View.getTimeout());
 
-        Assertions.assertTrue(paginaAgregar.get(0)!=null);
+        Assertions.assertTrue(paginaAgregar.get(0) != null);
     }
 
     // PR26. Probar que se muestran todas las publicaciones de un usuario
@@ -665,10 +657,10 @@ class SdiEntrega132ApplicationTests {
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
-        Assertions.assertTrue(pub1.get(0)!=null);
+        Assertions.assertTrue(pub1.get(0) != null);
 
         List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
-        Assertions.assertTrue(pub2.get(0)!=null);
+        Assertions.assertTrue(pub2.get(0) != null);
     }
 
     // PR27. Probar que se muestran todas las publicaciones de un amigo
@@ -685,10 +677,10 @@ class SdiEntrega132ApplicationTests {
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 1 de Andrea", PO_View.getTimeout());
-        Assertions.assertTrue(pub1.get(0)!=null);
+        Assertions.assertTrue(pub1.get(0) != null);
 
         List<WebElement> pub2 = SeleniumUtils.waitLoadElementsBy(driver, "text", "publicacion 2 de Andrea", PO_View.getTimeout());
-        Assertions.assertTrue(pub2.get(0)!=null);
+        Assertions.assertTrue(pub2.get(0) != null);
     }
 
     // PR28. Probar que no se puede acceder a las publicaciones de un usuario por URL sin ser su amigo
@@ -702,7 +694,7 @@ class SdiEntrega132ApplicationTests {
 
         // Comprobamos que están todas las publicaciones
         List<WebElement> pub1 = SeleniumUtils.waitLoadElementsBy(driver, "text", "Error de autenticación: No eres amigo/a de este usuario", PO_View.getTimeout());
-        Assertions.assertTrue(pub1.get(0)!=null);
+        Assertions.assertTrue(pub1.get(0) != null);
 
     }
 
@@ -817,9 +809,6 @@ class SdiEntrega132ApplicationTests {
     public void PR33() {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
-
-
-
     }
 
     // PR34. Borrar logs como administrador
@@ -828,9 +817,6 @@ class SdiEntrega132ApplicationTests {
     public void PR34() {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
-
-        
-
     }
 
     // PR35. Acceder a las publicaciones de un amigo y recomendar una publicación. Comprobar que el
@@ -908,7 +894,7 @@ class SdiEntrega132ApplicationTests {
     //cambiado.
     @Test
     @Order(37)
-    public void PR37(){
+    public void PR37() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
@@ -917,7 +903,7 @@ class SdiEntrega132ApplicationTests {
         List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
                 PO_View.getTimeout());
         Long id = publicationsService.getPublications().get(0).getId();
-        elementos.get(0).findElement(By.id("censurada"+id)).click();
+        elementos.get(0).findElement(By.id("censurada" + id)).click();
 
     }
 
@@ -925,7 +911,7 @@ class SdiEntrega132ApplicationTests {
     //publicación censurada.
     @Test
     @Order(38)
-    public void PR38(){
+    public void PR38() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
@@ -935,7 +921,7 @@ class SdiEntrega132ApplicationTests {
                 PO_View.getTimeout());
 
         Long id = publicationsService.getPublications().get(0).getId();
-        WebElement elem=elementos.get(0).findElement(By.id("censurada"+id));
+        WebElement elem = elementos.get(0).findElement(By.id("censurada" + id));
         elem.click();
         //Despues de crearlo nos desconectamos
         PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
@@ -943,7 +929,7 @@ class SdiEntrega132ApplicationTests {
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
         //Pulsamos el enlace para ver las publicaciones del user01
         driver.get("http://localhost:8090/publication/list");
-        SeleniumUtils.textIsNotPresentOnPage(driver,"publicacion 1 de Andrea");
+        SeleniumUtils.textIsNotPresentOnPage(driver, "publicacion 1 de Andrea");
 
     }
 
@@ -951,7 +937,7 @@ class SdiEntrega132ApplicationTests {
     //aparece una publicación moderada.
     @Test
     @Order(39)
-    public void PR39(){
+    public void PR39() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
@@ -961,7 +947,7 @@ class SdiEntrega132ApplicationTests {
                 PO_View.getTimeout());
 
         Long id = publicationsService.getPublications().get(2).getId();
-        WebElement elem=elementos.get(2).findElement(By.id("moderada"+id));
+        WebElement elem = elementos.get(2).findElement(By.id("moderada" + id));
         elem.click();
         //Despues de crearlo nos desconectamos
         PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
@@ -975,7 +961,7 @@ class SdiEntrega132ApplicationTests {
 
     @Test
     @Order(40)
-    public void PR40(){
+    public void PR40() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "user05@email.com", "user05");
         driver.get("http://localhost:8090/publication/edit?id=20&state=Censurada");
@@ -984,14 +970,14 @@ class SdiEntrega132ApplicationTests {
         String checkText = "Publicaciones";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
-        SeleniumUtils.textIsNotPresentOnPage(driver,"Cambiar estado");
-        SeleniumUtils.textIsNotPresentOnPage(driver,"Estado actual");
+        SeleniumUtils.textIsNotPresentOnPage(driver, "Cambiar estado");
+        SeleniumUtils.textIsNotPresentOnPage(driver, "Estado actual");
 
     }
 
     @Test
     @Order(41)
-    public void PR41(){
+    public void PR41() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         driver.get("http://localhost:8090/publication/list");
@@ -1003,6 +989,7 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
 
     }
+
     //[Prueba42] Hacer una búsqueda escribiendo en el campo un texto que no exista y comprobar que se
     //muestra la página que corresponde, con la lista de publicaciones vacía.
     @Test
@@ -1013,7 +1000,6 @@ class SdiEntrega132ApplicationTests {
         driver.get("http://localhost:8090/publication/list");
         //Hacemos una búsqueda con el campo vacío
         PO_PrivateView.fillSearch(driver, "asd");
-
 
 
         String checkText = "Publicaciones";
@@ -1027,7 +1013,7 @@ class SdiEntrega132ApplicationTests {
     //email.
     @Test
     @Order(43)
-    public void PR43(){
+    public void PR43() {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         driver.get("http://localhost:8090/publication/list");
@@ -1037,7 +1023,7 @@ class SdiEntrega132ApplicationTests {
         String checkText = "Publicaciones";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
-        Assertions.assertEquals("http://localhost:8090/publication/list?searchText=Aceptada",driver.getCurrentUrl());
+        Assertions.assertEquals("http://localhost:8090/publication/list?searchText=Aceptada", driver.getCurrentUrl());
 
     }
 
@@ -1067,7 +1053,7 @@ class SdiEntrega132ApplicationTests {
         driver.findElement(By.id("post")).click();
 
         List<WebElement> elements = PO_View.checkElementBy(driver, "class", "img.thumbnail rounded float-left");
-        Assertions.assertTrue(elements.size()==1);
+        Assertions.assertTrue(elements.size() == 1);
     }
 
     // PR45. Probar que se puede crear una publicación sin imagen
@@ -1091,9 +1077,12 @@ class SdiEntrega132ApplicationTests {
         // Confirmamos
         driver.findElement(By.id("post")).click();
 
+        // clickamos la opción de Publicaciones
+        SeleniumUtils.waitLoadElementsBy(driver, "text", "Ultima", PO_View.getTimeout()).get(0).click();
+
         List<WebElement> nuevaPublicacion = SeleniumUtils.waitLoadElementsBy(driver, "text", "Prueba título", PO_View.getTimeout());
 
-        Assertions.assertTrue(nuevaPublicacion.get(0)!=null);
+        Assertions.assertTrue(nuevaPublicacion.get(0) != null);
     }
 
 }
