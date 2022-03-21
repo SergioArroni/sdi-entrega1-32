@@ -41,4 +41,7 @@ public class FriendsService {
         return friendsRepository.findInvitationsByUser2Id(id);
     }
 
+    public void deleteAllFriends() {
+        friendsRepository.deleteAll();
+    }
 }

@@ -152,4 +152,12 @@ public class InsertSampleDataService {
         publicationsService.addPublication(pub3);
 
     }
+
+    public void reset(){
+        publicationsService.deleteAllPublications();
+        friendsService.deleteAllFriends();
+        usersService.deleteAllUsers();
+
+        init();
+    }
 }

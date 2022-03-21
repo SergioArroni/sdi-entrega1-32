@@ -3,7 +3,9 @@ package com.uniovi.sdientrega132;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.pageobjects.*;
 import com.uniovi.sdientrega132.repositories.PublicationsRepository;
+import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.InsertSampleDataService;
+import com.uniovi.sdientrega132.services.PublicationsService;
 import com.uniovi.sdientrega132.services.UsersService;
 import com.uniovi.sdientrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
@@ -43,6 +45,12 @@ class SdiEntrega132ApplicationTests {
     private UsersService usersService;
 
     @Autowired
+    private FriendsService friendsService;
+
+    @Autowired
+    private PublicationsService publicationsService;
+
+    @Autowired
     private PublicationsRepository publicationsRepository;
 
     @Autowired
@@ -64,6 +72,7 @@ class SdiEntrega132ApplicationTests {
     @AfterEach
     public void tearDown() {
         driver.manage().deleteAllCookies();
+
     }
 
     //Antes de la primera prueba
@@ -90,8 +99,7 @@ class SdiEntrega132ApplicationTests {
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
 
-        usersService.deleteAllUsers();
-        insertSampleDataService.init();
+        insertSampleDataService.reset();
     }
 
     // PR02. Registro de usuario con datos inválidos (email vacío, nombre vacío,
@@ -317,8 +325,7 @@ class SdiEntrega132ApplicationTests {
         SeleniumUtils.textIsNotPresentOnPage(driver, "user02@email.com");
         SeleniumUtils.textIsNotPresentOnPage(driver, "user03@email.com");
 
-        usersService.deleteAllUsers();
-        insertSampleDataService.init();
+        insertSampleDataService.reset();
     }
 
     //[Prueba15] Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el sistema,
@@ -349,6 +356,9 @@ class SdiEntrega132ApplicationTests {
                 result = PO_View.checkElementBy(driver, "text", checkText);
                 Assertions.assertEquals(checkText, result.get(0).getText());
             }
+            //Por cada página compruebo que no esté el propio usuario ni el admin
+            SeleniumUtils.textIsNotPresentOnPage(driver, "admin@email.com");
+            SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
         }
         //Nos movemos a la última página
         PO_PrivateView.clickOn(driver, "//a[contains(@class, 'page-link')]", numPags + 1);
@@ -356,6 +366,9 @@ class SdiEntrega132ApplicationTests {
             checkText = lista.get(numPags * pageSize + j).getEmail();
             result = PO_View.checkElementBy(driver, "text", checkText);
             Assertions.assertEquals(checkText, result.get(0).getText());
+            //Por cada página compruebo que no esté el propio usuario ni el admin
+            SeleniumUtils.textIsNotPresentOnPage(driver, "admin@email.com");
+            SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
         }
     }
 
@@ -482,7 +495,8 @@ class SdiEntrega132ApplicationTests {
 
         //Hacemos una búsqueda para el usuario 6
         PO_PrivateView.fillSearch(driver, "user06");
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
+
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButtonuser06@email.com");
 
         PO_PrivateView.logout(driver);
 
