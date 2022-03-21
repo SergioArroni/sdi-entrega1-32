@@ -156,6 +156,60 @@ public class InsertSampleDataService {
         Publication pub11 = new Publication("Petición de amistad", "Me aceptas la petición, Sara?", user3);
         Publication pub12 = new Publication(">Respuesta", "Nope", user2);
 
+        Publication pub_1_3 = new Publication("pub T-1-3", "pub P-1-3", user1);
+        Publication pub_1_4 = new Publication("pub T-1-4", "pub P-1-4", user1);
+        Publication pub_1_5 = new Publication("pub T-1-5", "pub P-1-5", user1);
+        Publication pub_1_6 = new Publication("pub T-1-6", "pub P-1-6", user1);
+        Publication pub_1_7 = new Publication("pub T-1-7", "pub P-1-7", user1);
+        Publication pub_1_8 = new Publication("pub T-1-8", "pub P-1-8", user1);
+        Publication pub_1_9 = new Publication("pub T-1-9", "pub P-1-9", user1);
+        Publication pub_1_10 = new Publication("pub T-1-10", "pub P-1-10", user1);
+
+        Publication pub_2_3 = new Publication("pub T-2-3", "pub P-2-3", user2);
+        Publication pub_2_4 = new Publication("pub T-2-4", "pub P-2-4", user2);
+        Publication pub_2_5 = new Publication("pub T-2-5", "pub P-2-5", user2);
+        Publication pub_2_6 = new Publication("pub T-2-6", "pub P-2-6", user2);
+        Publication pub_2_7 = new Publication("pub T-2-7", "pub P-2-7", user2);
+        Publication pub_2_8 = new Publication("pub T-2-8", "pub P-2-8", user2);
+        Publication pub_2_9 = new Publication("pub T-2-9", "pub P-2-9", user2);
+        Publication pub_2_10 = new Publication("pub T-2-10", "pub P-2-10", user2);
+
+        Publication pub_3_3 = new Publication("pub T-3-3", "pub P-3-3", user3);
+        Publication pub_3_4 = new Publication("pub T-3-4", "pub P-3-4", user3);
+        Publication pub_3_5 = new Publication("pub T-3-5", "pub P-3-5", user3);
+        Publication pub_3_6 = new Publication("pub T-3-6", "pub P-3-6", user3);
+        Publication pub_3_7 = new Publication("pub T-3-7", "pub P-3-7", user3);
+        Publication pub_3_8 = new Publication("pub T-3-8", "pub P-3-8", user3);
+        Publication pub_3_9 = new Publication("pub T-3-9", "pub P-3-9", user3);
+        Publication pub_3_10 = new Publication("pub T-3-10", "pub P-3-10", user3);
+
+        Publication pub_4_3 = new Publication("pub T-4-3", "pub P-4-3", user4);
+        Publication pub_4_4 = new Publication("pub T-4-4", "pub P-4-4", user4);
+        Publication pub_4_5 = new Publication("pub T-4-5", "pub P-4-5", user4);
+        Publication pub_4_6 = new Publication("pub T-4-6", "pub P-4-6", user4);
+        Publication pub_4_7 = new Publication("pub T-4-7", "pub P-4-7", user4);
+        Publication pub_4_8 = new Publication("pub T-4-8", "pub P-4-8", user4);
+        Publication pub_4_9 = new Publication("pub T-4-9", "pub P-4-9", user4);
+        Publication pub_4_10 = new Publication("pub T-4-10", "pub P-4-10", user4);
+
+        Publication pub_5_3 = new Publication("pub T-5-3", "pub P-5-3", user5);
+        Publication pub_5_4 = new Publication("pub T-5-4", "pub P-5-4", user5);
+        Publication pub_5_5 = new Publication("pub T-5-5", "pub P-5-5", user5);
+        Publication pub_5_6 = new Publication("pub T-5-6", "pub P-5-6", user5);
+        Publication pub_5_7 = new Publication("pub T-5-7", "pub P-5-7", user5);
+        Publication pub_5_8 = new Publication("pub T-5-8", "pub P-5-8", user5);
+        Publication pub_5_9 = new Publication("pub T-5-9", "pub P-5-9", user5);
+        Publication pub_5_10 = new Publication("pub T-5-10", "pub P-5-10", user5);
+
+        Publication pub_6_3 = new Publication("pub T-6-3", "pub P-6-3", user6);
+        Publication pub_6_4 = new Publication("pub T-6-4", "pub P-6-4", user6);
+        Publication pub_6_5 = new Publication("pub T-6-5", "pub P-6-5", user6);
+        Publication pub_6_6 = new Publication("pub T-6-6", "pub P-6-6", user6);
+        Publication pub_6_7 = new Publication("pub T-6-7", "pub P-6-7", user6);
+        Publication pub_6_8 = new Publication("pub T-6-8", "pub P-6-8", user6);
+        Publication pub_6_9 = new Publication("pub T-6-9", "pub P-6-9", user6);
+        Publication pub_6_10 = new Publication("pub T-6-10", "pub P-6-10", user6);
+
         publicationsService.addPublication(pub1);
         publicationsService.addPublication(pub2);
         publicationsService.addPublication(pub3);
@@ -168,6 +222,60 @@ public class InsertSampleDataService {
         publicationsService.addPublication(pub10);
         publicationsService.addPublication(pub11);
         publicationsService.addPublication(pub12);
+
+        publicationsService.addPublication(pub_1_3);
+        publicationsService.addPublication(pub_1_4);
+        publicationsService.addPublication(pub_1_5);
+        publicationsService.addPublication(pub_1_6);
+        publicationsService.addPublication(pub_1_7);
+        publicationsService.addPublication(pub_1_8);
+        publicationsService.addPublication(pub_1_9);
+        publicationsService.addPublication(pub_1_10);
+
+        publicationsService.addPublication(pub_2_3);
+        publicationsService.addPublication(pub_2_4);
+        publicationsService.addPublication(pub_2_5);
+        publicationsService.addPublication(pub_2_6);
+        publicationsService.addPublication(pub_2_7);
+        publicationsService.addPublication(pub_2_8);
+        publicationsService.addPublication(pub_2_9);
+        publicationsService.addPublication(pub_2_10);
+
+        publicationsService.addPublication(pub_3_3);
+        publicationsService.addPublication(pub_3_4);
+        publicationsService.addPublication(pub_3_5);
+        publicationsService.addPublication(pub_3_6);
+        publicationsService.addPublication(pub_3_7);
+        publicationsService.addPublication(pub_3_8);
+        publicationsService.addPublication(pub_3_9);
+        publicationsService.addPublication(pub_3_10);
+
+        publicationsService.addPublication(pub_4_3);
+        publicationsService.addPublication(pub_4_4);
+        publicationsService.addPublication(pub_4_5);
+        publicationsService.addPublication(pub_4_6);
+        publicationsService.addPublication(pub_4_7);
+        publicationsService.addPublication(pub_4_8);
+        publicationsService.addPublication(pub_4_9);
+        publicationsService.addPublication(pub_4_10);
+
+        publicationsService.addPublication(pub_5_3);
+        publicationsService.addPublication(pub_5_4);
+        publicationsService.addPublication(pub_5_5);
+        publicationsService.addPublication(pub_5_6);
+        publicationsService.addPublication(pub_5_7);
+        publicationsService.addPublication(pub_5_8);
+        publicationsService.addPublication(pub_5_9);
+        publicationsService.addPublication(pub_5_10);
+
+        publicationsService.addPublication(pub_6_3);
+        publicationsService.addPublication(pub_6_4);
+        publicationsService.addPublication(pub_6_5);
+        publicationsService.addPublication(pub_6_6);
+        publicationsService.addPublication(pub_6_7);
+        publicationsService.addPublication(pub_6_8);
+        publicationsService.addPublication(pub_6_9);
+        publicationsService.addPublication(pub_6_10);
 
     }
 
