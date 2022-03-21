@@ -7,7 +7,7 @@
 <nav th:replace="fragments/nav"/>
 
 <div class="container" id="main-container">
-    <h2>Subir publicación</h2>
+    <h2 th:text="#{publication.menu.add}">Subir publicación</h2>
     <form class="form-horizontal" method="post" action="/publication/add" th:object="${publication}" enctype="multipart/form-data">
         <div class="form-group">
             <label class="control-label col-sm-2" for="title" th:text="#{publication.menu.add.title}" >Título:</label>

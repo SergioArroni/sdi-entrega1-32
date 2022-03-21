@@ -25,11 +25,11 @@
                 </li>
                 <li id= "friends-menu" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="friendsDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"> Amigos
+                       aria-haspopup="true" aria-expanded="false" th:text="#{friend.title}"> Amigos
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/friend/invitation" id="invitationFriends">Invitaciones pendientes</a>
-                        <a class="dropdown-item" href="/friend/list" id="listFriends">Listado Amigos</a>
+                        <a class="dropdown-item" href="/friend/invitation" id="invitationFriends" th:text="#{friend.invitations}">Invitaciones pendientes</a>
+                        <a class="dropdown-item" href="/friend/list" id="listFriends" th:text="#{friend.list}">Listado Amigos</a>
                     </div>
                 </li>
                 <li id= "publications-menu" class="nav-item dropdown">
