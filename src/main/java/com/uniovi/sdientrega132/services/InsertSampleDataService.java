@@ -1,6 +1,7 @@
 package com.uniovi.sdientrega132.services;
 
 import com.uniovi.sdientrega132.entities.Friend;
+import com.uniovi.sdientrega132.entities.Log;
 import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class InsertSampleDataService {
     private FriendsService friendsService;
     @Autowired
     private RolesService rolesService;
+    @Autowired
+    private LogsService logsService;
 
     @PostConstruct
     public void init() {
@@ -222,6 +225,17 @@ public class InsertSampleDataService {
         publicationsService.addPublication(pub10);
         publicationsService.addPublication(pub11);
         publicationsService.addPublication(pub12);
+
+        logsService.addLog(new Log("PET","2022-03-21 20:54:01.1847723","Mapping: / Method: GET Param:" ));
+        logsService.addLog(new Log("PET","2022-03-21 21:04:42.3237548","Mapping: /logs/list Method: GET Param:" ));
+        logsService.addLog(new Log("LOGIN-EX","2022-03-21 21:04:33.2715268","Username: user01@email.com" ));
+        logsService.addLog(new Log("LOGIN-EX","2022-03-21 21:04:37.1219494","Username: admin@email.com" ));
+        logsService.addLog(new Log("LOGIN-ERR","2022-03-21 21:04:33.2635488","Username: user01@email.com" ));
+        logsService.addLog(new Log("LOGIN-ERR","2022-03-21 21:04:33.2675379","Username: admin@email.com" ));
+        logsService.addLog(new Log("ALTA","2022-03-21 21:04:37.2226464","Username: user01@email.com" ));
+        logsService.addLog(new Log("ALTA","2022-03-21 21:04:33.2445986","Username: admin@email.com" ));
+        logsService.addLog(new Log("LOGOUT","2022-03-21 21:04:31.9370754","Username: user01@email.com" ));
+        logsService.addLog(new Log("LOGOUT","2022-03-21 21:04:37.2276331","Username: admin@email.com" ));
 
         publicationsService.addPublication(pub_1_3);
         publicationsService.addPublication(pub_1_4);
