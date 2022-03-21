@@ -34,11 +34,11 @@
                 </li>
                 <li id= "publications-menu" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="publicationsDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"> Publicaciones
+                       aria-haspopup="true" aria-expanded="false" th:text="#{publication.publications}"> Publicaciones
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/publication/add">Agregar publicacion</a>
-                        <a class="dropdown-item" href="/publication/list">Listado de publicaciones</a>
+                        <a class="dropdown-item" href="/publication/add" id="addPublication" th:text="#{publication.menu.add}">Agregar publicacion</a>
+                        <a class="dropdown-item" href="/publication/list" id="listPublication" th:text="#{publication.menu.list}">Listado de publicaciones</a>
                     </div>
                 </li>
                 <li id= "logs-menu" class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">

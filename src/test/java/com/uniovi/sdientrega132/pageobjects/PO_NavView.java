@@ -73,4 +73,12 @@ public class PO_NavView extends PO_View {
 
     }
 
+    public static void desplegarLogs(WebDriver driver, String textoOpcion) {
+        // clickamos la opción de Publicaciones
+        SeleniumUtils.waitLoadElementsBy(driver, "id", "logsDropdown", PO_View.getTimeout()).get(0).click();
+        // Esperamos a que aparezca el menú
+        PO_PrivateView.clickOn(driver, textoOpcion, 0);
+
+    }
+
 }
