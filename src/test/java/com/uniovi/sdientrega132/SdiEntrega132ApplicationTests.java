@@ -806,6 +806,8 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(33)
     public void PR33() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
 
 
@@ -815,8 +817,10 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(34)
     public void PR34() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
-
+        
 
     }
 
