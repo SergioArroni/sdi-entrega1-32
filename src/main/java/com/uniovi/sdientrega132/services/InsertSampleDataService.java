@@ -121,15 +121,15 @@ public class InsertSampleDataService {
         user14 = usersService.getUserByEmail(user14.getEmail());
         user15 = usersService.getUserByEmail(user15.getEmail());
 
-        //friendsService.addFriend(new Friend(user1.getId(), user6.getId(), true));
-        //friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
-        //friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
-        //friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
-        //friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
-        //friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
-        //friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
-        //friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
-        //friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user6.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
+        friendsService.addFriend(new Friend(user1.getId(), user4.getId(), true));
+        friendsService.addFriend(new Friend(user5.getId(), user2.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user3.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user4.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user7.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user8.getId(), false));
+        friendsService.addFriend(new Friend(user5.getId(), user1.getId(), true));
 /**
  friendsService.addFriend(new Friend(user1.getId(), user2.getId(), true));
  friendsService.addFriend(new Friend(user1.getId(), user3.getId(), true));
@@ -144,12 +144,26 @@ public class InsertSampleDataService {
  */
 
         Publication pub1 = new Publication("publicacion 1 de Andrea", "probando las publicaciones", user1);
-        Publication pub2 = new Publication("Hola :P", "Esto es aburrido", user6);
-        Publication pub3 = new Publication("publicacion 2 de Andrea", "buscando amigos", user1);
+        Publication pub2 = new Publication("publicacion 2 de Andrea", "buscando amigos", user1);
+        Publication pub3 = new Publication("Hola :P", "Esto es aburrido", user6);
+        Publication pub4 = new Publication("publicacion 1 de Juan", "primer comentario", user4);
+        Publication pub5 = new Publication("Nueva publicacion", "Me aburrooo", user6);
+        Publication pub6 = new Publication("Buenaas", "uwu", user2);
+        Publication pub7 = new Publication("Esto no lo lee nadie", "Sample text", user4);
+        Publication pub8 = new Publication("publicacion 3 de Andrea", "Gracias por aceptar la petición, Nuria", user1);
+        Publication pub9 = new Publication(">Respuesta", "Nadaa", user3);
+        Publication pub10 = new Publication("como funciona esto", "?", user5);
 
         publicationsService.addPublication(pub1);
         publicationsService.addPublication(pub2);
         publicationsService.addPublication(pub3);
+        publicationsService.addPublication(pub4);
+        publicationsService.addPublication(pub5);
+        publicationsService.addPublication(pub6);
+        publicationsService.addPublication(pub7);
+        publicationsService.addPublication(pub8);
+        publicationsService.addPublication(pub9);
+        publicationsService.addPublication(pub10);
 
     }
 }

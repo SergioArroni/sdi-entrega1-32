@@ -1,5 +1,6 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.Publication;
 import com.uniovi.sdientrega132.entities.User;
 import com.uniovi.sdientrega132.services.FriendsService;
@@ -74,8 +75,10 @@ public class PublicationsController {
 
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
         publications = publicationsService.getPublicationsForUser(pageable, user);
-        if(friendsService.getCoupleFriends(userAut.getId(), user.getId()) == null &&
-                friendsService.getCoupleFriends(user.getId(), userAut.getId()) == null){
+        Friend sonAmigos = friendsService.getCoupleFriends(userAut.getId(), user.getId());
+        if(sonAmigos == null)
+            sonAmigos = friendsService.getCoupleFriends(user.getId(), userAut.getId());
+        if(sonAmigos == null || !sonAmigos.getAccept()){
             model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
             model.addAttribute("publicationsRecommended", new ArrayList<Publication>());
             model.addAttribute("page", publications);
