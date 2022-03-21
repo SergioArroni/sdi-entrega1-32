@@ -63,6 +63,7 @@ public class PublicationsController {
         model.addAttribute("publicationsRecommended", publications.getContent());
         //model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
         model.addAttribute("page", publications);
+        model.addAttribute("authorizeError", false);
 
         return "publication/list";
     }
@@ -82,6 +83,7 @@ public class PublicationsController {
             model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
             model.addAttribute("publicationsRecommended", new ArrayList<Publication>());
             model.addAttribute("page", publications);
+            model.addAttribute("authorizeError", true);
         }
         else {
             List<Publication> publicactionRecommended = new ArrayList<Publication>();
@@ -99,6 +101,7 @@ public class PublicationsController {
             model.addAttribute("publicationsNotRecommended", publicationsNotRecommended.getContent());
             model.addAttribute("publicationsRecommended", publicationsRecommended.getContent());
             model.addAttribute("page", publications);
+            model.addAttribute("authorizeError", false);
         }
 
         return "publication/list";
@@ -157,6 +160,7 @@ public class PublicationsController {
             }
 
         }
+        model.addAttribute("authorizeError", false);
 
         return "redirect:/publication/list";
     }
@@ -170,10 +174,12 @@ public class PublicationsController {
 
     @RequestMapping(value = "/publication/edit")
     public String editState(@RequestParam(value = "", required = false) Long id,
-                          @RequestParam(value = "", required = false) String state) {
+                          @RequestParam(value = "", required = false) String state,
+                            Model model) {
         System.out.println("Modificado estado "+state);
         publicationsService.editStateOf(id, state);
 
+        model.addAttribute("authorizeError", false);
         return "redirect:/publication/list";
     }
 

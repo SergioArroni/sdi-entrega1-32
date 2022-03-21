@@ -146,13 +146,15 @@ public class InsertSampleDataService {
         Publication pub1 = new Publication("publicacion 1 de Andrea", "probando las publicaciones", user1);
         Publication pub2 = new Publication("publicacion 2 de Andrea", "buscando amigos", user1);
         Publication pub3 = new Publication("Hola :P", "Esto es aburrido", user6);
-        Publication pub4 = new Publication("publicacion 1 de Juan", "primer comentario", user4);
+        Publication pub4 = new Publication("publicacion 1 de Juan", "Primer comentario.", user4);
         Publication pub5 = new Publication("Nueva publicacion", "Me aburrooo", user6);
         Publication pub6 = new Publication("Buenaas", "uwu", user2);
         Publication pub7 = new Publication("Esto no lo lee nadie", "Sample text", user4);
-        Publication pub8 = new Publication("publicacion 3 de Andrea", "Gracias por aceptar la petición, Nuria", user1);
-        Publication pub9 = new Publication(">Respuesta", "Nadaa", user3);
+        Publication pub8 = new Publication("Publicacion 1 de Nuria", "Gracias por aceptar la petición, Alex", user3);
+        Publication pub9 = new Publication(">Respuesta", "Nadaa", user5);
         Publication pub10 = new Publication("como funciona esto", "?", user5);
+        Publication pub11 = new Publication("Petición de amistad", "Me aceptas la petición, Sara?", user3);
+        Publication pub12 = new Publication(">Respuesta", "Nope", user2);
 
         publicationsService.addPublication(pub1);
         publicationsService.addPublication(pub2);
@@ -164,6 +166,8 @@ public class InsertSampleDataService {
         publicationsService.addPublication(pub8);
         publicationsService.addPublication(pub9);
         publicationsService.addPublication(pub10);
+        publicationsService.addPublication(pub11);
+        publicationsService.addPublication(pub12);
 
     }
 
