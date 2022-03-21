@@ -45,7 +45,7 @@ public class PublicationsController {
 
     @RequestMapping("/publication/list")
     public String getList(Model model, Pageable pageable, Principal principal,
-                          @RequestParam(value = "", required = false) String searchText) {
+                          @RequestParam(required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         Page<Publication> publications;
@@ -104,6 +104,7 @@ public class PublicationsController {
         return "publication/list";
     }
 
+    @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping("/publication/list/update")
     public String updateList(Model model, Pageable pageable, Principal principal){
         String email = principal.getName();
