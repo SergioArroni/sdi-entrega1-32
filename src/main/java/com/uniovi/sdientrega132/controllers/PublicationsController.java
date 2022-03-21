@@ -20,15 +20,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.*;
+
 
 @Controller
 public class PublicationsController {
@@ -50,7 +48,7 @@ public class PublicationsController {
                           @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        Page<Publication> publications;
         if (user.getRole().equals("ROLE_ADMIN")) {
             if (searchText != null && !searchText.isEmpty())
                 publications = publicationsService.searchPublications(searchText, pageable);
@@ -61,7 +59,6 @@ public class PublicationsController {
         }
 
         model.addAttribute("publicationsRecommended", publications.getContent());
-        //model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
         model.addAttribute("page", publications);
         model.addAttribute("authorizeError", false);
 
@@ -74,7 +71,7 @@ public class PublicationsController {
         User userAut = usersService.getUserByEmail(emailAut);
         User user = usersService.getUserByEmail(email);
 
-        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
+        Page<Publication> publications;
         publications = publicationsService.getPublicationsForUser(pageable, user);
         Friend sonAmigos = friendsService.getCoupleFriends(userAut.getId(), user.getId());
         if(sonAmigos == null)
@@ -86,18 +83,18 @@ public class PublicationsController {
             model.addAttribute("authorizeError", true);
         }
         else {
-            List<Publication> publicactionRecommended = new ArrayList<Publication>();
-            List<Publication> publicactionNotRecommended = new ArrayList<Publication>();
+            List<Publication> publicationRecommended = new ArrayList<>();
+            List<Publication> publicationNotRecommended = new ArrayList<>();
 
             for (Publication pub : publications) {
-                if (pub.getRecomendaciones().contains(userAut)) {
-                    publicactionRecommended.add(pub);
+                if (pub.getRecommendations().contains(userAut)) {
+                    publicationRecommended.add(pub);
                 } else {
-                    publicactionNotRecommended.add(pub);
+                    publicationNotRecommended.add(pub);
                 }
             }
-            Page<Publication> publicationsRecommended = new PageImpl<Publication>(publicactionRecommended);
-            Page<Publication> publicationsNotRecommended = new PageImpl<Publication>(publicactionNotRecommended);
+            Page<Publication> publicationsRecommended = new PageImpl<>(publicationRecommended);
+            Page<Publication> publicationsNotRecommended = new PageImpl<>(publicationNotRecommended);
             model.addAttribute("publicationsNotRecommended", publicationsNotRecommended.getContent());
             model.addAttribute("publicationsRecommended", publicationsRecommended.getContent());
             model.addAttribute("page", publications);
@@ -141,8 +138,6 @@ public class PublicationsController {
         publicationsService.addPublication(publication);
 
         if (!imagen.isEmpty()) {
-//            Path directorio = Paths.get("src//main//resources//static//images");
-//            String ruta = directorio.toFile().getAbsolutePath();
             String ruta = "C://Productos";
 
             try {
@@ -166,17 +161,16 @@ public class PublicationsController {
     }
 
     @RequestMapping(value = "/publication/add")
-    public String getPublication(Model model, Pageable pageable) {
+    public String getPublication(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
         model.addAttribute("publication", new Publication());
         return "publication/add";
     }
 
     @RequestMapping(value = "/publication/edit")
-    public String editState(@RequestParam(value = "", required = false) Long id,
-                          @RequestParam(value = "", required = false) String state,
+    public String editState(@RequestParam(required = false) Long id,
+                          @RequestParam(required = false) String state,
                             Model model) {
-        System.out.println("Modificado estado "+state);
         publicationsService.editStateOf(id, state);
 
         model.addAttribute("authorizeError", false);
@@ -189,16 +183,14 @@ public class PublicationsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Publication pub = publicationsService.getPublication(pubId2);
-        if(!pub.getRecomendaciones().contains(activeUser) && !pub.getUser().equals(activeUser)){
-            pub.getRecomendaciones().add(activeUser);
+        if(!pub.getRecommendations().contains(activeUser) && !pub.getUser().equals(activeUser)){
+            pub.getRecommendations().add(activeUser);
             publicationsService.addPublication(pub);
         }
         return "redirect:/publication/listFriend/" + pub.getUser().getEmail();
     }
 
-//    public void handleFileUpload(FileUpload event) throws IOException {
-//
-//    }
+
 
 
 

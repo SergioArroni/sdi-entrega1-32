@@ -56,8 +56,8 @@ public class UsersController {
 
 
     @RequestMapping("/user/list")
-    public String getListado(Model model, Pageable pageable,
-                             @RequestParam(value = "", required = false) String searchText) {
+    public String getList(Model model, Pageable pageable,
+                          @RequestParam(value = "", required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
@@ -97,7 +97,6 @@ public class UsersController {
         User user = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
         List<User> listUsers = new ArrayList<>();
-        Set<Long> usersFriends = new HashSet<>();
         if (user.getRole().equals("ROLE_ADMIN")) {
             listUsers = usersService.getUsers();
         } else {
@@ -150,7 +149,7 @@ public class UsersController {
     }
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model) {
+    public String home() {
         return "home";
     }
 
