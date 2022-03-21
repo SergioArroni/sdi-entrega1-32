@@ -49,7 +49,7 @@
                 <td sec:authorize="hasRole('ROLE_ADMIN')" 
                     th:if="${var.email}!=${#authentication.getName()}" 
                     scope="row">
-                    <input type="checkbox" th:value="${var.id}">
+                    <input type="checkbox" id="selected" name="selected" th:value="${var.id}">
                 </td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')"
                     th:if="${var.email}==${#authentication.getName()}"
