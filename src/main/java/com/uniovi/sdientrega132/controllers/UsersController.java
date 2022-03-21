@@ -1,5 +1,8 @@
 package com.uniovi.sdientrega132.controllers;
+
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
@@ -20,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class UsersController {
@@ -35,7 +36,11 @@ public class UsersController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private LogsController logsController;
 
+    @Autowired
+    private FriendsService friendsService;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
@@ -49,15 +54,18 @@ public class UsersController {
         return "redirect:/home";
     }
 
+
     @RequestMapping("/user/list")
     public String getListado(Model model, Pageable pageable,
                              @RequestParam(value = "", required = false) String searchText) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<User> users = new PageImpl<>(new LinkedList<>());
+
         List<User> listUsers = new ArrayList<>();
-        List<User> usersAmigos = new ArrayList<>();
+        Page<User> users = new PageImpl<>(new LinkedList<>());
+        Set<Long> usersFriends = new HashSet<>();
+
         if (searchText != null && !searchText.isEmpty())
             users = usersService.searchUserByEmailAndName(searchText, activeUser, pageable);
         else {
@@ -67,20 +75,19 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-        if (listUsers.isEmpty()) {
-            model.addAttribute("usersList", users.getContent());
-            model.addAttribute("page", users);
-        } else {
-            model.addAttribute("usersList", listUsers);
+        AuxCodeList(model, activeUser, users, listUsers);
+
+        var friends = friendsService.getFriends(activeUser.getId());
+
+        List<Long> friendId = new ArrayList<>();
+
+        for (Friend u : friends) {
+            System.out.println(u);
+            friendId.add(u.getUser1_id());
         }
 
-        for (User u : users) {
-                if(activeUser.esAmigo(u) && !usersAmigos.contains(u)) {
-                    usersAmigos.add(u);
-                }
-        }
-        Page<User> aux = new PageImpl<>(usersAmigos);
-        model.addAttribute("usersListFriends", aux);
+        model.addAttribute("actualUser", activeUser);
+        model.addAttribute("usersListFriends", friendId);
         return "user/list";
     }
 
@@ -90,18 +97,27 @@ public class UsersController {
         User user = usersService.getUserByEmail(email);
         Page<User> users = new PageImpl<>(new LinkedList<>());
         List<User> listUsers = new ArrayList<>();
+        Set<Long> usersFriends = new HashSet<>();
         if (user.getRole().equals("ROLE_ADMIN")) {
             listUsers = usersService.getUsers();
         } else {
             users = usersService.getStandardUsers(user, pageable);
         }
+        AuxCodeList(model, user, users, listUsers);
+
+        var friends = friendsService.getFriends(user.getId());
+
+        model.addAttribute("usersListFriends", friends);
+        return "user/list :: tableUsers";
+    }
+
+    private void AuxCodeList(Model model, User user, Page<User> users, List<User> listUsers) {
         if (listUsers.isEmpty()) {
             model.addAttribute("usersList", users.getContent());
             model.addAttribute("page", users);
         } else {
             model.addAttribute("usersList", listUsers);
         }
-        return "user/list :: tableUsers";
     }
 
     @GetMapping("/user/delete")
@@ -124,9 +140,11 @@ public class UsersController {
     public String login(Model model, String error, String logout) {
         if (error != null) {
             model.addAttribute("error", "");
+            logsController.LogInEr();
         }
         if (logout != null) {
             model.addAttribute("message", "");
+            logsController.LogOut();
         }
         return "login";
     }

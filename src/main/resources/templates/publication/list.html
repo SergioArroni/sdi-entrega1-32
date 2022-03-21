@@ -7,9 +7,17 @@
 
 <div class="container" id="main-container">
     <h2 th:text="#{publication.publications}">Publicaciones</h2>
-    <button type="button" id="updateButton" class="btn btn-default">Actualizar</button>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
+
+    <form sec:authorize="hasRole('ROLE_ADMIN')" class="form-inline" action="/publication/list">
+        <div class="form-group">
+            <input id="search-input" name="searchText" type="text" class="form-control" size="50"
+                   th:placeholder="#{publication.search}">
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="#{button.search}"></button>
+    </form>
+
+    <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
+    <script>
         $( "#updateButton" ).click(function() {
             var numberPage = [[${param.page}]];
             var urlUpdate = '/publication/list/update';
@@ -17,14 +25,16 @@
                 urlUpdate += "?page="+numberPage[0];
             }
             $("#tablePublications").load(urlUpdate);
+
         });
-        /*]]>*/
     </script>
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="tablePublications" id="tablePublications" th:replace="fragments/publicationTable" />
     </div>
     <footer th:replace="fragments/pagination"/>
     <div th:if="${#lists.isEmpty(publicationsRecommended)}" th:text="#{publication.nopublication}"]> No hay publicaciones </div>
+    <div th:if="${authorizeError}" th:text="#{Error.publication.notFriends}"]>
+        Error de autenticación: No eres amigo/a de este usuario </div>
 </div>
 <footer th:replace="fragments/footer"/>
 

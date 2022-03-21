@@ -1,6 +1,6 @@
 <div class="text-center">
     <ul class="pagination justify-content-center"> <!-- Primera -->
-        <li class="page-item"><a class="page-link" th:href="@{'?page=0'}">Primera</a>
+        <li class="page-item"><a class="page-link" th:href="@{'?page=0'}" th:text="#{page.first}">Primera</a>
         </li>
         <!-- Anterior (si la hay ) -->
         <li class="page-item" th:if='${page.getNumber()-1 >= 0}'><a class="page-link"
@@ -12,12 +12,12 @@
                                         th:text="${page.getNumber()+1}"></a>
         </li>
         <!-- Siguiente (si la hay) -->
-        <li class="page-item" th:if='${page.getNumber()+1 <= page.getTotalPages()-1}'><a class="page-link"
+        <li id="nextPageOfList" class="page-item" th:if='${page.getNumber()+1 <= page.getTotalPages()-1}'><a class="page-link"
                                                                                          th:href="@{'?page='+${page.getNumber()+1} }"
                                                                                          th:text="${page.getNumber()+2}"></a>
         </li>
         <!-- Última -->
-        <li class="page-item"><a class="page-link" th:href="@{'?page='+${page.getTotalPages()-1}}"> Última</a>
+        <li class="page-item"><a class="page-link" th:href="@{'?page='+${page.getTotalPages()-1}}" th:text="#{page.last}"> Última</a>
         </li>
     </ul>
 </div>

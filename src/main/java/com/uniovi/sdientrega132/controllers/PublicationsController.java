@@ -17,25 +17,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.*;
 
 @Controller
 public class PublicationsController {
-
-    @Autowired
-    private HttpSession httpSession;
 
     @Autowired
     private PublicationValidator publicationValidator;
@@ -50,15 +46,24 @@ public class PublicationsController {
     private FriendsService friendsService;
 
     @RequestMapping("/publication/list")
-    public String getList(Model model, Pageable pageable, Principal principal) {
+    public String getList(Model model, Pageable pageable, Principal principal,
+                          @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
-        publications = publicationsService.getPublicationsForUser(pageable, user);
+        Page<Publication> publications = new PageImpl<>(new LinkedList<Publication>());
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            if (searchText != null && !searchText.isEmpty())
+                publications = publicationsService.searchPublications(searchText, pageable);
+            else
+                publications = publicationsService.getPublications(pageable);
+        } else {
+            publications = publicationsService.getPublicationsForUser(pageable, user);
+        }
 
         model.addAttribute("publicationsRecommended", publications.getContent());
         //model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
         model.addAttribute("page", publications);
+        model.addAttribute("authorizeError", false);
 
         return "publication/list";
     }
@@ -68,13 +73,17 @@ public class PublicationsController {
         String emailAut = principal.getName();
         User userAut = usersService.getUserByEmail(emailAut);
         User user = usersService.getUserByEmail(email);
+
         Page<Publication> publications = new PageImpl<Publication>(new LinkedList<Publication>());
         publications = publicationsService.getPublicationsForUser(pageable, user);
-        if(friendsService.getCoupleFriends(userAut.getId(), user.getId()) == null &&
-                friendsService.getCoupleFriends(user.getId(), userAut.getId()) == null){
+        Friend sonAmigos = friendsService.getCoupleFriends(userAut.getId(), user.getId());
+        if(sonAmigos == null)
+            sonAmigos = friendsService.getCoupleFriends(user.getId(), userAut.getId());
+        if(sonAmigos == null || !sonAmigos.getAccept()){
             model.addAttribute("publicationsNotRecommended", new ArrayList<Publication>());
             model.addAttribute("publicationsRecommended", new ArrayList<Publication>());
             model.addAttribute("page", publications);
+            model.addAttribute("authorizeError", true);
         }
         else {
             List<Publication> publicactionRecommended = new ArrayList<Publication>();
@@ -92,6 +101,7 @@ public class PublicationsController {
             model.addAttribute("publicationsNotRecommended", publicationsNotRecommended.getContent());
             model.addAttribute("publicationsRecommended", publicationsRecommended.getContent());
             model.addAttribute("page", publications);
+            model.addAttribute("authorizeError", false);
         }
 
         return "publication/list";
@@ -101,8 +111,8 @@ public class PublicationsController {
     public String updateList(Model model, Pageable pageable, Principal principal){
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Publication> marks = publicationsService.getPublicationsForUser(pageable, user);
-        model.addAttribute("publicationsRecommended", marks.getContent() );
+        Page<Publication> publications = publicationsService.getPublicationsForUser(pageable, user);
+        model.addAttribute("publicationsList", publications.getContent() );
         return "publication/list :: tablePublications";
     }
 
@@ -113,7 +123,9 @@ public class PublicationsController {
 
     @RequestMapping(value = "/publication/add", method = RequestMethod.POST)
     public String setPublication(@Validated Publication publication,
-                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model) {
+                                 @RequestParam("file")MultipartFile imagen, BindingResult result, Model model,
+                                 Principal principal) {
+        publication.setState("Aceptada");
         publicationValidator.validate(publication, result);
         if (result.hasErrors()) {
             model.addAttribute("usersList", usersService.getUsers());
@@ -121,33 +133,54 @@ public class PublicationsController {
         }
 
         publication.setPublishingDate(new Date());
+
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        publication.setUser(user);
+
+        publicationsService.addPublication(publication);
+
         if (!imagen.isEmpty()) {
-            Path directorio = Paths.get("src//main//resources//static//images");
-            String ruta = directorio.toFile().getAbsolutePath();
+//            Path directorio = Paths.get("src//main//resources//static//images");
+//            String ruta = directorio.toFile().getAbsolutePath();
+            String ruta = "C://Productos";
 
             try {
                 byte[] bytes = imagen.getBytes();
-                String nombreImagen = UUID.randomUUID()+".png";
+                String nombreImagen = publication.getId()+".png";
                 Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(nombreImagen);
+                publication.setPhoto(publication.getId()+"");
+
+                publicationsService.addPublication(publication);
             } catch (IOException e) {
                 System.out.println("Fallo con la imagen");
                 e.printStackTrace();
             }
 
         }
+        model.addAttribute("authorizeError", false);
 
-        publicationsService.addPublication(publication);
         return "redirect:/publication/list";
     }
 
     @RequestMapping(value = "/publication/add")
-    public String getPublication(Model model) {
+    public String getPublication(Model model, Pageable pageable) {
         model.addAttribute("usersList", usersService.getUsers());
         model.addAttribute("publication", new Publication());
         return "publication/add";
+    }
+
+    @RequestMapping(value = "/publication/edit")
+    public String editState(@RequestParam(value = "", required = false) Long id,
+                          @RequestParam(value = "", required = false) String state,
+                            Model model) {
+        System.out.println("Modificado estado "+state);
+        publicationsService.editStateOf(id, state);
+
+        model.addAttribute("authorizeError", false);
+        return "redirect:/publication/list";
     }
 
     @RequestMapping("/publication/{pubId2}/recommend")
@@ -166,5 +199,9 @@ public class PublicationsController {
 //    public void handleFileUpload(FileUpload event) throws IOException {
 //
 //    }
+
+
+
+
 
 }

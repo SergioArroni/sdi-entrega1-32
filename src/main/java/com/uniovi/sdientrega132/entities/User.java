@@ -26,8 +26,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Publication> publications;
 
-    @ManyToMany
-    private List<Friend> amigos;
+    @ElementCollection
+    private List<Long> friends = new ArrayList<>();
 
     public User() {
     }
@@ -103,19 +103,23 @@ public class User {
         this.publications = publications;
     }
 
-    public List<Friend> getAmigos() {
-        return amigos;
+    public List<Long> getFriends() {
+        return friends;
     }
 
-    public  void addAmigo(Long u){
-        amigos.add(new Friend(this.id, u, false));
+    public void setFriends(List<Long> friends) {
+        this.friends = friends;
     }
 
-    public boolean esAmigo(User u) {
-        for (Friend f : amigos) {
-            if (f.getUser1_id() == u.getId() || f.getUser2_id() == u.getId()) {
+    public void addFriend(Long u) {
+        var fri = getFriends();
+        fri.add(u);
+        setFriends(fri);
+    }
+
+    public boolean isFriend(Long u) {
+        if (friends.contains(u)) {
             return true;
-            }
         }
         return false;
     }
