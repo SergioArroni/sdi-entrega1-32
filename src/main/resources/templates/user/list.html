@@ -1,6 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
 <head th:replace="fragments/head"/>
 <body>
 <!-- Barra de Navegación superior -->
@@ -18,7 +17,8 @@
 
     <p th:text="#{user.list.message}"></p>
     <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
-    <script>
+    <script> th:inline = "javascript" >
+        /*<![CDATA[*/
         $("#updateButton").click(function () {
             var numberPage = [[${param.page}]];
             var urlUpdate = '/user/list/update';
@@ -27,6 +27,7 @@
             }
             $("#tableUsers").load(urlUpdate);
         });
+    /*]]>*/
     </script>
     <div class="table-responsive">
         <table class="table table-hover" th:fragment="tableUsers" id="tableUsers"
@@ -46,10 +47,10 @@
                 <td scope="row" th:text="${var.email}">ejemplo@uniovi.es</td>
                 <td scope="row" th:text="${var.name}">Nombre del usuario</td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')" scope="row" th:text="${var.surname}">Apellidos del usuario</td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')" 
-                    th:if="${var.email}!=${#authentication.getName()}" 
+                <td sec:authorize="hasRole('ROLE_ADMIN')"
+                    th:if="${var.email}!=${#authentication.getName()}"
                     scope="row">
-                    <input type="checkbox" id="selected" name="selected" th:value="${var.id}">
+                    <input type="checkbox" th:value="${var.id}">
                 </td>
                 <td sec:authorize="hasRole('ROLE_ADMIN')"
                     th:if="${var.email}==${#authentication.getName()}"
@@ -62,7 +63,7 @@
                                     th:id="${'AceptButton' + var.id}" class="btn btn-success">
                                 <span th:text="#{button.send}"></span>
                             </button>
-                            <script> th:inline="javascript"> /*<![CDATA[*/
+                            <script th:inline="javascript"> /*<![CDATA[*/
                             $("#AceptButton" + "[[${var.id}]]").click(function () {
                                 $.get("/friend/send/[[${var.id}]]", function () {
                                     var numberPage = [[${param.page}]];

@@ -85,7 +85,7 @@ public class InsertSampleDataService {
         user15.setPassword("user15");
         user15.setRole(rolesService.getRoles()[0]);
 
-        usersService.addUser(admin);
+
         usersService.addUser(user1);
         usersService.addUser(user2);
         usersService.addUser(user3);
@@ -101,6 +101,7 @@ public class InsertSampleDataService {
         usersService.addUser(user13);
         usersService.addUser(user14);
         usersService.addUser(user15);
+        usersService.addUser(admin);
 
 
         user1 = usersService.getUserByEmail(user1.getEmail());
