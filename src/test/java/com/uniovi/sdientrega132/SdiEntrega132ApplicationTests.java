@@ -32,12 +32,12 @@ import java.util.List;
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     //static String Geckodriver ="C:\\nada.exe;
-    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+    //static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
     //static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
-    //static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverHugo);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverSergio);
     static String URL = "http://localhost:8090";
 
 
@@ -484,30 +484,29 @@ class SdiEntrega132ApplicationTests {
 
     }
 
-    // PR19. Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario. Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente)
     @Test
     @Order(19)
-    public void PR19() { 
+    public void PR19() {
         //Vamos al formulario de logueo
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        PO_LoginView.fillLoginForm(driver, "user08@email.com", "user08");
 
-        //Hacemos una búsqueda para el usuario 6
-        PO_PrivateView.fillSearch(driver, "user06");
-
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButtonuser06@email.com");
+        //Hacemos una búsqueda para el usuario 04
+        PO_PrivateView.fillSearch(driver, "user04");
+        Long id = usersService.getUserByEmail("user04@email.com").getId();
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton"+id);
 
         PO_PrivateView.logout(driver);
 
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
-        String checkText = "user01@email.com";
+        String checkText = "user08@email.com";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
         PO_PrivateView.logout(driver);
@@ -518,49 +517,38 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(20)
     public void PR20() {
-        //Volvemos a enviar una petición de amistad desde el usuario 1
+        //Volvemos a enviar una petición de amistad desde el usuario 8
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        PO_LoginView.fillLoginForm(driver, "user08@email.com", "user08");
 
-        //Hacemos una búsqueda para el usuario 6
-        PO_PrivateView.fillSearch(driver, "user14");
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton14");
-
+        //Hacemos una búsqueda para el usuario 04
+        PO_PrivateView.fillSearch(driver, "user04");
+        //Comprobamos que el botón de enviar invitación no está disponible
+        SeleniumUtils.textIsNotPresentOnPage(driver, PO_Properties.getString("button.send", 0));
         PO_PrivateView.logout(driver);
-
-        // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user14@email.com", "user14");
-
-        PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
-        //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
-        PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
-
-        //Deberíamos de tener una sola invitación, no dos.
-        // Se comprueba que user14@email.com tiene 1 invitación
-        List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
-        Assertions.assertEquals(1, friends.size());
     }
-
 
     // PR21. Mostrar el listado de invitaciones de amistad recibidas. Comprobar con un listado que contenga varias invitaciones recibidas.
     @Test
     @Order(21)
     public void PR21() {
-        //Le enviamos otra petición de amistad al user06, que ya tenía una del user01.
+        //Le enviamos otra petición de amistad al user04, que ya tenía una del user01.
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
+        PO_LoginView.fillLoginForm(driver, "user09@email.com", "user09");
 
-        //Hacemos una búsqueda para el usuario 6
-        PO_PrivateView.fillSearch(driver, "user06");
+        //Hacemos una búsqueda para el usuario 4
+        PO_PrivateView.fillSearch(driver, "user04");
+        Long id = usersService.getUserByEmail("user04@email.com").getId();
+
         //Primera invitación
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton"+id);
 
         PO_PrivateView.logout(driver);
 
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
@@ -577,13 +565,14 @@ class SdiEntrega132ApplicationTests {
         //Nos loggeamos con el user06, que tiene 2 invitaciones pendientes.
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
-        PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton1')]", 0);
+        Long id = usersService.getUserByEmail("user04@email.com").getId();
+        PO_PrivateView.click(driver, "//button[contains(@id, 'AceptButton"+id+"')]", 0);
 
         // Se despliega el menú de usuarios, y se clica en Ver peticiones de amistad
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
@@ -599,17 +588,17 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(23)
     public void PR23() {
-        //Nos loggeamos con el user06, que tiene 1 amigo (user01)
+        //Nos loggeamos con el user04, que tiene 1 amigo (user08)
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+        PO_LoginView.fillLoginForm(driver, "user04@email.com", "user04");
 
         // Se despliega el menú de amigos, y se clica en lista de amigos
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/list')]", 0);
 
-        // Se comprueba que user06 tiene un nuevo amigo
-        String checkText = "user01@email.com";
+        // Se comprueba que user04 tiene un nuevo amigo
+        String checkText = "user08@email.com";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
         PO_PrivateView.logout(driver);

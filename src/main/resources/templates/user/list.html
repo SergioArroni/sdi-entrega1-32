@@ -60,11 +60,11 @@
                     <td scope="row"><a></a>
                         <div>
                             <button type="button" sec:authorize="hasRole('ROLE_USER')"
-                                    th:id="${'AceptButton' + var.email}" class="btn btn-success">
+                                    th:id="${'AceptButton' + var.id}" class="btn btn-success">
                                 <span th:text="#{button.send}"></span>
                             </button>
                             <script th:inline="javascript"> /*<![CDATA[*/
-                            $("#AceptButton" + "[[${var.email}]]").click(function () {
+                            $("#AceptButton" + "[[${var.id}]]").click(function () {
                                 $.get("/friend/send/[[${var.id}]]", function () {
                                     var numberPage = [[${param.page}]];
                                     var urlUpdate = '/user/list/update';
