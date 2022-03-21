@@ -145,7 +145,7 @@ public class PublicationsController {
                 Path rutaCompleta = Paths.get(ruta + "//" + nombreImagen);
                 Files.write(rutaCompleta, bytes);
 
-                publication.setFoto(publication.getId()+"");
+                publication.setPhoto(publication.getId()+"");
 
                 publicationsService.addPublication(publication);
             } catch (IOException e) {
