@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection"})
 public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
@@ -19,19 +20,12 @@ public class UsersService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    /*public List<User> getUsers() {
-        List<User> users = (List<User>) usersRepository.findAll();
-        return users;
-    }*/
-
     public Page<User> getStandardUsers(User user, Pageable pageable) {
-        Page<User> users = usersRepository.findAllStandard(pageable, user);
-        return users;
+        return usersRepository.findAllStandard(pageable, user);
     }
 
     public List<User> getStandardUsers(User user) {
-        List<User> users = usersRepository.findAllStandard(user);
-        return users;
+        return usersRepository.findAllStandard(user);
     }
 
     public void addUser(User user) {
@@ -67,12 +61,6 @@ public class UsersService {
         List<User> users = new ArrayList<>();
         usersRepository.findAll().forEach(users::add);
         return users;
-    }
-
-    public void updateFriends(Long id, List<Long> friends) {
-
-        usersRepository.updateFriends(id, friends);
-
     }
 
     public void deleteAllUsers() {

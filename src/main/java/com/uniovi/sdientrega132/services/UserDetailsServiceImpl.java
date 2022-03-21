@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings({"ConstantConditions", "SpringJavaAutowiredFieldsWarningInspection"})
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired

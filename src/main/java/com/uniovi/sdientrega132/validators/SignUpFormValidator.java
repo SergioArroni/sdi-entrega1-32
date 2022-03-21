@@ -9,6 +9,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
+@SuppressWarnings("NullableProblems, SpringJavaAutowiredFieldsWarningInspection")
 public class SignUpFormValidator implements Validator {
 
     @Autowired

@@ -9,15 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 public interface PublicationsRepository extends CrudRepository<Publication, Long> {
 
     @Query("SELECT p FROM Publication p WHERE p.user = ?1 AND p.state<>'Censurada' ORDER BY p.id ASC")
     Page<Publication> findAllByUser(Pageable pageable, User user);
-
-    @Query("SELECT p FROM Publication p WHERE p.user = ?1 AND p.state<>'Censurada' AND p.state<>'Moderada' ORDER BY p.id ASC")
-    Page<Publication> findAllByFriend(Pageable pageable, User user);
 
     Page<Publication> findAll(Pageable pageable);
 

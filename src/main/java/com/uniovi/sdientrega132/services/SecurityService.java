@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection"})
 public class SecurityService {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -19,14 +20,6 @@ public class SecurityService {
     private UserDetailsService userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-
-    public String findLoggedInEmail() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetails instanceof UserDetails) {
-            return ((UserDetails) userDetails).getUsername();
-        }
-        return null;
-    }
 
     public void autoLogin(String email, String password) {
 

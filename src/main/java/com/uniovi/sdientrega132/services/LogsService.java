@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection"})
 public class LogsService {
     @Autowired
     private LogsRepository logsRepository;
