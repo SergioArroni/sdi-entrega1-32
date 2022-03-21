@@ -112,11 +112,9 @@ class SdiEntrega132ApplicationTests {
         // Rellenamos el formulario, con la repeticion de la contraseña incorrecta
         PO_SignUpView.fillForm(driver, "andrea@email.com", "Andrea", "Delgado", "123456", "1234567");
 
-        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.passwordConfirm.coincidence",
-                PO_Properties.getSPANISH());
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.passwordConfirm.coincidence", PO_Properties.getSPANISH());
 
-        String checkText = PO_HomeView.getP().getString("Error.signup.passwordConfirm.coincidence",
-                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("Error.signup.passwordConfirm.coincidence", PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
@@ -128,11 +126,9 @@ class SdiEntrega132ApplicationTests {
         // Rellenamos el formulario, con un email ya existente
         PO_SignUpView.fillForm(driver, "user01@email.com", "Marta", "González", "123456", "123456");
 
-        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.email.duplicate",
-                PO_Properties.getSPANISH());
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "Error.signup.email.duplicate", PO_Properties.getSPANISH());
 
-        String checkText = PO_HomeView.getP().getString("Error.signup.email.duplicate",
-                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("Error.signup.email.duplicate", PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
@@ -178,11 +174,9 @@ class SdiEntrega132ApplicationTests {
         // Rellenamos el formulario, como un usuario normal pero con la contraseña incorrecta
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "12345678");
 
-        List<WebElement> result = PO_LoginView.checkElementByKey(driver, "Error.login",
-                PO_Properties.getSPANISH());
+        List<WebElement> result = PO_LoginView.checkElementByKey(driver, "Error.login", PO_Properties.getSPANISH());
 
-        String checkText = PO_HomeView.getP().getString("Error.login",
-                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("Error.login", PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
@@ -231,8 +225,7 @@ class SdiEntrega132ApplicationTests {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
-        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
-                PO_View.getTimeout());
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
         elementos.get(0).findElement(By.id("selected")).click();
         driver.findElement(By.id("deleteButton")).click();
         SeleniumUtils.textIsNotPresentOnPage(driver, "user01@email.com");
@@ -258,10 +251,9 @@ class SdiEntrega132ApplicationTests {
             }
 
         } while (isNextPage);
-
 */
-        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
-                PO_View.getTimeout());
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
         // Seleccionamos el último usuario y lo borramos
         WebElement checkbox = elementos.get(elementos.size() - 1).findElement(By.id("selected"));
         checkbox.click();
@@ -278,8 +270,7 @@ class SdiEntrega132ApplicationTests {
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
 
-        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
-                PO_View.getTimeout());
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
 
         elementos.get(1).findElement(By.id("selected")).click();
         elementos.get(2).findElement(By.id("selected")).click();
@@ -503,20 +494,20 @@ class SdiEntrega132ApplicationTests {
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
 
         //Hacemos una búsqueda para el usuario 6
-        PO_PrivateView.fillSearch(driver, "user06");
-        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton6");
+        PO_PrivateView.fillSearch(driver, "user14");
+        PO_PrivateView.enviarAceptarPeticion(driver, "AceptButton14");
 
         PO_PrivateView.logout(driver);
 
         // Rellenamos el formulario de login con datos válidos
-        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
+        PO_LoginView.fillLoginForm(driver, "user14@email.com", "user14");
 
         PO_PrivateView.click(driver, "//li[contains(@id, 'friends-menu')]/a", 0);
         //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
         PO_PrivateView.click(driver, "//a[contains(@href, 'friend/invitation')]", 0);
 
         //Deberíamos de tener una sola invitación, no dos.
-        // Se comprueba que user06@email.com tiene 1 invitación
+        // Se comprueba que user14@email.com tiene 1 invitación
         List<WebElement> friends = PO_View.checkElementBy(driver, "text", "Aceptar");
         Assertions.assertEquals(1, friends.size());
     }

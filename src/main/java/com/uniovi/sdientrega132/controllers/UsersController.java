@@ -1,6 +1,8 @@
 package com.uniovi.sdientrega132.controllers;
 
+import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.entities.User;
+import com.uniovi.sdientrega132.services.FriendsService;
 import com.uniovi.sdientrega132.services.RolesService;
 import com.uniovi.sdientrega132.services.SecurityService;
 import com.uniovi.sdientrega132.services.UsersService;
@@ -37,6 +39,9 @@ public class UsersController {
     @Autowired
     private LogsController logsController;
 
+    @Autowired
+    private FriendsService friendsService;
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
         signUpFormValidator.validate(user, result);
@@ -45,7 +50,6 @@ public class UsersController {
         }
         user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
-        System.out.println("C");
         securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
         return "redirect:/home";
     }
@@ -71,17 +75,19 @@ public class UsersController {
                 users = usersService.getStandardUsers(activeUser, pageable);
             }
         }
-
         AuxCodeList(model, activeUser, users, listUsers);
 
-        for (User u : users) {
-            if (activeUser.isFriend(u.getId())) {
-                usersFriends.add(u.getId());
-            }
+        var friends = friendsService.getFriends(activeUser.getId());
+
+        List<Long> friendId = new ArrayList<>();
+
+        for (Friend u : friends) {
+            System.out.println(u);
+            friendId.add(u.getUser1_id());
         }
 
         model.addAttribute("actualUser", activeUser);
-        model.addAttribute("usersListFriends", usersFriends);
+        model.addAttribute("usersListFriends", friendId);
         return "user/list";
     }
 
@@ -99,13 +105,9 @@ public class UsersController {
         }
         AuxCodeList(model, user, users, listUsers);
 
-        for (User u : users) {
-            if (user.isFriend(u.getId()) && !usersFriends.contains(u)) {
-                usersFriends.add(u.getId());
-            }
-        }
+        var friends = friendsService.getFriends(user.getId());
 
-        model.addAttribute("usersListFriends", usersFriends);
+        model.addAttribute("usersListFriends", friends);
         return "user/list :: tableUsers";
     }
 

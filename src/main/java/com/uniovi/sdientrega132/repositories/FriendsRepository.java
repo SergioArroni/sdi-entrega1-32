@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface FriendsRepository extends CrudRepository<Friend, Long> {
     @Modifying
     @Transactional
@@ -17,6 +19,9 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
 
     @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.accept = false")
     Page<Friend> findInvitationsByUser1(Pageable pageable,Long user1_id);
+
+    @Query("SELECT r FROM Friend r WHERE r.User2_id = ?1")
+    List<Friend> findInvitationsByUser2Id(Long user1_id);
 
     @Query("SELECT r FROM Friend r WHERE r.User2_id = ?1 and r.accept = true ORDER BY r.User2_id ASC")
     Page<Friend> friendsUser2(Pageable pageable, Long user2_id);
@@ -27,8 +32,4 @@ public interface FriendsRepository extends CrudRepository<Friend, Long> {
     @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.User2_id = ?2")
     Friend findCoupleFriends(Long user1_id, Long user2_id);
 
-    @Query("SELECT r FROM Friend r WHERE r.User1_id = ?1 and r.User2_id = ?2 and r.accept = true")
-    Friend findCoupleFriendsAccept(Long user1_id, Long user2_id);
-
-    Page<Friend> findAll(Pageable pageable);
 }

@@ -9,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UsersService {
@@ -38,7 +36,7 @@ public class UsersService {
 
     public Page<User> searchUserByEmailAndName(String searchText, User user, Pageable pageable) {
         Page<User> users = new PageImpl<>(new LinkedList<>());
-        searchText  = "%"+searchText+"%";
+        searchText = "%" + searchText + "%";
         if (user.getRole().equals("ROLE_USER")) {
             users = usersRepository.searchByEmailAndName(pageable, searchText);
         }
@@ -66,6 +64,10 @@ public class UsersService {
         return users;
     }
 
+    public void updateFriends(Long id, List<Long> friends) {
 
+        usersRepository.updateFriends(id, friends);
+
+    }
 
 }
