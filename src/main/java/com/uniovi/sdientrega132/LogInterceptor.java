@@ -6,6 +6,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 //@Component
 @SuppressWarnings({"deprecation", "NullableProblems"})
@@ -23,21 +24,37 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         if (request.getRequestURL().toString().equals("http://localhost:8090/home")) {
             logsController.LogInEx();
-        }else if (request.getRequestURL().toString().equals("http://localhost:8090/user/list")) {
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/user/list")) {
             logsController.LogInEx();
-        }
-        else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")) {
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?error")) {
             logsController.LogInEr();
-        }
-        else if (request.getRequestURL().toString().equals("http://localhost:8090/login?logout")) {
+        } else if (request.getRequestURL().toString().equals("http://localhost:8090/login?logout")) {
             logsController.LogOut();
         } else if (request.getRequestURL().toString().equals("http://localhost:8090/signup") && request.getMethod().equals("POST")) {
-            logsController.LogAlta(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
-            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
+            StringBuilder parametros = conversor(request.getParameterNames());
+            logsController.LogAlta(request.getRequestURL().toString(), request.getMethod(), parametros);
+            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), parametros);
         } else {
-            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), request.getParameterNames());
+
+            StringBuilder parametros = conversor(request.getParameterNames());
+
+            logsController.LogPET(request.getRequestURL().toString(), request.getMethod(), parametros);
         }
         return true;
     }
+
+    private StringBuilder conversor(Enumeration<String> parameterNames) {
+
+        var iter = parameterNames.asIterator();
+
+        StringBuilder parametros = new StringBuilder();
+
+        while (iter.hasNext()) {
+            String param = iter.next();
+            parametros.append(param).append(" ");
+        }
+        return parametros;
+    }
+
 }
 

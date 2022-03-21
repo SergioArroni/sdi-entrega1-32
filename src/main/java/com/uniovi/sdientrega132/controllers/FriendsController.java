@@ -73,7 +73,7 @@ public class FriendsController {
         User activeUser = usersService.getUserByEmail(email);
         Page<Friend> friends = friendsService.getInvitationsByUser1_id(pageable, activeUser.getId());
         CodeAuxFriends(model, friends);
-
+        System.out.println("a");
         return "friend/invitation :: tableFriends";
     }
 

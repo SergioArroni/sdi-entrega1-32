@@ -60,7 +60,6 @@ public class LogsController {
         }
     }
 
-
     @RequestMapping("/logs/deleteAll")
     public String delete() {
         //Comprobamos si es admin por si intentan acceder por la URL
@@ -97,34 +96,16 @@ public class LogsController {
         logsService.addLog(l);
     }
 
-    public void LogPET(String pathInfo, String method, Enumeration<String> parameterNames) {
+    public void LogPET(String pathInfo, String method, StringBuilder parameterNames) {
 
-        var iter = parameterNames.asIterator();
-
-        StringBuilder parametros = new StringBuilder();
-
-        while (iter.hasNext()) {
-            String param = iter.next();
-            parametros.append(param).append(" ");
-        }
-
-        Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
+        Log l = new Log("PET", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parameterNames);
         System.out.println(l);
         logsService.addLog(l);
     }
 
-    public void LogAlta(String pathInfo, String method, Enumeration<String> parameterNames) {
+    public void LogAlta(String pathInfo, String method, StringBuilder parameterNames) {
 
-        var iter = parameterNames.asIterator();
-
-        StringBuilder parametros = new StringBuilder();
-
-        while (iter.hasNext()) {
-            String param = iter.next();
-            parametros.append(param).append(" ");
-        }
-
-        Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parametros);
+        Log l = new Log("ALTA", Timestamp.from(Instant.now()).toString(), pathInfo + "\t" + method + "\t" + parameterNames);
         System.out.println(l);
         logsService.addLog(l);
     }
