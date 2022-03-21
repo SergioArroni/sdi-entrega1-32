@@ -904,6 +904,143 @@ class SdiEntrega132ApplicationTests {
         PO_PrivateView.logout(driver);
     }
 
+    //[Prueba37] Como administrador, cambiar el estado de una publicación y comprobar que el estado ha
+    //cambiado.
+    @Test
+    @Order(37)
+    public void PR37(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+        Long id = publicationsService.getPublications().get(0).getId();
+        elementos.get(0).findElement(By.id("censurada"+id)).click();
+
+    }
+
+    //[Prueba38] Como usuario estándar, comprobar que no aparece en el listado propio de publicaciones una
+    //publicación censurada.
+    @Test
+    @Order(38)
+    public void PR38(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+
+        Long id = publicationsService.getPublications().get(0).getId();
+        WebElement elem=elementos.get(0).findElement(By.id("censurada"+id));
+        elem.click();
+        //Despues de crearlo nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Pulsamos el enlace para ver las publicaciones del user01
+        driver.get("http://localhost:8090/publication/list");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"publicacion 1 de Andrea");
+
+    }
+
+    //[Prueba39] Como usuario estándar, comprobar que, en el listado de publicaciones de un amigo, no
+    //aparece una publicación moderada.
+    @Test
+    @Order(39)
+    public void PR39(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //PO_HomeView.clickOption(driver, "/publication/list", "class", "btn btn-primary");
+        driver.get("http://localhost:8090/publication/list");
+
+        List<WebElement> elementos = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",
+                PO_View.getTimeout());
+
+        Long id = publicationsService.getPublications().get(2).getId();
+        WebElement elem=elementos.get(2).findElement(By.id("moderada"+id));
+        elem.click();
+        //Despues de crearlo nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
+        //Pulsamos el enlace para ver las publicaciones del user01
+        driver.get("http://localhost:8090/publication/listFriend/user06@email.com");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Hola :P");
+
+    }
+
+    @Test
+    @Order(40)
+    public void PR40(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "user05@email.com", "user05");
+        driver.get("http://localhost:8090/publication/edit?id=20&state=Censurada");
+
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Cambiar estado");
+        SeleniumUtils.textIsNotPresentOnPage(driver,"Estado actual");
+
+    }
+
+    @Test
+    @Order(41)
+    public void PR41(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        driver.get("http://localhost:8090/publication/list");
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "");
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+
+    }
+    //[Prueba42] Hacer una búsqueda escribiendo en el campo un texto que no exista y comprobar que se
+    //muestra la página que corresponde, con la lista de publicaciones vacía.
+    @Test
+    @Order(42)
+    public void PR42() {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        driver.get("http://localhost:8090/publication/list");
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "asd");
+
+
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        Assertions.assertEquals("http://localhost:8090/publication/list?searchText=asd", driver.getCurrentUrl());
+    }
+
+    //[Prueba43] Hacer una búsqueda con un texto específico y comprobar que se muestra la página que
+    //corresponde, con la lista de publicaciones en los que el texto especificado sea parte de título, estado o del
+    //email.
+    @Test
+    @Order(43)
+    public void PR43(){
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary"); // Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        driver.get("http://localhost:8090/publication/list");
+        //Hacemos una búsqueda con el campo vacío
+        PO_PrivateView.fillSearch(driver, "Aceptada");
+
+        String checkText = "Publicaciones";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        Assertions.assertEquals("http://localhost:8090/publication/list?searchText=Aceptada",driver.getCurrentUrl());
+
+    }
+
     // PR44. Probar que se puede crear una publicación con imagen
     @Test
     @Order(44)
