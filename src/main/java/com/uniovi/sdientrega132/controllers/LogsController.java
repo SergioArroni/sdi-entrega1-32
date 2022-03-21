@@ -44,23 +44,6 @@ public class LogsController {
         }
     }
 
-    @SuppressWarnings("SpringMVCViewInspection")
-    @RequestMapping("/logs/list/update")
-    public String updateList(Model model) {
-        //Comprobamos si es admin por si intentan acceder por la URL
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        User activeUser = usersService.getUserByEmail(email);
-        if (activeUser.getRole().equals("ROLE_ADMIN")) {
-            List<Log> logs = logsService.getLogs();
-            model.addAttribute("logsList", logs);
-            return "user/list :: tableLogs";
-        } else {
-            return "home";
-        }
-    }
-
-
     @RequestMapping("/logs/deleteAll")
     public String delete() {
         //Comprobamos si es admin por si intentan acceder por la URL

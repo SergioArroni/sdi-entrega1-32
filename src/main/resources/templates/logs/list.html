@@ -7,13 +7,6 @@
 <div class="container">
     <h2>Logs</h2>
 
-    <button type="button" id="updateButton" class="btn btn-default" th:text="#{button.update}"></button>
-    <script>
-        $("#updateButton").click(function () {
-            var urlUpdate = '/logs/list/update';
-            $("#tableLogs").load(urlUpdate);
-        });
-    </script>
     <button type="button" id="deleteButton" class="btn btn-default"
             th:text="#{button.deleteAll}"></button>
     <script> th:inline = "javascript" >
