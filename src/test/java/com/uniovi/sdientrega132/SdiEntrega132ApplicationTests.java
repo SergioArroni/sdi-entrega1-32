@@ -665,6 +665,53 @@ class SdiEntrega132ApplicationTests {
         Assertions.assertTrue(pub2.get(0)!=null);
     }
 
+    // PR30. Intentar acceder al listado de usuarios sin estar autenticado
+    @Test
+    @Order(30)
+    public void PR30() {
+
+        driver.get("http://localhost:8090/user/list");
+
+
+
+    }
+
+    // PR31. Intentar acceder al listado de invitaciones de amistad de un usuario sin estar autenticado
+    @Test
+    @Order(31)
+    public void PR31() {
+
+        driver.get("http://localhost:8090/user/list");
+
+    }
+
+    // PR32. Intentar acceder a una acción de usuario admin estando autenticado como usuario estándar
+    @Test
+    @Order(32)
+    public void PR32() {
+
+        driver.get("http://localhost:8090/user/list");
+
+    }
+
+    // PR33. Ver los logs como usuario admin. Al menos hay 2 de cada tipo
+    @Test
+    @Order(33)
+    public void PR33() {
+
+        driver.get("http://localhost:8090/user/list");
+
+    }
+
+    // PR34. Intentar acceder al listado de usuarios sin estar autenticado
+    @Test
+    @Order(34)
+    public void PR34() {
+
+        driver.get("http://localhost:8090/user/list");
+
+    }
+
     // PR44. Probar que se puede crear una publicación con imagen
     @Test
     @Order(44)
