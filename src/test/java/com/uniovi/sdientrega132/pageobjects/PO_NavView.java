@@ -69,7 +69,7 @@ public class PO_NavView extends PO_View {
         // clickamos la opción de Publicaciones
         SeleniumUtils.waitLoadElementsBy(driver, "id", "publicationsDropdown", PO_View.getTimeout()).get(0).click();
         // Esperamos a que aparezca el menú
-        PO_PrivateView.clickOn(driver, textoOpcion, 0);
+        SeleniumUtils.waitLoadElementsBy(driver, "id", textoOpcion, PO_View.getTimeout()).get(0).click();
 
     }
 

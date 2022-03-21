@@ -29,12 +29,12 @@ import java.util.List;
 class SdiEntrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     //static String Geckodriver ="C:\\nada.exe;
-    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
+//    static String GeckodriverHugo ="C:\\Users\\Hugo\\Desktop\\TERCER_CURSO_INGENIERIA\\SDI\\PRACTICA\\sesion06\\PL-SDI-Sesión5-material\\PL-SDI-Sesión5-material\\geckodriver-v0.30.0-win64.exe";
     //static String GeckodriverAndrea = "C:\\Users\\ANDREA DELGADO\\Documents\\CURSO 2021-2022\\CUATRI 2\\SDI\\geckodriver.exe";
-    //static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
+    static String GeckodriverSergio = "C:\\Dev\\tools\\selenium\\geckodriver-v0.30.0-win64.exe";
 
     //Común a Windows y a MACOSX
-    static WebDriver driver = getDriver(PathFirefox, GeckodriverHugo);
+    static WebDriver driver = getDriver(PathFirefox, GeckodriverSergio);
     static String URL = "http://localhost:8090";
 
 
@@ -637,7 +637,7 @@ class SdiEntrega132ApplicationTests {
         driver.findElement(By.id("post")).click();
 
         // Comprobamos que no ha pasado a ninguna otra ventana
-        List<WebElement> paginaAgregar = SeleniumUtils.waitLoadElementsBy(driver, "text", "Subir publicación", PO_View.getTimeout());
+        List<WebElement> paginaAgregar = SeleniumUtils.waitLoadElementsBy(driver, "id", "uploadPublication", PO_View.getTimeout());
 
         Assertions.assertTrue(paginaAgregar.get(0)!=null);
     }
@@ -665,7 +665,7 @@ class SdiEntrega132ApplicationTests {
     @Order(27)
     public void PR27() {
         PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
-        PO_LoginView.fillLoginForm(driver, "user02@email.com", "user02");
+        PO_LoginView.fillLoginForm(driver, "user06@email.com", "user06");
 
         // Entramos en la ventana de amigos
         PO_NavView.desplegarAmigos(driver, "listFriends");
