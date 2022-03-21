@@ -54,4 +54,7 @@ public class Friend {
         return accept;
     }
 
+    public void setAccept(Boolean accept) {
+        this.accept = accept;
+    }
 }

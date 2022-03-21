@@ -1,9 +1,7 @@
 package com.uniovi.sdientrega132.entities;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="publication")
@@ -34,7 +32,7 @@ public class Publication {
         publishingDate = new Date();
         photo = "";
         state = "Aceptada";
-        recomendaciones = new ArrayList<>();
+        recomendaciones = new ArrayList<User>();
     }
 
     public long getId() {
@@ -61,6 +59,10 @@ public class Publication {
         this.text = text;
     }
 
+    public Date getPublishingDate() {
+        return publishingDate;
+    }
+
     public void setPublishingDate(Date publishingDate) {
         this.publishingDate = publishingDate;
     }
@@ -73,16 +75,32 @@ public class Publication {
         this.user = user;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public void setState(String state) {
         this.state = state;
     }
 
-    public List<User> getRecommendations() {
+    public List<User> getRecomendaciones() {
         return recomendaciones;
+    }
+
+    public void setRecomendaciones(List<User> recomendaciones) {
+        this.recomendaciones = recomendaciones;
+    }
+
+    public String printRecomendations(){
+        return recomendaciones.size() + " Recs.";
     }
 
     @Override
@@ -93,4 +111,5 @@ public class Publication {
                 ", publishingDate=" + publishingDate +
                 '}';
     }
+
 }

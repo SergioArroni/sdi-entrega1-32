@@ -87,7 +87,7 @@ public class PublicationsController {
             List<Publication> publicationNotRecommended = new ArrayList<>();
 
             for (Publication pub : publications) {
-                if (pub.getRecommendations().contains(userAut)) {
+                if (pub.getRecomendaciones().contains(userAut)) {
                     publicationRecommended.add(pub);
                 } else {
                     publicationNotRecommended.add(pub);
@@ -184,8 +184,8 @@ public class PublicationsController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Publication pub = publicationsService.getPublication(pubId2);
-        if(!pub.getRecommendations().contains(activeUser) && !pub.getUser().equals(activeUser)){
-            pub.getRecommendations().add(activeUser);
+        if(!pub.getRecomendaciones().contains(activeUser) && !pub.getUser().equals(activeUser)){
+            pub.getRecomendaciones().add(activeUser);
             publicationsService.addPublication(pub);
         }
         return "redirect:/publication/listFriend/" + pub.getUser().getEmail();
