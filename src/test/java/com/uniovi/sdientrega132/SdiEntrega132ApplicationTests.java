@@ -768,7 +768,6 @@ class SdiEntrega132ApplicationTests {
 
         driver.get("http://localhost:8090/user/list");
 
-
         String searchText = "Identificate";
         List<WebElement> element = SeleniumUtils.waitLoadElementsBy(driver, "text", searchText, PO_View.getTimeout());
         Assertions.assertTrue(element.get(0).getText().equals(searchText));
@@ -780,7 +779,11 @@ class SdiEntrega132ApplicationTests {
     @Order(31)
     public void PR31() {
 
-        driver.get("http://localhost:8090/user/list");
+        driver.get("http://localhost:8090/friend/invitation");
+
+        String searchText = "Identificate";
+        List<WebElement> element = SeleniumUtils.waitLoadElementsBy(driver, "text", searchText, PO_View.getTimeout());
+        Assertions.assertTrue(element.get(0).getText().equals(searchText));
 
     }
 
@@ -788,8 +791,14 @@ class SdiEntrega132ApplicationTests {
     @Test
     @Order(32)
     public void PR32() {
+        PO_NavView.clickOption(driver, "login", "class", "btn btn-primary");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
 
-        driver.get("http://localhost:8090/user/list");
+        driver.get("http://localhost:8090/logs/list");
+
+        String searchText = "Error";
+        List<WebElement> elements = SeleniumUtils.waitLoadElementsBy(driver, "text", searchText, PO_View.getTimeout());
+        Assertions.assertTrue(!elements.isEmpty());
 
     }
 
@@ -798,16 +807,16 @@ class SdiEntrega132ApplicationTests {
     @Order(33)
     public void PR33() {
 
-        driver.get("http://localhost:8090/user/list");
+
 
     }
 
-    // PR34. Intentar acceder al listado de usuarios sin estar autenticado
+    // PR34. Borrar logs como administrador
     @Test
     @Order(34)
     public void PR34() {
 
-        driver.get("http://localhost:8090/user/list");
+
 
     }
 
