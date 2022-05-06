@@ -3,30 +3,40 @@ package com.uniovi.sdientrega132.entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue
     private long id;
+    //Nombre
     private String name;
-    private String surnames;
+    private String surname;
     @NotNull
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
     private String password;
     @Transient
     private String passwordConfirm;
     private String role;
 
-    public User(){}
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Publication> publications;
 
-    public User(String name, String surname,String email){
-        this.name=name;
-        this.surnames=surname;
-        this.email=email;
+    @ElementCollection
+    private List<Long> friends = new ArrayList<>();
+
+    public User() {
+    }
+
+    public User(String name, String surname, String email) {
+        super();
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
     }
 
     public long getId() {
@@ -53,12 +63,12 @@ public class User {
         this.name = name;
     }
 
-    public String getSurnames() {
-        return surnames;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setSurnames(String surnames) {
-        this.surnames = surnames;
+    public void setSurname(String surnames) {
+        this.surname = surnames;
     }
 
     public String getEmail() {
@@ -85,11 +95,40 @@ public class User {
         this.role = role;
     }
 
+    public Set<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(Set<Publication> publications) {
+        this.publications = publications;
+    }
+
+    public List<Long> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<Long> friends) {
+        this.friends = friends;
+    }
+
+    public void addFriend(Long u) {
+        var fri = getFriends();
+        fri.add(u);
+        setFriends(fri);
+    }
+
+    public boolean isFriend(Long u) {
+        if (friends.contains(u)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", surnames='" + surnames + '\'' +
+                ", surnames='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

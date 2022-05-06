@@ -2,41 +2,45 @@ package com.uniovi.sdientrega132.services;
 
 import com.uniovi.sdientrega132.entities.Friend;
 import com.uniovi.sdientrega132.repositories.FriendsRepository;
-import com.uniovi.sdientrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection"})
 public class FriendsService {
 
     @Autowired
     private FriendsRepository friendsRepository;
 
-
-    public List<Friend> getFriends() {
-        List<Friend> professors = new ArrayList<Friend>();
-        friendsRepository.findAll().forEach((professors::add));
-        return professors;
+    public Page<Friend> getInvitationsByUser1_id(Pageable pageable, long user1_id) {
+        return friendsRepository.findInvitationsByUser1(pageable, user1_id);
     }
 
-    public Friend getFriend(Long id) {
-        return friendsRepository.findById(id).get();
+    public Page<Friend> getFriendByUser(Pageable pageable, Long User1_id) {
+        return friendsRepository.friendsUser1(pageable, User1_id);
     }
 
-    public Friend getFriendByUser2(String User2_id) {
-        return friendsRepository.findByUser2_id(User2_id);
+    public Friend getCoupleFriends(Long User1_id, Long User2_id) {
+        return friendsRepository.findCoupleFriends(User1_id, User2_id);
     }
 
-    public void addFriend(Friend professor) {
-        friendsRepository.save(professor);
+    public void addFriend(Friend friend) {
+        friendsRepository.save(friend);
     }
 
-    public void deleteFriend(Long id) {
-        friendsRepository.deleteById(id);
+    public void setFriendInvitationSend(boolean revised, Long id) {
+        friendsRepository.updateResend(revised, id);
     }
 
+    public List<Friend> getFriends(Long id){
+        return friendsRepository.findInvitationsByUser2Id(id);
+    }
 
+    public void deleteAllFriends() {
+        friendsRepository.deleteAll();
+    }
 }
